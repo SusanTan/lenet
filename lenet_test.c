@@ -34,3 +34,16 @@ void test_initialization (LeNet* lenet)
   printf("\nPrinting F6 Initialized weights..\n");
   test_linear_init(lenet->F6_W, lenet->F6_B, 84, 120);
 }
+
+void test_image_batch (Img** imgs, int batchsize, int imgsize)
+{
+  printf("\nPrinting the image from channel 0 from 32 batches:\n");
+  //just use the first channel
+  for(int i=0; i<batchsize; i++)
+  {
+      printf("\n********Printing batch %d *********\n", i);
+      for(int j=0; j<imgsize; j++)
+        for(int k=0; k<imgsize; k++)
+          printf("%.4f, ",imgs[i][0][j][k]);
+  }
+}

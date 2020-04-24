@@ -25,7 +25,7 @@ Img** maxpool2d_forward(int stride, int pool_size, Img** in, int batchsize, int 
       {
         for(int n=0; n<(img_size-pool_size+1); n+=stride)
         {
-          int max = 0;
+          float max = 0.0f;
           for(int l=0; l<pool_size; l++)
             for(int w=0; w<pool_size; w++)
               if(max<in[i][j][m+l][n+w])

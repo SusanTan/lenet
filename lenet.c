@@ -21,7 +21,7 @@ void initialize_lenet(LeNet* lenet){
   lenet->F6_B = initialize_linear_bias  (C5_COUT, F6_COUT);
   lenet->OL_W = initialize_linear_weight(F6_COUT, OL_COUT);
   lenet->OL_B = initialize_linear_bias  (F6_COUT, OL_COUT);
-  test_initialization (lenet);
+  //test_initialization (lenet);
 }
 
 void torch_tanh (Img** x, int batchsize, int img_size, int channels)
@@ -36,8 +36,11 @@ void torch_tanh (Img** x, int batchsize, int img_size, int channels)
 void forward()
 {
   Img** C1_out = conv2d_forward(lenet.C1, img_batch, BATCHSIZE, C1_INSIZE, C1_CIN, C1_COUT);
+  //test_image_batch(C1_out, BATCHSIZE, S2_INSIZE);
   torch_tanh(C1_out, BATCHSIZE, S2_INSIZE, C1_COUT);
+  //test_image_batch(C1_out, BATCHSIZE, S2_INSIZE);
 	Img** S2_out = maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C1_out, BATCHSIZE, C1_COUT, S2_INSIZE);
+  test_image_batch(S2_out, BATCHSIZE, C3_INSIZE);
   Img** C3_out = conv2d_forward(lenet.C3, S2_out, BATCHSIZE, C3_INSIZE, C1_COUT, C3_COUT);
   torch_tanh(C3_out, BATCHSIZE, S4_INSIZE, C3_COUT);
   Img** S4_out = maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C3_out, BATCHSIZE, C3_COUT, S4_INSIZE);
@@ -62,6 +65,7 @@ int main(int argc, char** argv){
     RandomChoices(batchindice, 60000, BATCHSIZE);
     img_batch = form_img_batch(batchindice, BATCHSIZE, mnist_train_imgs);
     uint8_t* label_batch = form_label_batch(batchindice, BATCHSIZE, mnist_train_labels);
+    //test_image_batch(img_batch, BATCHSIZE, 32);
     forward();
     return 0;
 }
