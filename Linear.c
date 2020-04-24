@@ -8,38 +8,47 @@ float RandomNumber(float Min, float Max)
     return ((float)rand()/(float)RAND_MAX) * (Max - Min) + Min;
 }
 
-void uniform(Linear* linear, int in, int out)
+void uniform_W(float** W, int in, int out)
 {
   float k = 1/(float)in;
   float sqrtk = sqrtf(k);
   for(int i = 0; i<out; i++)
     for(int j=0; j<in; j++)
-      linear->W[i][j] = RandomNumber(-sqrtk, sqrtk);
+      W[i][j] = RandomNumber(-sqrtk, sqrtk);
+}
 
+void uniform_B(float* B, int in, int out)
+{
+  float k = 1/(float)in;
+  float sqrtk = sqrtf(k);
   for(int i=0; i<out; i++)
-    linear->B[i] = RandomNumber(-sqrtk,sqrtk);
+    B[i] = RandomNumber(-sqrtk,sqrtk);
 }
 
 
-void initialize_linear(Linear* linear, int in, int out)
+float** initialize_linear_weight(int in, int out)
 {
   //malloc space of shape (out,in) for weight
-  linear->W = (float**) malloc (out*sizeof(float*));
+  float** W = (float**) malloc (out*sizeof(float*));
   for(int i=0; i<out; i++)
-    linear->W[i]=(float*) malloc (in*sizeof(float));
-
-  //malloc space of shape (out) for bias
-  linear->B = (float*) malloc (out*sizeof(float));
-  uniform(linear, in, out);
+    W[i]=(float*) malloc (in*sizeof(float));
+  uniform_W(W, in, out);
+  return W;
 }
 
-Imgs linear_forward(Linear layer, Imgs in, int batchsize, int in_channels, int out_channels)
+float* initialize_linear_bias(int in, int out)
 {
-  Imgs forward = (mnist_data**) malloc (sizeof(mnist_data*)*batchsize);
+  //malloc space of shape (out) for bias
+  float* B = (float*) malloc (out*sizeof(float));
+  uniform_B(B, in, out);
+  return B;
+}
+
+Img** linear_forward(float** W, float* B, Img** in, int batchsize, int in_channels, int out_channels)
+{
+  Img** forward = (Img**) malloc (sizeof(Img*)*batchsize);
   for(int i=0; i<batchsize; i++)
-  {
-    forward[i] = (mnist_data*) malloc (sizeof(mnist_data)*out_channels);
-  }
+    forward[i] = (Img*)malloc(sizeof(Img)*out_channels);
 
   for(int i=0; i<batchsize; i++)
   {
@@ -50,11 +59,10 @@ Imgs linear_forward(Linear layer, Imgs in, int batchsize, int in_channels, int o
       out[0][0] = 0.0f;
       for(int k=0; k<in_channels; k++)
       {
-        out[0][0] += in[i][k].image[0][0]*layer.W[j][k];
+        out[0][0] += in[i][k][0][0]*W[j][k];
       }
-      out[0][0] += layer.B[j];
-      forward[i][j].image = out;
-      forward[i][j].label = 0;//Note, really isn't a label notation here. need to change code.
+      out[0][0] += B[j];
+      forward[i][j] = out;
     }
   }
   return forward;

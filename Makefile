@@ -1,6 +1,7 @@
 CC=clang
 CFLAGS= -ggdb
-OBJ = mnist.o lenet.o lenet_test.o conv2d.o MaxPool2d.o Linear.o
+#OBJ = mnist.o lenet.o lenet_test.o conv2d.o MaxPool2d.o Linear.o
+OBJ = mnist.o lenet.o conv2d.o Linear.o lenet_test.o MaxPool2d.o
 LINKFLAGS= -lm
 INPUT= mnist_train.csv
 
@@ -10,12 +11,9 @@ INPUT= mnist_train.csv
 lenet: $(OBJ)
 		$(CC) -o $@ $^ $(CFLAGS) $(LINKFLAGS)
 
-convert: convert_mnist.py
-	python convert_mnist.py
-
 run: lenet
-	./lenet $(INPUT)
+	./lenet
 
 clean:
-	rm *.o *.csv lenet
+	rm *.o lenet
 

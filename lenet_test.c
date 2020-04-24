@@ -1,50 +1,36 @@
 #include <stdio.h>
 #include "lenet.h"
 
-#ifndef CONV_W
-#define CONV_W 5
-#endif
-#ifndef CONV_L
-#define CONV_L 5
-#endif
-void test_conv_init(Conv2d conv)
+void test_conv_init(float**** kernel, int in_channels, int out_channels, int size)
 {
-  for (int i=0; i<conv.out_channels; i++)
-  {
-    for(int j=0; j<conv.in_channels; j++)
-    {
-      for(int k=0; k<CONV_W; k++)
-      {
-        for(int l=0; l<CONV_L; l++)
-        {
-            printf("%.3f, ", conv.kernel[i][j][k][l]);
-        }
-      }
-    }
-  }
+  for (int i=0; i<out_channels; i++)
+    for(int j=0; j<in_channels; j++)
+      for(int k=0; k<size; k++)
+        for(int l=0; l<size; l++)
+            printf("%.3f, ", kernel[i][j][k][l]);
 }
 
-void test_linear_init(Linear l, int out, int in)
+void test_linear_init(float** W, float* B, int out, int in)
 {
    printf("Weight:\n");
    for(int i=0; i<out; i++)
    {
      for(int j=0; j<in; j++)
      {
-       printf("%.3f, ", l.W[i][j]);
+       printf("%.3f, ", W[i][j]);
      }
    }
    printf("\nBias:\n");
    for(int i=0; i<out; i++)
-     printf("%.3f, ", l.B[i]);
+     printf("%.3f, ", B[i]);
 }
 
 void test_initialization (LeNet* lenet)
 {
   printf("Printing C1 Initialized weights..\n");
-  test_conv_init(lenet->C1);
+  test_conv_init(lenet->C1, 1,6,5);
   printf("\nPrinting C3 Initialized weights..\n");
-  test_conv_init(lenet->C3);
+  test_conv_init(lenet->C3, 6,16,5);
   printf("\nPrinting F6 Initialized weights..\n");
-  test_linear_init(lenet->F6, 84, 120);
+  test_linear_init(lenet->F6_W, lenet->F6_B, 84, 120);
 }

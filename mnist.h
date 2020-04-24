@@ -1,14 +1,10 @@
 #include <stdio.h>
+#include <stdint.h>
+typedef float** Img;
+Img mnist_train_imgs[60000];
+uint8_t mnist_train_labels[60000];
 
-typedef struct mnist_data {
-  float** image; //maximum size
-  unsigned int  label;
-}mnist_data;
+void init_data(const char* imagefile, const char* labelfile, Img* imgs, uint8_t* labels);
 
-typedef mnist_data** Imgs;
-
-mnist_data mnist[60000];
-
-void init_data(FILE* fp, mnist_data* mnist, int h, int w);
-
-Imgs form_images(int* batchindice, int batchsize, int channels);
+Img** form_img_batch(int* batchindice, int batchsize, Img* mnist_train_imgs);
+uint8_t* form_label_batch(int* batchindice, int batchsize, uint8_t* mnist_train_labels);

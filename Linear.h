@@ -1,8 +1,2 @@
-
-typedef struct Linear
-{
-  float** W;
-  float*  B;
-}Linear;
-
-void initialize_linear(Linear* linear, int in, int out);
+float** initialize_linear_weight(int in, int out);
+float*  initialize_linear_bias  (int in, int out);
