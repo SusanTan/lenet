@@ -10,8 +10,12 @@ INPUT= mnist_train.csv
 lenet: $(OBJ)
 		$(CC) -o $@ $^ $(CFLAGS) $(LINKFLAGS)
 
-clean:
-	rm *.o lenet
+convert: convert_mnist.py
+	python convert_mnist.py
 
 run: lenet
 	./lenet $(INPUT)
+
+clean:
+	rm *.o *.csv lenet
+
