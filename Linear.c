@@ -1,4 +1,3 @@
-#include "Linear.h"
 #include <stdlib.h>
 #include <math.h>
 #include "mnist.h"

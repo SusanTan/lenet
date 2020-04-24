@@ -1,4 +1,3 @@
-#include "conv2d.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

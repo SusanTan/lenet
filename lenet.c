@@ -54,14 +54,6 @@ void forward()
 }
 
 int main(int argc, char** argv){
-
-    FILE *fp = fopen("mnist_train.csv","r");
-
-    if (fp == NULL){
-      printf("Requires mnist_train.csv, please run: make convert");
-      exit(1);
-    }
-
     init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels);
     initialize_lenet(&lenet);
 

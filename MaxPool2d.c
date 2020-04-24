@@ -1,4 +1,3 @@
-#include "MaxPool2d.h"
 #include "mnist.h"
 #include <stdlib.h>
 

@@ -1,7 +1,4 @@
 #include "mnist.h"
-#include "conv2d.h"
-#include "MaxPool2d.h"
-#include "Linear.h"
 
 #define CONV_SIZE   5
 #define POOL_SIZE   2
@@ -44,7 +41,12 @@ typedef struct LeNet
 
 LeNet lenet;
 
+//initializations
+float**** initialize_conv(int in_channels, int out_channels, int kernel_size);
+float** initialize_linear_weight(int in, int out);
+float*  initialize_linear_bias  (int in, int out);
 
+//forward pass
 Img** conv2d_forward(float**** conv, Img** img_batch, int batchsize, int img_size, int in_channels, int out_channels);
 Img** maxpool2d_forward(int stride, int pool_size, Img** in, int batchsize, int channels, int img_size);
 Img** linear_forward(float** W, float* B, Img** in, int batchsize, int in_channels, int out_channels);
