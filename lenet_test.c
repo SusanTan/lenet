@@ -47,3 +47,32 @@ void test_image_batch (Img** imgs, int batchsize, int imgsize)
           printf("%.4f, ",imgs[i][0][j][k]);
   }
 }
+
+void test_output (Img** imgs, int batchsize)
+{
+
+  for(int i=0; i<batchsize; i++)
+  {
+    printf("\n*******test batch %d**************\n ", i);
+    for(int j=0; j<10; j++)
+      printf("%.3f, ", imgs[i][j][0][0]);
+  }
+  printf("\n");
+
+}
+
+
+void test_weight (float** W, int in_channels, int out_channels)
+{
+  printf("\n********test weight*********\n");
+  for(int i=0; i<out_channels; i++)
+    for(int j=0; j<in_channels; j++)
+      printf("%.3f, ", W[i][j]);
+}
+
+void test_bias (float* B, int out_channels)
+{
+  printf("\n********test bias*********\n");
+  for(int i=0; i<out_channels; i++)
+     printf("%.3f, ", B[i]);
+}

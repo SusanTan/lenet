@@ -14,17 +14,19 @@
 #define OL_COUT     10
 
 //image size
-#define C1_INSIZE   32
-#define S2_INSIZE   28
-#define C3_INSIZE   14
-#define S4_INSIZE   10
-#define C5_INSIZE   5
-#define F6_INSIZE   1
+#define C1_OUTSIZE  28
+#define S2_OUTSIZE  14
+#define C3_OUTSIZE  10
+#define S4_OUTSIZE  5
+#define C5_OUTSIZE  1
+#define F6_OUTSIZE  1
+#define OL_OUTSIZE  1
 
 Img mnist_train_imgs[60000];
 uint8_t mnist_train_labels[60000];
 
 Img** img_batch;
+uint8_t* label_batch;
 //kernels of size (out_channels, in_channels, h, w)
 typedef struct LeNet
 {
@@ -41,12 +43,27 @@ typedef struct LeNet
 
 LeNet lenet;
 
+/// intermediate results///////
+Img** C1_out;
+Img** S2_out;
+Img** C3_out;
+Img** S4_out;
+Img** C5_out;
+Img** F6_out;
+Img** OL_out;
+
+float** OL_W_delta;
+///////////////////////////////
+
 //initializations
 float**** initialize_conv(int in_channels, int out_channels, int kernel_size);
 float** initialize_linear_weight(int in, int out);
 float*  initialize_linear_bias  (int in, int out);
 
 //forward pass
-Img** conv2d_forward(float**** conv, Img** img_batch, int batchsize, int img_size, int in_channels, int out_channels);
-Img** maxpool2d_forward(int stride, int pool_size, Img** in, int batchsize, int channels, int img_size);
-Img** linear_forward(float** W, float* B, Img** in, int batchsize, int in_channels, int out_channels);
+void conv2d_forward(float**** conv, Img** img_batch, int batchsize, int img_size, int in_channels, int out_channels, Img** output);
+void maxpool2d_forward(int stride, int pool_size, Img** in, int batchsize, int channels, int img_size, Img** output);
+void linear_forward(float** W, float* B, Img** in, int batchsize, int in_channels, int out_channels, Img** output);
+
+//backward pass
+void last_layer_backward(uint8_t* label_batch, Img** out, Img** in, float** W, float* B, int batchsize, int in_channels, int out_channels, float** delta);

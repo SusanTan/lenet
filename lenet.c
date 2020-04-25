@@ -10,6 +10,29 @@ void RandomChoices(int* batchindice, int range, int size)
     batchindice[i] = (rand()%(range+1));
 }
 
+float** initialize_deltas(int d1, int d2)
+{
+  float** result = (float**)malloc(d1*sizeof(float*));
+  for(int i=0; i<d1; i++)
+    result[i] = (float*)malloc(d2*sizeof(float));
+  return result;
+}
+
+Img** initialize_images(int d1, int d2, int d3, int d4)
+{
+  Img** images = (Img**)malloc(sizeof(Img*)*d1);
+  for(int i=0; i<d1; i++)
+  {
+    images[i] = (Img*)malloc(sizeof(Img)*d2);
+    for(int j=0; j<d2; j++)
+    {
+      images[i][j] = (float**)malloc(sizeof(float*)*d3);
+      for(int k=0; k<d3; k++)
+        images[i][j][k] = (float*)malloc(sizeof(float)*d4);
+    }
+  }
+  return images;
+}
 
 void initialize_lenet(LeNet* lenet){
   lenet->pool_stride = POOL_STRIDE;
@@ -22,6 +45,16 @@ void initialize_lenet(LeNet* lenet){
   lenet->OL_W = initialize_linear_weight(F6_COUT, OL_COUT);
   lenet->OL_B = initialize_linear_bias  (F6_COUT, OL_COUT);
   //test_initialization (lenet);
+
+  //initialize all intermediate storages
+  C1_out = initialize_images(BATCHSIZE, C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
+  S2_out = initialize_images(BATCHSIZE, C1_COUT, S2_OUTSIZE, S2_OUTSIZE);
+  C3_out = initialize_images(BATCHSIZE, C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
+  S4_out = initialize_images(BATCHSIZE, C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
+  C5_out = initialize_images(BATCHSIZE, C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
+  F6_out = initialize_images(BATCHSIZE, F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
+  OL_out = initialize_images(BATCHSIZE, OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
+  OL_W_delta = initialize_deltas(BATCHSIZE, OL_COUT);
 }
 
 void torch_tanh (Img** x, int batchsize, int img_size, int channels)
@@ -35,26 +68,59 @@ void torch_tanh (Img** x, int batchsize, int img_size, int channels)
 
 void forward()
 {
-  Img** C1_out = conv2d_forward(lenet.C1, img_batch, BATCHSIZE, C1_INSIZE, C1_CIN, C1_COUT);
-  //test_image_batch(C1_out, BATCHSIZE, S2_INSIZE);
-  torch_tanh(C1_out, BATCHSIZE, S2_INSIZE, C1_COUT);
-  //test_image_batch(C1_out, BATCHSIZE, S2_INSIZE);
-	Img** S2_out = maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C1_out, BATCHSIZE, C1_COUT, S2_INSIZE);
-  test_image_batch(S2_out, BATCHSIZE, C3_INSIZE);
-  Img** C3_out = conv2d_forward(lenet.C3, S2_out, BATCHSIZE, C3_INSIZE, C1_COUT, C3_COUT);
-  torch_tanh(C3_out, BATCHSIZE, S4_INSIZE, C3_COUT);
-  Img** S4_out = maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C3_out, BATCHSIZE, C3_COUT, S4_INSIZE);
-  Img** C5_out = conv2d_forward(lenet.C5, S4_out, BATCHSIZE, C5_INSIZE, C3_COUT, C5_COUT);
-  torch_tanh(C5_out, BATCHSIZE, F6_INSIZE, C5_COUT);
-  Img** F6_out = linear_forward(lenet.F6_W, lenet.F6_B, C5_out, BATCHSIZE, C5_COUT, F6_COUT);
-  Img** output = linear_forward(lenet.OL_W, lenet.OL_B, F6_out, BATCHSIZE, F6_COUT, OL_COUT);
-  for(int i=0; i<32; i++)
-  {
-    printf("test batch %d:\n ", i);
-    for(int j=0; j<10; j++)
-      printf("%.3f, ", output[i][j][0][0]);
-  }
+  conv2d_forward(lenet.C1, img_batch, BATCHSIZE, C1_OUTSIZE, C1_CIN, C1_COUT, C1_out);
+  torch_tanh(C1_out, BATCHSIZE, C1_OUTSIZE, C1_COUT);
+	maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C1_out, BATCHSIZE, C1_COUT, S2_OUTSIZE, S2_out);
+  conv2d_forward(lenet.C3, S2_out, BATCHSIZE, C3_OUTSIZE, C1_COUT, C3_COUT, C3_out);
+  torch_tanh(C3_out, BATCHSIZE, C3_OUTSIZE, C3_COUT);
+  maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C3_out, BATCHSIZE, C3_COUT, S4_OUTSIZE, S4_out);
+  conv2d_forward(lenet.C5, S4_out, BATCHSIZE, C5_OUTSIZE, C3_COUT, C5_COUT, C5_out);
+  torch_tanh(C5_out, BATCHSIZE, C5_OUTSIZE, C5_COUT);
+  linear_forward(lenet.F6_W, lenet.F6_B, C5_out, BATCHSIZE, C5_COUT, F6_COUT, F6_out);
+  torch_tanh(F6_out, BATCHSIZE, F6_OUTSIZE, F6_COUT);
+  linear_forward(lenet.OL_W, lenet.OL_B, F6_out, BATCHSIZE, F6_COUT, OL_COUT, OL_out);
+  torch_tanh(OL_out, BATCHSIZE, OL_OUTSIZE, OL_COUT);
 }
+
+/*float mse_loss(Img** output, uint8_t* label_batch)
+{
+  float y[BATCHSIZE][OL_COUT];
+  float mse = 0.0f;
+
+  for (int i=0; i<BATCHSIZE; i++)
+  {
+    for(int j=0; j<OL_COUT; j++)
+    {
+      if(j==label_batch[i])
+        y[i][j]=1.0f;
+      else
+        y[i][j]=-1.0f;
+    }
+  }
+
+  float temp = 0.0f;
+  for(int i=0; i<BATCHSIZE; i++)
+  {
+    for(int j=0; j<OL_COUT; j++)
+    {
+      temp = 0.5f*(y[i][j]-output[i][j][0][0])*(y[i][j]-output[i][j][0][0]);
+      mse += temp;
+    }
+  }
+  mse /= BATCHSIZE*OL_COUT;
+  return mse;
+}*/
+
+void backward()
+{
+  //float loss = mse_loss(output, label_batch);
+  test_weight(lenet.OL_W, F6_COUT, OL_COUT);
+  test_bias(lenet.OL_B, OL_COUT);
+  last_layer_backward(label_batch, OL_out, F6_out, lenet.OL_W,
+                      lenet.OL_B, BATCHSIZE, F6_COUT, OL_COUT, OL_W_delta);
+  test_bias(lenet.OL_B, OL_COUT);
+}
+
 
 int main(int argc, char** argv){
     init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels);
@@ -64,8 +130,9 @@ int main(int argc, char** argv){
     int batchindice[BATCHSIZE];
     RandomChoices(batchindice, 60000, BATCHSIZE);
     img_batch = form_img_batch(batchindice, BATCHSIZE, mnist_train_imgs);
-    uint8_t* label_batch = form_label_batch(batchindice, BATCHSIZE, mnist_train_labels);
-    //test_image_batch(img_batch, BATCHSIZE, 32);
+    label_batch = form_label_batch(batchindice, BATCHSIZE, mnist_train_labels);
     forward();
+    test_output(OL_out, BATCHSIZE);
+    backward();
     return 0;
 }

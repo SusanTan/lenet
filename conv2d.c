@@ -60,55 +60,34 @@ float**** initialize_conv(int in_channels, int out_channels, int kernel_size)
 }
 
 
-void convolute_and_cumulate (float** result, float** kernel, Img input, int size)
+void convolute_and_cumulate (float** result, float** kernel, Img input, int out_size)
 {
-  int out_size = size-4;
-
   for(int i=0; i<out_size; i++)
   {
     for(int j=0; j<out_size; j++)
     {
-
       float muladd = 0.0f;
       //compute the convolution part;
       for(int k=0; k<5; k++)
         for(int l=0; l<5; l++)
           muladd += kernel[k][l] * input[i+k][j+l];
-
       result[i][j] += muladd;
     }
   }
-
 }
 
 
-Img** conv2d_forward(float**** conv, Img** x, int batchsize, int img_size, int in_channels, int out_channels)
+void conv2d_forward(float**** conv, Img** x, int batchsize, int img_size, int in_channels, int out_channels, Img** output)
 {
-  int out_size = img_size - 4;//assuming 5x5 kernel stride 1
-  //maloc the final forward result
-  Img** forward = (Img**)malloc(sizeof(Img*)*batchsize);
+  //clear output first
   for(int i=0; i<batchsize; i++)
-    forward[i] = (Img*)malloc(sizeof(Img)*out_channels);
-
-  for(int i=0; i<batchsize; i++)
-  {
     for(int j=0; j<out_channels; j++)
-    {
+      for(int m=0; m<img_size; m++)
+        for(int n=0; n<img_size; n++)
+          output[i][j][m][n] = 0.0f;
 
-      float** result = (float**) malloc(sizeof(float*)*out_size);
-      for(int m=0; m<out_size; m++)
-         result[m] = (float*) malloc (sizeof(float)*out_size);
-
-      for(int m=0; m<out_size; m++)
-        for(int n=0; n<out_size; n++)
-          result[m][n] = 0.0f;
-
+  for(int i=0; i<batchsize; i++)
+    for(int j=0; j<out_channels; j++)
       for(int k=0; k<in_channels; k++)
-        convolute_and_cumulate(result, conv[j][k], x[i][k], img_size);
-
-      forward[i][j] = result;
-    }
-  }
-
-  return forward;
+        convolute_and_cumulate(output[i][j], conv[j][k], x[i][k], img_size);
 }
