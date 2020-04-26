@@ -46,8 +46,10 @@ LeNet lenet;
 /// intermediate results///////
 Img** C1_out;
 Img** S2_out;
+Img** S2_max_map; // record max locations
 Img** C3_out;
 Img** S4_out;
+Img** S4_max_map; // record max locations
 Img** C5_out;
 Img** F6_out;
 Img** OL_out;
@@ -65,10 +67,11 @@ float*  initialize_linear_bias  (int in, int out);
 
 //forward pass
 void conv2d_forward(float**** conv, Img** img_batch, int batchsize, int img_size, int in_channels, int out_channels, Img** output);
-void maxpool2d_forward(int stride, int pool_size, Img** in, int batchsize, int channels, int img_size, Img** output);
+void maxpool2d_forward(int stride, int pool_size, Img** in, int batchsize, int channels, int img_size, Img** output, Img** max_map);
 void linear_forward(float** W, float* B, Img** in, int batchsize, int in_channels, int out_channels, Img** output);
 
 //backward pass
 void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_channels, Img** delta);
 void linear_backward(Img** delta_l_plus_1, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, Img** delta_l);
 void conv_backward(Img** delta_l_plus_1, Img** in, Img** W_l, int batchsize, int l_cin, int l_cout, Img** delta_l, int kernel_size, int img_size_in, int img_size_out);
+void pool_backward(Img** delta_l_plus_1, Img** in, int batchsize, int channels, Img** delta_l, int stride, int img_size_in, Img** max_map);

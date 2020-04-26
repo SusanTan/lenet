@@ -48,8 +48,10 @@ void initialize_lenet(LeNet* lenet){
 
   //initialize all intermediate storages
   C1_out     = initialize_images(BATCHSIZE, C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
+  S2_max_map = initialize_images(BATCHSIZE, C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
   S2_out     = initialize_images(BATCHSIZE, C1_COUT, S2_OUTSIZE, S2_OUTSIZE);
   C3_out     = initialize_images(BATCHSIZE, C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
+  S4_max_map = initialize_images(BATCHSIZE, C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
   S4_out     = initialize_images(BATCHSIZE, C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
   C5_out     = initialize_images(BATCHSIZE, C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
   F6_out     = initialize_images(BATCHSIZE, F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
@@ -73,10 +75,10 @@ void forward()
 {
   conv2d_forward(lenet.C1, img_batch, BATCHSIZE, C1_OUTSIZE, C1_CIN, C1_COUT, C1_out);
   torch_tanh(C1_out, BATCHSIZE, C1_OUTSIZE, C1_COUT);
-	maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C1_out, BATCHSIZE, C1_COUT, S2_OUTSIZE, S2_out);
+	maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C1_out, BATCHSIZE, C1_COUT, S2_OUTSIZE, S2_out, S2_max_map);
   conv2d_forward(lenet.C3, S2_out, BATCHSIZE, C3_OUTSIZE, C1_COUT, C3_COUT, C3_out);
   torch_tanh(C3_out, BATCHSIZE, C3_OUTSIZE, C3_COUT);
-  maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C3_out, BATCHSIZE, C3_COUT, S4_OUTSIZE, S4_out);
+  maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C3_out, BATCHSIZE, C3_COUT, S4_OUTSIZE, S4_out, S4_max_map);
   conv2d_forward(lenet.C5, S4_out, BATCHSIZE, C5_OUTSIZE, C3_COUT, C5_COUT, C5_out);
   torch_tanh(C5_out, BATCHSIZE, C5_OUTSIZE, C5_COUT);
   linear_forward(lenet.F6_W, lenet.F6_B, C5_out, BATCHSIZE, C5_COUT, F6_COUT, F6_out);
