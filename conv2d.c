@@ -49,9 +49,7 @@ float**** initialize_conv(int in_channels, int out_channels, int kernel_size)
     {
       kernel[i][j] = (float**) malloc (sizeof(float*)*kernel_size);
       for(int k=0; k<kernel_size; k++)
-      {
         kernel[i][j][k] = (float*) malloc (sizeof(float)*kernel_size);
-      }
     }
   }
 

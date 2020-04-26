@@ -88,7 +88,7 @@ void last_layer_backward(uint8_t* label_batch, Img** out, Img** in, float** W, f
 
   float eta = 0.1f;
   float temp = 0.0f;
-  //W += <eta * outerproduct(delta, in)> over the batch
+  //W += eta*<outerproduct(delta, in)> over the batch
   for(int j=0; j<out_channels; j++)
   {
     for(int k=0; k<in_channels; k++)
@@ -109,6 +109,53 @@ void last_layer_backward(uint8_t* label_batch, Img** out, Img** in, float** W, f
       temp+=delta[j][i];
     temp *= eta/(float)batchsize;
     B[i] += temp;
+  }
+
+}
+
+void linear_backward(float** W_l_plus_1, float** delta_l_plus_1, Img** out, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, int l_plus1_cout, float** delta_l)
+{
+  //initialize the delta array;
+  for(int i=0; i<batchsize; i++)
+    for(int j=0; j<l_cout; j++)
+      delta_l[i][j] = 0.0f;
+
+  //mmul(W_l_plus_1 * delta)
+  for(int i=0; i<batchsize; i++)
+  {
+    for(int j=0; j<l_cout; j++)
+    {
+      for(int k=0; k<l_plus1_cout; k++)
+        delta_l[i][j] += W_l_plus_1[k][j] * delta_l_plus_1[i][k];
+      float x = out[i][j][0][0];
+      delta_l[i][j] *= (1-x*x);
+    }
+  }
+
+  float eta = 0.1f;
+  float temp = 0.0f;
+  //W -= eta*<outerproduct(delta, in)> over the batch
+  for(int j=0; j<l_cout; j++)
+  {
+    for(int k=0; k<l_cin; k++)
+    {
+      temp = 0.0f;
+      for(int i=0; i<batchsize; i++)
+        temp += delta_l[i][j] * in[i][k][0][0];
+      temp *= eta/(float)batchsize;
+      printf("%.8f, ", temp);
+      W_l[j][k] -= temp;
+    }
+  }
+
+  //B += eta * delta
+  for(int i=0; i<l_cout; i++)
+  {
+    temp = 0.0f;
+    for(int j=0; j<batchsize; j++)
+      temp+=delta_l[j][i];
+    temp *= eta/(float)batchsize;
+    B_l[i] -= temp;
   }
 
 }

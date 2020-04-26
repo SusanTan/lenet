@@ -52,7 +52,8 @@ Img** C5_out;
 Img** F6_out;
 Img** OL_out;
 
-float** OL_W_delta;
+float** OL_delta;
+float** F6_delta;
 ///////////////////////////////
 
 //initializations
@@ -67,3 +68,4 @@ void linear_forward(float** W, float* B, Img** in, int batchsize, int in_channel
 
 //backward pass
 void last_layer_backward(uint8_t* label_batch, Img** out, Img** in, float** W, float* B, int batchsize, int in_channels, int out_channels, float** delta);
+void linear_backward(float** W_l_plus_1, float** delta_l_plus_1, Img** out, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, int l_plus1_cout, float** delta_l);

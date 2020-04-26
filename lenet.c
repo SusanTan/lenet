@@ -54,7 +54,8 @@ void initialize_lenet(LeNet* lenet){
   C5_out = initialize_images(BATCHSIZE, C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
   F6_out = initialize_images(BATCHSIZE, F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
   OL_out = initialize_images(BATCHSIZE, OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
-  OL_W_delta = initialize_deltas(BATCHSIZE, OL_COUT);
+  OL_delta = initialize_deltas(BATCHSIZE, OL_COUT);
+  F6_delta = initialize_deltas(BATCHSIZE, F6_COUT);
 }
 
 void torch_tanh (Img** x, int batchsize, int img_size, int channels)
@@ -114,11 +115,10 @@ void forward()
 void backward()
 {
   //float loss = mse_loss(output, label_batch);
-  test_weight(lenet.OL_W, F6_COUT, OL_COUT);
-  test_bias(lenet.OL_B, OL_COUT);
-  last_layer_backward(label_batch, OL_out, F6_out, lenet.OL_W,
-                      lenet.OL_B, BATCHSIZE, F6_COUT, OL_COUT, OL_W_delta);
-  test_bias(lenet.OL_B, OL_COUT);
+  last_layer_backward  (label_batch, OL_out, F6_out, lenet.OL_W,
+                        lenet.OL_B, BATCHSIZE, F6_COUT, OL_COUT, OL_delta);
+  linear_backward      (lenet.OL_W, OL_delta, F6_out, C5_out, lenet.F6_W,
+                        lenet.F6_B, BATCHSIZE, C5_COUT, F6_COUT, OL_COUT, F6_delta);
 }
 
 
