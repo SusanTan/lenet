@@ -52,9 +52,10 @@ Img** C5_out;
 Img** F6_out;
 Img** OL_out;
 
-float** last_delta; //(batchsize, 10)
-float** OL_delta;
-float** F6_delta;
+Img** last_delta; //(batchsize, 10)
+Img** OL_delta;
+Img** F6_delta;
+Img** C5_delta;
 ///////////////////////////////
 
 //initializations
@@ -68,5 +69,6 @@ void maxpool2d_forward(int stride, int pool_size, Img** in, int batchsize, int c
 void linear_forward(float** W, float* B, Img** in, int batchsize, int in_channels, int out_channels, Img** output);
 
 //backward pass
-void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_channels, float** delta);
-void linear_backward(float** delta_l_plus_1, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, float** delta_l);
+void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_channels, Img** delta);
+void linear_backward(Img** delta_l_plus_1, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, Img** delta_l);
+void conv_backward(Img** delta_l_plus_1, Img** in, Img** W_l, int batchsize, int l_cin, int l_cout, Img** delta_l, int kernel_size, int img_size_in, int img_size_out);

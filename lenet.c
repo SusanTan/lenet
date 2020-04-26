@@ -47,16 +47,17 @@ void initialize_lenet(LeNet* lenet){
   //test_initialization (lenet);
 
   //initialize all intermediate storages
-  C1_out = initialize_images(BATCHSIZE, C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
-  S2_out = initialize_images(BATCHSIZE, C1_COUT, S2_OUTSIZE, S2_OUTSIZE);
-  C3_out = initialize_images(BATCHSIZE, C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
-  S4_out = initialize_images(BATCHSIZE, C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
-  C5_out = initialize_images(BATCHSIZE, C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
-  F6_out = initialize_images(BATCHSIZE, F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
-  OL_out = initialize_images(BATCHSIZE, OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
-  last_delta = initialize_deltas(BATCHSIZE, OL_COUT);
-  OL_delta   = initialize_deltas(BATCHSIZE, F6_COUT);
-  F6_delta   = initialize_deltas(BATCHSIZE, C5_COUT);
+  C1_out     = initialize_images(BATCHSIZE, C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
+  S2_out     = initialize_images(BATCHSIZE, C1_COUT, S2_OUTSIZE, S2_OUTSIZE);
+  C3_out     = initialize_images(BATCHSIZE, C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
+  S4_out     = initialize_images(BATCHSIZE, C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
+  C5_out     = initialize_images(BATCHSIZE, C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
+  F6_out     = initialize_images(BATCHSIZE, F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
+  OL_out     = initialize_images(BATCHSIZE, OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
+  last_delta = initialize_images(BATCHSIZE, OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
+  OL_delta   = initialize_images(BATCHSIZE, F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
+  F6_delta   = initialize_images(BATCHSIZE, C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
+  C5_delta   = initialize_images(BATCHSIZE, C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
 }
 
 void torch_tanh (Img** x, int batchsize, int img_size, int channels)
@@ -119,8 +120,12 @@ void backward()
   last_layer_prep  (label_batch, OL_out, BATCHSIZE, OL_COUT, last_delta);
   linear_backward  (last_delta, F6_out, lenet.OL_W, lenet.OL_B, BATCHSIZE,
                     F6_COUT, OL_COUT, OL_delta);
-  linear_backward  (OL_delta,   C5_out, lenet.F6_W, lenet.F6_B, BATCHSIZE,
+  linear_backward  (OL_delta, C5_out, lenet.F6_W, lenet.F6_B, BATCHSIZE,
                     C5_COUT, F6_COUT, F6_delta);
+  test_weight(lenet.C5[119][15], CONV_SIZE, CONV_SIZE);
+  conv_backward    (F6_delta, S4_out, lenet.C5, BATCHSIZE, C3_COUT, C5_COUT,
+                    C5_delta, CONV_SIZE, S4_OUTSIZE, C5_OUTSIZE);
+  test_weight(lenet.C5[119][15], CONV_SIZE, CONV_SIZE);
 }
 
 

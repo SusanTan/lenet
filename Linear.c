@@ -60,7 +60,7 @@ void linear_forward(float** W, float* B, Img** in, int batchsize, int in_channel
   }
 }
 
-void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_channels, float** delta)
+void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_channels, Img** delta)
 {
   //form y the same size as out
   for (int i=0; i<batchsize; i++)
@@ -69,10 +69,10 @@ void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_cha
     {
       if(j==label_batch[i])
       {
-        delta[i][j]=1.0f;
+        delta[i][j][0][0]=1.0f;
       }
       else
-        delta[i][j]=-1.0f;
+        delta[i][j][0][0]=-1.0f;
     }
   }
 
@@ -82,18 +82,18 @@ void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_cha
     for(int j=0; j<out_channels; j++)
     {
       float x = out[i][j][0][0];
-      delta[i][j] = -(delta[i][j]-x)*(1-x*x);
+      delta[i][j][0][0] = -(delta[i][j][0][0]-x)*(1-x*x);
     }
   }
 
 }
 
-void linear_backward(float** delta_l_plus_1, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, float** delta_l)
+void linear_backward(Img** delta_l_plus_1, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, Img** delta_l)
 {
   //initialize the delta array;
   for(int i=0; i<batchsize; i++)
     for(int j=0; j<l_cin; j++)
-      delta_l[i][j] = 0.0f;
+      delta_l[i][j][0][0] = 0.0f;
 
   //mmul(W * delta)
   for(int i=0; i<batchsize; i++)
@@ -101,9 +101,9 @@ void linear_backward(float** delta_l_plus_1, Img** in, float** W_l, float* B_l, 
     for(int j=0; j<l_cin; j++)
     {
       for(int k=0; k<l_cout; k++)
-        delta_l[i][j] += W_l[k][j] * delta_l_plus_1[i][k];
+        delta_l[i][j][0][0] += W_l[k][j] * delta_l_plus_1[i][k][0][0];
       float x = in[i][j][0][0];
-      delta_l[i][j] *= (1-x*x);
+      delta_l[i][j][0][0] *= (1-x*x);
     }
   }
 
@@ -116,7 +116,7 @@ void linear_backward(float** delta_l_plus_1, Img** in, float** W_l, float* B_l, 
     {
       temp = 0.0f;
       for(int i=0; i<batchsize; i++)
-        temp += delta_l_plus_1[i][j] * in[i][k][0][0];
+        temp += delta_l_plus_1[i][j][0][0] * in[i][k][0][0];
       temp *= eta/(float)batchsize;
       W_l[j][k] -= temp;
     }
@@ -127,7 +127,7 @@ void linear_backward(float** delta_l_plus_1, Img** in, float** W_l, float* B_l, 
   {
     temp = 0.0f;
     for(int j=0; j<batchsize; j++)
-      temp += delta_l_plus_1[j][i];
+      temp += delta_l_plus_1[j][i][0][0];
     temp *= eta/(float)batchsize;
     B_l[i] -= temp;
   }
