@@ -14,6 +14,7 @@
 #define OL_COUT     10
 
 //image size
+#define C1_INSIZE   32
 #define C1_OUTSIZE  28
 #define S2_OUTSIZE  14
 #define C3_OUTSIZE  10
@@ -42,22 +43,26 @@ typedef struct LeNet
 }LeNet;
 
 LeNet lenet;
-
+LeNet delta;
 /// intermediate results///////
-Img** C1_out;
-Img** S2_out;
-Img** S2_max_map; // record max locations
-Img** C3_out;
-Img** S4_out;
-Img** S4_max_map; // record max locations
-Img** C5_out;
-Img** F6_out;
-Img** OL_out;
+Img* C1_out;
+Img* S2_out;
+Img* S2_max_map; // record max locations
+Img* C3_out;
+Img* S4_out;
+Img* S4_max_map; // record max locations
+Img* C5_out;
+Img* F6_out;
+Img* OL_out;
 
-Img** last_delta; //(batchsize, 10)
-Img** OL_delta;
-Img** F6_delta;
-Img** C5_delta;
+Img* last_error; //(batchsize, 10)
+Img* OL_error;
+Img* F6_error;
+Img* C5_error;
+Img* S4_error;
+Img* C3_error;
+Img* S2_error;
+Img* C1_error;
 ///////////////////////////////
 
 //initializations
@@ -66,12 +71,12 @@ float** initialize_linear_weight(int in, int out);
 float*  initialize_linear_bias  (int in, int out);
 
 //forward pass
-void conv2d_forward(float**** conv, Img** img_batch, int batchsize, int img_size, int in_channels, int out_channels, Img** output);
-void maxpool2d_forward(int stride, int pool_size, Img** in, int batchsize, int channels, int img_size, Img** output, Img** max_map);
-void linear_forward(float** W, float* B, Img** in, int batchsize, int in_channels, int out_channels, Img** output);
+void conv2d_forward(float**** conv, Img* x, int img_size, int in_channels, int out_channels, Img* output);
+void maxpool2d_forward(int stride, int pool_size, Img* in, int channels, int img_size, Img* output, Img* max_map);
+void linear_forward(float** W, float* B, Img* in, int in_channels, int out_channels, Img* output);
 
 //backward pass
-void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_channels, Img** delta);
-void linear_backward(Img** delta_l_plus_1, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, Img** delta_l);
-void conv_backward(Img** delta_l_plus_1, Img** in, Img** W_l, int batchsize, int l_cin, int l_cout, Img** delta_l, int kernel_size, int img_size_in, int img_size_out);
-void pool_backward(Img** delta_l_plus_1, Img** in, int batchsize, int channels, Img** delta_l, int stride, int img_size_in, Img** max_map);
+void last_layer_prep(uint8_t label, Img* out, int out_channels, Img* delta);
+void linear_backward(Img* error_l_plus_1, Img* in, float** W_l, float* B_l, int l_cin, int l_cout, Img* error_l, float**W_l_delta, float* B_l_delta);
+void conv_backward(Img* error_l_plus_1, Img* in, float**** W_l, int l_cin, int l_cout, Img* error_l, int kernel_size, int img_size_in, int img_size_out, float**** W_l_delta);
+void pool_backward(Img* error_l_plus_1, int channels, Img* error_l, int stride, int img_size_in, Img* max_map);

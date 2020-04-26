@@ -43,93 +43,61 @@ float* initialize_linear_bias(int in, int out)
   return B;
 }
 
-void linear_forward(float** W, float* B, Img** in, int batchsize, int in_channels, int out_channels, Img** output)
+void linear_forward(float** W, float* B, Img* in, int in_channels, int out_channels, Img* output)
 {
-  for(int i=0; i<batchsize; i++)
-    for(int j=0; j<out_channels; j++)
-      output[i][j][0][0] = 0.0f;
+  for(int i=0; i<out_channels; i++)
+    output[i][0][0] = 0.0f;
 
-  for(int i=0; i<batchsize; i++)
+  for(int j=0; j<out_channels; j++)
   {
-    for(int j=0; j<out_channels; j++)
-    {
-      for(int k=0; k<in_channels; k++)
-        output[i][j][0][0] += in[i][k][0][0]*W[j][k];
-      output[i][j][0][0] += B[j];
-    }
+    for(int k=0; k<in_channels; k++)
+      output[j][0][0] += in[k][0][0]*W[j][k];
+    output[j][0][0] += B[j];
   }
 }
 
-void last_layer_prep(uint8_t* label_batch, Img** out, int batchsize, int out_channels, Img** delta)
+void last_layer_prep(uint8_t label, Img* out, int out_channels, Img* error)
 {
   //form y the same size as out
-  for (int i=0; i<batchsize; i++)
+  for(int j=0; j<out_channels; j++)
   {
-    for(int j=0; j<out_channels; j++)
-    {
-      if(j==label_batch[i])
-      {
-        delta[i][j][0][0]=1.0f;
-      }
-      else
-        delta[i][j][0][0]=-1.0f;
-    }
+    if(j==label)
+      error[j][0][0]=1.0f;
+    else
+      error[j][0][0]=-1.0f;
   }
 
   //delta = -(y-out)*df(out) where df(x) is 1-x*x
-  for(int i=0; i<batchsize; i++)
+  for(int j=0; j<out_channels; j++)
   {
-    for(int j=0; j<out_channels; j++)
-    {
-      float x = out[i][j][0][0];
-      delta[i][j][0][0] = -(delta[i][j][0][0]-x)*(1-x*x);
-    }
+    float x = out[j][0][0];
+    error[j][0][0] = -(error[j][0][0]-x)*(1-x*x);
   }
-
 }
 
-void linear_backward(Img** delta_l_plus_1, Img** in, float** W_l, float* B_l, int batchsize, int l_cin, int l_cout, Img** delta_l)
+void linear_backward(Img* error_l_plus_1, Img* in, float** W_l, float* B_l, int l_cin, int l_cout, Img* error_l, float** W_l_delta, float* B_l_delta)
 {
-  //initialize the delta array;
-  for(int i=0; i<batchsize; i++)
-    for(int j=0; j<l_cin; j++)
-      delta_l[i][j][0][0] = 0.0f;
+  //initialize the error array;
+  for(int i=0; i<l_cin; i++)
+    error_l[i][0][0] = 0.0f;
 
   //mmul(W * delta)
-  for(int i=0; i<batchsize; i++)
+  for(int j=0; j<l_cin; j++)
   {
-    for(int j=0; j<l_cin; j++)
-    {
-      for(int k=0; k<l_cout; k++)
-        delta_l[i][j][0][0] += W_l[k][j] * delta_l_plus_1[i][k][0][0];
-      float x = in[i][j][0][0];
-      delta_l[i][j][0][0] *= (1-x*x);
-    }
+    for(int k=0; k<l_cout; k++)
+      error_l[j][0][0] += W_l[k][j] * error_l_plus_1[k][0][0];
+    float x = in[j][0][0];
+    error_l[j][0][0] *= (1-x*x);
   }
 
   float eta = 0.1f;
-  float temp = 0.0f;
-  //W -= eta*<outerproduct(delta, in)> over the batch
+  //W -= eta*outerproduct(delta, in) over the batch
+  //please /batchsize in main
   for(int j=0; j<l_cout; j++)
-  {
     for(int k=0; k<l_cin; k++)
-    {
-      temp = 0.0f;
-      for(int i=0; i<batchsize; i++)
-        temp += delta_l_plus_1[i][j][0][0] * in[i][k][0][0];
-      temp *= eta/(float)batchsize;
-      W_l[j][k] -= temp;
-    }
-  }
+      W_l_delta[j][k] -= eta*error_l_plus_1[j][0][0] * in[k][0][0];
 
   //B += eta * delta
   for(int i=0; i<l_cout; i++)
-  {
-    temp = 0.0f;
-    for(int j=0; j<batchsize; j++)
-      temp += delta_l_plus_1[j][i][0][0];
-    temp *= eta/(float)batchsize;
-    B_l[i] -= temp;
-  }
-
+    B_l_delta[i] -= eta*error_l_plus_1[i][0][0];
 }

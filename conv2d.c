@@ -76,66 +76,45 @@ void convolute_full (float** result, float** kernel, Img input, int kernel_size,
 }
 
 
-void conv2d_forward(float**** conv, Img** x, int batchsize, int img_size, int in_channels, int out_channels, Img** output)
+void conv2d_forward(float**** conv, Img* x, int img_size, int in_channels, int out_channels, Img* output)
 {
   //clear output first
-  for(int i=0; i<batchsize; i++)
-    for(int j=0; j<out_channels; j++)
-      for(int m=0; m<img_size; m++)
-        for(int n=0; n<img_size; n++)
-          output[i][j][m][n] = 0.0f;
+  for(int i=0; i<out_channels; i++)
+    for(int j=0; j<img_size; j++)
+      for(int k=0; k<img_size; k++)
+        output[i][j][k] = 0.0f;
 
-  for(int i=0; i<batchsize; i++)
-    for(int j=0; j<out_channels; j++)
-      for(int k=0; k<in_channels; k++)
-        convolute_valid(output[i][j], conv[j][k], x[i][k], 5, img_size);
+   for(int j=0; j<out_channels; j++)
+     for(int k=0; k<in_channels; k++)
+       convolute_valid(output[j], conv[j][k], x[k], 5, img_size);
 }
 
-void conv_backward(Img** delta_l_plus_1, Img** in, Img** W_l, int batchsize, int l_cin, int l_cout, Img** delta_l, int kernel_size, int img_size_in, int img_size_out)
+void conv_backward(Img* error_l_plus_1, Img* in, float**** W_l, int l_cin, int l_cout, Img* error_l, int kernel_size, int img_size_in, int img_size_out, float**** W_l_delta)
 {
   //clear the delta array
-  for(int i=0; i<batchsize; i++)
-    for(int j=0; j<l_cin; j++)
-      for(int k=0; k<img_size_in; k++)
-        for(int l=0; l<img_size_in; l++)
-          delta_l[i][j][k][l] = 0.0f;
+  for(int j=0; j<l_cin; j++)
+    for(int k=0; k<img_size_in; k++)
+      for(int l=0; l<img_size_in; l++)
+        error_l[j][k][l] = 0.0f;
 
-  for(int i=0; i<batchsize; i++)
-    for(int j=0; j<l_cout; j++)
-      for(int k=0; k<l_cin; k++)
-        convolute_full(delta_l[i][k], W_l[j][k], delta_l_plus_1[i][j], kernel_size, img_size_out);
+  for(int j=0; j<l_cout; j++)
+    for(int k=0; k<l_cin; k++)
+      convolute_full(error_l[k], W_l[j][k], error_l_plus_1[j], kernel_size, img_size_out);
 
-  for(int i=0; i<batchsize; i++)
-    for(int j=0; j<l_cin; j++)
-      for(int k=0; k<img_size_in; k++)
-        for(int l=0; l<img_size_in; l++)
-          delta_l[i][j][k][l] *= 1-(in[i][j][k][l]*in[i][j][k][l]);
-
-  //clear the buffer
-  float temp[l_cout][l_cin][img_size_in][img_size_in];
-  for(int i=0; i<l_cout; i++)
-    for(int j=0; j<l_cin; j++)
-      for(int k=0; k<img_size_in; k++)
-        for(int l=0; l<img_size_in; l++)
-          temp[i][j][k][l] = 0.0f;
+  for(int j=0; j<l_cin; j++)
+    for(int k=0; k<img_size_in; k++)
+      for(int l=0; l<img_size_in; l++)
+        error_l[j][k][l] *= 1-(in[j][k][l]*in[j][k][l]);
 
   //batched, reverted convolution in the buffer, too lazy to do anything fancy
   for(int i=0; i<l_cout; i++)
     for(int j=0; j<l_cin; j++)
-      for(int k=0; k<batchsize; k++)
-        for(int a=0; a<img_size_in; a++)
-          for(int b=0; b<img_size_in; b++)
-            for(int c=0; c<img_size_out; c++)
-              for(int d=0; d<img_size_out; d++)
-                temp[i][j][a][b] += in[k][j][a+c][b+d] * delta_l_plus_1[k][i][c][d];
+      convolute_valid(W_l_delta[i][j], error_l_plus_1[i], in[j], img_size_out, kernel_size);
 
-  //average convolution output and add to weight matrix
+  //eta applied. check with sven.
   for(int i=0; i<l_cout; i++)
     for(int j=0; j<l_cin; j++)
-       for(int c=0; c<img_size_in; c++)
-          for(int d=0; d<img_size_in; d++)
-          {
-            temp[i][j][c][d] /= batchsize;
-            W_l[i][j][c][d] += temp[i][j][c][d];
-          }
+      for(int k=0; k<kernel_size; k++)
+        for(int l=0; l<kernel_size; l++)
+          W_l_delta[i][j][k][l] *= 0.1;
 }
