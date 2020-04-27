@@ -59,7 +59,7 @@ void test_weight (float** W, int in_channels, int out_channels)
   printf("\n********test weight*********\n");
   for(int i=0; i<out_channels; i++)
     for(int j=0; j<in_channels; j++)
-      printf("%.3f, ", W[i][j]);
+      printf("%.5f, ", W[i][j]);
 }
 
 void test_bias (float* B, int out_channels)

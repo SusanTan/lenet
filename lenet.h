@@ -25,9 +25,13 @@
 
 Img mnist_train_imgs[60000];
 uint8_t mnist_train_labels[60000];
+Img mnist_test_imgs[10000];
+uint8_t mnist_test_labels[10000];
 
-Img** img_batch;
-uint8_t* label_batch;
+Img** train_img_batch;
+uint8_t* train_label_batch;
+Img** test_img_batch;
+uint8_t* test_label_batch;
 //kernels of size (out_channels, in_channels, h, w)
 typedef struct LeNet
 {

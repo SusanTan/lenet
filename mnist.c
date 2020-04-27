@@ -11,10 +11,10 @@ uint8_t raw_imgs[TRAIN_SIZE][28][28];
 unsigned char raw_labels[TRAIN_SIZE];
 
 // data is enlarged to 32x32, normalized.
-void init_data(const char* imagefile, const char* labelfile, Img* imgs, uint8_t* labels)
+void init_data(const char* imagefile, const char* labelfile, Img* imgs, uint8_t* labels, int size)
 {
     //malloc 32x32 for each image;
-    for (int k=0; k<TRAIN_SIZE; k++)
+    for (int k=0; k<size; k++)
     {
       float** img = (float**)malloc(sizeof(float*)*IMAGE_SIZE);
       for(int i=0; i<IMAGE_SIZE; i++)
@@ -34,7 +34,7 @@ void init_data(const char* imagefile, const char* labelfile, Img* imgs, uint8_t*
     fclose(labelfp);
 
     //enlarge input from 28x28 to 32x32
-    for(int k=0; k<TRAIN_SIZE; k++)
+    for(int k=0; k<size; k++)
     {
       labels[k] = raw_labels[k];
       for(int i=0; i<IMAGE_SIZE; i++)
@@ -53,23 +53,28 @@ void init_data(const char* imagefile, const char* labelfile, Img* imgs, uint8_t*
     }
 }
 
-
-Img** form_img_batch(int* batchindice, int batchsize, Img* mnist_train_imgs)
+Img** allocate_img_batch(int batchsize)
 {
-  //shape: (batch, 1(in_channel), w, h)
   Img** imgs = (Img **)malloc(sizeof(Img*)*batchsize);
   for(int i=0; i<batchsize; i++)
-  {
-      imgs[i] = (Img*) malloc (sizeof(Img));
-      imgs[i][0] = mnist_train_imgs[batchindice[i]];
-  }
+    imgs[i] = (Img*) malloc (sizeof(Img));
   return imgs;
 }
 
-uint8_t* form_label_batch(int* batchindice, int batchsize, uint8_t* mnist_train_labels)
+void form_img_batch(Img** imgs, int* batchindice, int batchsize, Img* mnist_train_imgs)
+{
+  for(int i=0; i<batchsize; i++)
+    imgs[i][0] = mnist_train_imgs[batchindice[i]];
+}
+
+uint8_t* allocate_label_batch(int batchsize)
 {
   uint8_t* labels = (uint8_t*)malloc(sizeof(uint8_t)*batchsize);
-  for(int i=0; i<batchsize; i++)
-      labels[i] = mnist_train_labels[batchindice[i]];
   return labels;
+}
+
+void form_label_batch(uint8_t* labels, int* batchindice, int batchsize, uint8_t* mnist_train_labels)
+{
+  for(int i=0; i<batchsize; i++)
+    labels[i] = mnist_train_labels[batchindice[i]];
 }

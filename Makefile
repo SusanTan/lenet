@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS= -ggdb
+CFLAGS= -O3
 #OBJ = mnist.o lenet.o lenet_test.o conv2d.o MaxPool2d.o Linear.o
 OBJ = mnist.o lenet.o conv2d.o Linear.o lenet_test.o MaxPool2d.o
 LINKFLAGS= -lm

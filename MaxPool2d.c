@@ -45,5 +45,7 @@ void pool_backward(Img* error_l_plus_1, int channels, Img* error_l, int stride, 
     for(int j=0; j<img_size_in; j++)
       for(int k=0; k<img_size_in; k++)
         if(max_map[i][j][k] != 0.0f)
-          error_l[i][j][k] += error_l_plus_1[i][j/stride][j/stride];
+          error_l[i][j][k] = error_l_plus_1[i][j/stride][j/stride];
+        else
+          error_l[i][j][k] = 0.0f;
 }

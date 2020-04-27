@@ -25,10 +25,11 @@ void kaiming_uniform(float**** kernel, int in_channels, int out_channels, int ke
     //calculate gain
     double a = sqrt(5.0);
     double gain = sqrt(2.0 / (1 + a*a));
+    //double gain = 5.0 / 3;
 
     //calculate std,bound
     double std = gain / sqrt(fan_in);
-    float bound = (float) sqrt(3.0) * std;
+    float bound = (float) sqrt(3.0) * (float) std;
 
     for(int i=0; i<num_output_fmaps; i++)
       for(int j=0; j<num_input_fmaps; j++)
@@ -110,11 +111,4 @@ void conv_backward(Img* error_l_plus_1, Img* in, float**** W_l, int l_cin, int l
   for(int i=0; i<l_cout; i++)
     for(int j=0; j<l_cin; j++)
       convolute_valid(W_l_delta[i][j], error_l_plus_1[i], in[j], img_size_out, kernel_size);
-
-  //eta applied. check with sven.
-  for(int i=0; i<l_cout; i++)
-    for(int j=0; j<l_cin; j++)
-      for(int k=0; k<kernel_size; k++)
-        for(int l=0; l<kernel_size; l++)
-          W_l_delta[i][j][k][l] *= 0.1;
 }

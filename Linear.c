@@ -9,7 +9,7 @@ float RandomNumber(float Min, float Max)
 
 void uniform_W(float** W, int in, int out)
 {
-  float k = 1/(float)in;
+  float k = 3.0f/(float)(in);
   float sqrtk = sqrtf(k);
   for(int i = 0; i<out; i++)
     for(int j=0; j<in; j++)
@@ -18,7 +18,7 @@ void uniform_W(float** W, int in, int out)
 
 void uniform_B(float* B, int in, int out)
 {
-  float k = 1/(float)in;
+  float k = 3.0f/(float)(in);
   float sqrtk = sqrtf(k);
   for(int i=0; i<out; i++)
     B[i] = RandomNumber(-sqrtk,sqrtk);
@@ -71,7 +71,7 @@ void last_layer_prep(uint8_t label, Img* out, int out_channels, Img* error)
   for(int j=0; j<out_channels; j++)
   {
     float x = out[j][0][0];
-    error[j][0][0] = -(error[j][0][0]-x)*(1-x*x);
+    error[j][0][0] = (error[j][0][0]-x)*(1-x*x);
   }
 }
 
@@ -90,14 +90,11 @@ void linear_backward(Img* error_l_plus_1, Img* in, float** W_l, float* B_l, int 
     error_l[j][0][0] *= (1-x*x);
   }
 
-  float eta = 0.1f;
-  //W -= eta*outerproduct(delta, in) over the batch
-  //please /batchsize in main
+  //float eta = 0.1f;
   for(int j=0; j<l_cout; j++)
     for(int k=0; k<l_cin; k++)
-      W_l_delta[j][k] -= eta*error_l_plus_1[j][0][0] * in[k][0][0];
+      W_l_delta[j][k] += error_l_plus_1[j][0][0] * in[k][0][0];
 
-  //B += eta * delta
   for(int i=0; i<l_cout; i++)
-    B_l_delta[i] -= eta*error_l_plus_1[i][0][0];
+    B_l_delta[i] += error_l_plus_1[i][0][0];
 }
