@@ -14,6 +14,9 @@ lenet: $(OBJ)
 run: lenet
 	./lenet
 
+python: 
+	python lenet.py
+
 clean:
 	rm *.o lenet
 
