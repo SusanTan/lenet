@@ -58,6 +58,21 @@ float**** initialize_conv(int in_channels, int out_channels, int kernel_size)
 }
 
 
+void free_conv(float**** kernel, int in_channels, int out_channels, int kernel_size)
+{
+  for(int i=0; i<out_channels; i++)
+  {
+    for(int j=0; j<in_channels; j++)
+    {
+      for(int k=0; k<kernel_size; k++)
+        free(kernel[i][j][k]);
+      free(kernel[i][j]);
+    }
+    free(kernel[i]);
+  }
+  free(kernel);
+}
+
 void convolute_valid (float** result, float** kernel, Img input, int kernel_size, int img_size)
 {
   for(int i=0; i<img_size; i++)

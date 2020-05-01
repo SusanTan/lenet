@@ -36,8 +36,6 @@ uint8_t* test_label_batch;
 typedef struct LeNet
 {
     float**** C1;
-    int pool_stride;
-    int pool_size;
     float**** C3;
     float**** C5;
     float** F6_W;
@@ -67,12 +65,30 @@ Img* S4_error;
 Img* C3_error;
 Img* S2_error;
 Img* C1_error;
+
+typedef struct Intermediate
+{
+  Img* C1;
+  Img* S2;
+  Img* C3;
+  Img* S4;
+  Img* C5;
+  Img* F6;
+  Img* OL;
+}Intermediate;
+
+Intermediate out;
+Intermediate error;
 ///////////////////////////////
 
 //initializations
 float**** initialize_conv(int in_channels, int out_channels, int kernel_size);
 float** initialize_linear_weight(int in, int out);
 float*  initialize_linear_bias  (int in, int out);
+
+//free functions
+void free_conv(float**** kernel, int in_channels, int out_channels, int kernel_size);
+void free_linear(float** W, float* B, int out_channels);
 
 //forward pass
 void conv2d_forward(float**** conv, Img* x, int img_size, int in_channels, int out_channels, Img* output);

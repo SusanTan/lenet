@@ -43,6 +43,14 @@ float* initialize_linear_bias(int in, int out)
   return B;
 }
 
+void free_linear(float** W, float* B, int out_channels)
+{
+  for(int i=0; i<out_channels; i++)
+    free(W[i]);
+  free(W);
+  free(B);
+}
+
 void linear_forward(float** W, float* B, Img* in, int in_channels, int out_channels, Img* output)
 {
   for(int i=0; i<out_channels; i++)

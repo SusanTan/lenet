@@ -46,6 +46,17 @@ Img* initialize_images(int d1, int d2, int d3)
   return images;
 }
 
+void free_images(Img* img, int d1, int d2)
+{
+  for(int i=0; i<d1; i++)
+  {
+    for(int j=0; j<d2; j++)
+      free(img[i][j]);
+    free(img[i]);
+  }
+  free(img);
+}
+
 float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
 {
   float**** images = (float****)malloc(sizeof(float***)*d1);
@@ -68,8 +79,6 @@ float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
 }
 
 void initialize_lenet(){
-  lenet.pool_stride = POOL_STRIDE;
-  lenet.pool_size   = POOL_SIZE;
   lenet.C1 = initialize_conv(C1_CIN,  C1_COUT, CONV_SIZE);
   lenet.C3 = initialize_conv(C1_COUT, C3_COUT, CONV_SIZE);
   lenet.C5 = initialize_conv(C3_COUT, C5_COUT, CONV_SIZE);
@@ -119,10 +128,10 @@ void forward(Img* image)
 {
   conv2d_forward(lenet.C1, image, C1_OUTSIZE, C1_CIN, C1_COUT, C1_out);
   torch_tanh(C1_out, C1_OUTSIZE, C1_COUT);
-	maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C1_out, C1_COUT, S2_OUTSIZE, S2_out, S2_max_map);
+	maxpool2d_forward(POOL_STRIDE, POOL_SIZE, C1_out, C1_COUT, S2_OUTSIZE, S2_out, S2_max_map);
   conv2d_forward(lenet.C3, S2_out, C3_OUTSIZE, C1_COUT, C3_COUT, C3_out);
   torch_tanh(C3_out, C3_OUTSIZE, C3_COUT);
-  maxpool2d_forward(lenet.pool_stride, lenet.pool_size, C3_out, C3_COUT, S4_OUTSIZE, S4_out, S4_max_map);
+  maxpool2d_forward(POOL_STRIDE, POOL_SIZE, C3_out, C3_COUT, S4_OUTSIZE, S4_out, S4_max_map);
   conv2d_forward(lenet.C5, S4_out, C5_OUTSIZE, C3_COUT, C5_COUT, C5_out);
   torch_tanh(C5_out, C5_OUTSIZE, C5_COUT);
   linear_forward(lenet.F6_W, lenet.F6_B, C5_out, C5_COUT, F6_COUT, F6_out);
@@ -251,9 +260,37 @@ void testing()
   printf("\n classification error: %.3f\n", err);
 }
 
+
 void free_all()
 {
-  //TODO: free everything
+  free_conv(lenet.C1, C1_CIN,  C1_CIN,  CONV_SIZE);
+  free_conv(lenet.C3, C1_COUT, C3_COUT, CONV_SIZE);
+  free_conv(lenet.C5, C3_COUT, C5_COUT, CONV_SIZE);
+  free_linear(lenet.F6_W, lenet.F6_B, F6_COUT);
+  free_linear(lenet.OL_W, lenet.OL_B, OL_COUT);
+  free_images(C1_out, C1_COUT, C1_OUTSIZE);
+  free_images(S2_max_map, C1_COUT, C1_OUTSIZE);
+  free_images(S2_out, C1_COUT, S2_OUTSIZE);
+  free_images(C3_out, C3_COUT, C3_OUTSIZE);
+  free_images(S4_max_map, C3_COUT, C3_OUTSIZE);
+  free_images(S4_out, C3_COUT, S4_OUTSIZE);
+  free_images(C5_out, C5_COUT, C5_OUTSIZE);
+  free_images(F6_out, F6_COUT, F6_OUTSIZE);
+  free_images(OL_out, OL_COUT, OL_OUTSIZE);
+  free_images(last_error, OL_COUT, OL_OUTSIZE);
+  free_images(OL_error, F6_COUT, F6_OUTSIZE);
+  free_images(F6_error, C5_COUT, C5_OUTSIZE);
+  free_images(C5_error, C3_COUT, S4_OUTSIZE);
+  free_images(S4_error, C3_COUT, C3_OUTSIZE);
+  free_images(C3_error, C1_COUT, S2_OUTSIZE);
+  free_images(S2_error, C1_COUT, C1_OUTSIZE);
+  free_images(C1_error, C1_CIN , C1_INSIZE);
+  free_conv(delta.C5, C3_COUT, C5_COUT, CONV_SIZE);
+  free_conv(delta.C3, C1_COUT, C3_COUT, CONV_SIZE);
+  free_conv(delta.C1, C1_CIN,  C1_COUT, CONV_SIZE);
+  free_linear(delta.F6_W, delta.F6_B, F6_COUT);
+  free_linear(delta.OL_W, delta.OL_B, OL_COUT);
+
 
 }
 
@@ -261,8 +298,8 @@ int main(int argc, char** argv){
     init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 60000);
     init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 10000);
     initialize_lenet();
-    training();
-    testing();
+    //training();
+    //testing();
     free_all();
     //TODO: free all the mallocs
     return 0;
