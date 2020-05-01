@@ -79,33 +79,39 @@ float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
 }
 
 void initialize_lenet(){
-  lenet.C1 = initialize_conv(C1_CIN,  C1_COUT, CONV_SIZE);
-  lenet.C3 = initialize_conv(C1_COUT, C3_COUT, CONV_SIZE);
-  lenet.C5 = initialize_conv(C3_COUT, C5_COUT, CONV_SIZE);
-  lenet.F6_W = initialize_linear_weight(C5_COUT, F6_COUT);
-  lenet.F6_B = initialize_linear_bias  (C5_COUT, F6_COUT);
-  lenet.OL_W = initialize_linear_weight(F6_COUT, OL_COUT);
-  lenet.OL_B = initialize_linear_bias  (F6_COUT, OL_COUT);
-  //test_initialization (lenet);
+  lenet.C1 = initialize_4Dzeros(C1_COUT, C1_CIN,  CONV_SIZE, CONV_SIZE);
+  kaiming_uniform(lenet.C1, C1_CIN,  C1_COUT, CONV_SIZE);
+  lenet.C3 = initialize_4Dzeros(C3_COUT, C1_COUT, CONV_SIZE, CONV_SIZE);
+  kaiming_uniform(lenet.C3, C1_COUT,  C3_COUT, CONV_SIZE);
+  lenet.C5 = initialize_4Dzeros(C5_COUT, C3_COUT, CONV_SIZE, CONV_SIZE);
+  kaiming_uniform(lenet.C5, C3_COUT,  C5_COUT, CONV_SIZE);
+  lenet.F6_W = initialize_zeroweights(F6_COUT, C5_COUT);
+  uniform_W(lenet.F6_W, C5_COUT, F6_COUT);
+  lenet.OL_W = initialize_zeroweights(OL_COUT, F6_COUT);
+  uniform_W(lenet.OL_W, F6_COUT, OL_COUT);
+  lenet.F6_B = initialize_zerobias(F6_COUT);
+  uniform_B(lenet.F6_B, C5_COUT, F6_COUT);
+  lenet.OL_B = initialize_zerobias(OL_COUT);
+  uniform_B(lenet.OL_B, F6_COUT, OL_COUT);
 
   //initialize all intermediate storages
-  C1_out     = initialize_images(C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
+  out.C1     = initialize_images(C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
   S2_max_map = initialize_images(C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
-  S2_out     = initialize_images(C1_COUT, S2_OUTSIZE, S2_OUTSIZE);
-  C3_out     = initialize_images(C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
+  out.S2     = initialize_images(C1_COUT, S2_OUTSIZE, S2_OUTSIZE);
+  out.C3     = initialize_images(C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
   S4_max_map = initialize_images(C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
-  S4_out     = initialize_images(C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
-  C5_out     = initialize_images(C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
-  F6_out     = initialize_images(F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
-  OL_out     = initialize_images(OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
+  out.S4     = initialize_images(C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
+  out.C5     = initialize_images(C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
+  out.F6     = initialize_images(F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
+  out.OL     = initialize_images(OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
   last_error = initialize_images(OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
-  OL_error   = initialize_images(F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
-  F6_error   = initialize_images(C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
-  C5_error   = initialize_images(C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
-  S4_error   = initialize_images(C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
-  C3_error   = initialize_images(C1_COUT, S2_OUTSIZE, S2_OUTSIZE);
-  S2_error   = initialize_images(C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
-  C1_error   = initialize_images(C1_CIN , C1_INSIZE , C1_INSIZE );
+  error.OL   = initialize_images(F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
+  error.F6   = initialize_images(C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
+  error.C5   = initialize_images(C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
+  error.S4   = initialize_images(C3_COUT, C3_OUTSIZE, C3_OUTSIZE);
+  error.C3   = initialize_images(C1_COUT, S2_OUTSIZE, S2_OUTSIZE);
+  error.S2   = initialize_images(C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
+  error.C1   = initialize_images(C1_CIN , C1_INSIZE , C1_INSIZE );
 
   delta.OL_W = initialize_zeroweights(OL_COUT, F6_COUT);
   delta.F6_W = initialize_zeroweights(F6_COUT, C5_COUT);
@@ -126,38 +132,37 @@ void torch_tanh (Img* x, int img_size, int channels)
 
 void forward(Img* image)
 {
-  conv2d_forward(lenet.C1, image, C1_OUTSIZE, C1_CIN, C1_COUT, C1_out);
-  torch_tanh(C1_out, C1_OUTSIZE, C1_COUT);
-	maxpool2d_forward(POOL_STRIDE, POOL_SIZE, C1_out, C1_COUT, S2_OUTSIZE, S2_out, S2_max_map);
-  conv2d_forward(lenet.C3, S2_out, C3_OUTSIZE, C1_COUT, C3_COUT, C3_out);
-  torch_tanh(C3_out, C3_OUTSIZE, C3_COUT);
-  maxpool2d_forward(POOL_STRIDE, POOL_SIZE, C3_out, C3_COUT, S4_OUTSIZE, S4_out, S4_max_map);
-  conv2d_forward(lenet.C5, S4_out, C5_OUTSIZE, C3_COUT, C5_COUT, C5_out);
-  torch_tanh(C5_out, C5_OUTSIZE, C5_COUT);
-  linear_forward(lenet.F6_W, lenet.F6_B, C5_out, C5_COUT, F6_COUT, F6_out);
-  torch_tanh(F6_out, F6_OUTSIZE, F6_COUT);
-  linear_forward(lenet.OL_W, lenet.OL_B, F6_out, F6_COUT, OL_COUT, OL_out);
-  torch_tanh(OL_out, OL_OUTSIZE, OL_COUT);
+  conv2d_forward(lenet.C1, image, C1_OUTSIZE, C1_CIN, C1_COUT, out.C1);
+  torch_tanh(out.C1, C1_OUTSIZE, C1_COUT);
+	maxpool2d_forward(POOL_STRIDE, POOL_SIZE, out.C1, C1_COUT, S2_OUTSIZE, out.S2, S2_max_map);
+  conv2d_forward(lenet.C3, out.S2, C3_OUTSIZE, C1_COUT, C3_COUT, out.C3);
+  torch_tanh(out.C3, C3_OUTSIZE, C3_COUT);
+  maxpool2d_forward(POOL_STRIDE, POOL_SIZE, out.C3, C3_COUT, S4_OUTSIZE, out.S4, S4_max_map);
+  conv2d_forward(lenet.C5, out.S4, C5_OUTSIZE, C3_COUT, C5_COUT, out.C5);
+  torch_tanh(out.C5, C5_OUTSIZE, C5_COUT);
+  linear_forward(lenet.F6_W, lenet.F6_B, out.C5, C5_COUT, F6_COUT, out.F6);
+  torch_tanh(out.F6, F6_OUTSIZE, F6_COUT);
+  linear_forward(lenet.OL_W, lenet.OL_B, out.F6, F6_COUT, OL_COUT, out.OL);
+  torch_tanh(out.OL, OL_OUTSIZE, OL_COUT);
 }
 
 void backward(i)
 {
-  //float loss = mse_loss(output, label_batch);
-  last_layer_prep  (train_label_batch[i], OL_out, OL_COUT, last_error);
-  linear_backward  (last_error, F6_out, lenet.OL_W, lenet.OL_B,
-                    F6_COUT, OL_COUT, OL_error, delta.OL_W, delta.OL_B);
-  linear_backward  (OL_error, C5_out, lenet.F6_W, lenet.F6_B,
-                    C5_COUT, F6_COUT, F6_error, delta.F6_W, delta.F6_B);
-  conv_backward    (F6_error, S4_out, lenet.C5, C3_COUT, C5_COUT,
-                    C5_error, CONV_SIZE, S4_OUTSIZE, C5_OUTSIZE, delta.C5);
-  pool_backward    (C5_error, C3_COUT, S4_error, POOL_STRIDE,
+  last_layer_prep  (train_label_batch[i], out.OL, OL_COUT, last_error);
+  linear_backward  (last_error, out.F6, lenet.OL_W, lenet.OL_B,
+                    F6_COUT, OL_COUT, error.OL, delta.OL_W, delta.OL_B);
+  linear_backward  (error.OL, out.C5, lenet.F6_W, lenet.F6_B,
+                    C5_COUT, F6_COUT, error.F6, delta.F6_W, delta.F6_B);
+  conv_backward    (error.F6, out.S4, lenet.C5, C3_COUT, C5_COUT,
+                    error.C5, CONV_SIZE, S4_OUTSIZE, C5_OUTSIZE, delta.C5);
+  pool_backward    (error.C5, C3_COUT, error.S4, POOL_STRIDE,
                     C3_OUTSIZE, S4_max_map);
-  conv_backward    (S4_error, S2_out, lenet.C3, C1_COUT, C3_COUT,
-                    C3_error, CONV_SIZE, S2_OUTSIZE, C3_OUTSIZE, delta.C3);
-  pool_backward    (C3_error, C1_COUT, S2_error, POOL_STRIDE,
+  conv_backward    (error.S4, out.S2, lenet.C3, C1_COUT, C3_COUT,
+                    error.C3, CONV_SIZE, S2_OUTSIZE, C3_OUTSIZE, delta.C3);
+  pool_backward    (error.C3, C1_COUT, error.S2, POOL_STRIDE,
                     C1_OUTSIZE, S2_max_map);
-  conv_backward    (S2_error, train_img_batch[i], lenet.C1, C1_CIN, C1_COUT,
-                    C1_error, CONV_SIZE, C1_INSIZE, C1_OUTSIZE, delta.C1);
+  conv_backward    (error.S2, train_img_batch[i], lenet.C1, C1_CIN, C1_COUT,
+                    error.C1, CONV_SIZE, C1_INSIZE, C1_OUTSIZE, delta.C1);
 }
 
 void update_conv(float**** W, float**** W_d, int in_c, int out_c, int kernel)
@@ -221,14 +226,16 @@ void training()
     }
     weight_update();
   }
+  free_image_batch(train_img_batch, BATCHSIZE);
+  free(train_label_batch);
 }
 
 
 void testing()
 {
   int batchindice[1];
-  test_img_batch   = allocate_img_batch(BATCHSIZE);
-  test_label_batch = allocate_label_batch(BATCHSIZE);
+  test_img_batch   = allocate_img_batch(1);
+  test_label_batch = allocate_label_batch(1);
   int errors = 0;
   for(int j=0; j<10000; j++)
   {
@@ -239,13 +246,11 @@ void testing()
     int pred_digit = 0;
     int actual_digit = 0;
     float max = -100.0f;
-    //printf("OL_out values: \n");
     for(int i=0; i<10; i++)
     {
-      //printf("%.3f, ", OL_out[i][0][0]);
-      if(OL_out[i][0][0]>max)
+      if(out.OL[i][0][0]>max)
       {
-        max = OL_out[i][0][0];
+        max = out.OL[i][0][0];
         pred_digit = i;
       }
       if(test_label_batch[0]==i)
@@ -253,9 +258,9 @@ void testing()
     }
     if(pred_digit != actual_digit)
       errors++;
-    //printf("predicted: %d\n", pred_digit);
-    //printf("testing digit: %d\n", actual_digit);
   }
+  free_image_batch(test_img_batch, 1);
+  free(test_label_batch);
   double err =(double) errors/10000.0;
   printf("\n classification error: %.3f\n", err);
 }
@@ -268,38 +273,36 @@ void free_all()
   free_conv(lenet.C5, C3_COUT, C5_COUT, CONV_SIZE);
   free_linear(lenet.F6_W, lenet.F6_B, F6_COUT);
   free_linear(lenet.OL_W, lenet.OL_B, OL_COUT);
-  free_images(C1_out, C1_COUT, C1_OUTSIZE);
+  free_images(out.C1, C1_COUT, C1_OUTSIZE);
   free_images(S2_max_map, C1_COUT, C1_OUTSIZE);
-  free_images(S2_out, C1_COUT, S2_OUTSIZE);
-  free_images(C3_out, C3_COUT, C3_OUTSIZE);
+  free_images(out.S2, C1_COUT, S2_OUTSIZE);
+  free_images(out.C3, C3_COUT, C3_OUTSIZE);
   free_images(S4_max_map, C3_COUT, C3_OUTSIZE);
-  free_images(S4_out, C3_COUT, S4_OUTSIZE);
-  free_images(C5_out, C5_COUT, C5_OUTSIZE);
-  free_images(F6_out, F6_COUT, F6_OUTSIZE);
-  free_images(OL_out, OL_COUT, OL_OUTSIZE);
+  free_images(out.S4, C3_COUT, S4_OUTSIZE);
+  free_images(out.C5, C5_COUT, C5_OUTSIZE);
+  free_images(out.F6, F6_COUT, F6_OUTSIZE);
+  free_images(out.OL, OL_COUT, OL_OUTSIZE);
   free_images(last_error, OL_COUT, OL_OUTSIZE);
-  free_images(OL_error, F6_COUT, F6_OUTSIZE);
-  free_images(F6_error, C5_COUT, C5_OUTSIZE);
-  free_images(C5_error, C3_COUT, S4_OUTSIZE);
-  free_images(S4_error, C3_COUT, C3_OUTSIZE);
-  free_images(C3_error, C1_COUT, S2_OUTSIZE);
-  free_images(S2_error, C1_COUT, C1_OUTSIZE);
-  free_images(C1_error, C1_CIN , C1_INSIZE);
+  free_images(error.OL, F6_COUT, F6_OUTSIZE);
+  free_images(error.F6, C5_COUT, C5_OUTSIZE);
+  free_images(error.C5, C3_COUT, S4_OUTSIZE);
+  free_images(error.S4, C3_COUT, C3_OUTSIZE);
+  free_images(error.C3, C1_COUT, S2_OUTSIZE);
+  free_images(error.S2, C1_COUT, C1_OUTSIZE);
+  free_images(error.C1, C1_CIN , C1_INSIZE);
   free_conv(delta.C5, C3_COUT, C5_COUT, CONV_SIZE);
   free_conv(delta.C3, C1_COUT, C3_COUT, CONV_SIZE);
   free_conv(delta.C1, C1_CIN,  C1_COUT, CONV_SIZE);
   free_linear(delta.F6_W, delta.F6_B, F6_COUT);
   free_linear(delta.OL_W, delta.OL_B, OL_COUT);
-
-
 }
 
 int main(int argc, char** argv){
     init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 60000);
     init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 10000);
     initialize_lenet();
-    //training();
-    //testing();
+    training();
+    testing();
     free_all();
     //TODO: free all the mallocs
     return 0;

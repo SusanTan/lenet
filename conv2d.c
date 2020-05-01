@@ -20,12 +20,10 @@ void kaiming_uniform(float**** kernel, int in_channels, int out_channels, int ke
     int receptive_field_size = kernel_size*kernel_size;
 
     int fan_in = num_input_fmaps * receptive_field_size;
-    //int fan_out = num_output_fmaps * receptive_field_size;
 
     //calculate gain
     double a = sqrt(5.0);
     double gain = sqrt(2.0 / (1 + a*a));
-    //double gain = 5.0 / 3;
 
     //calculate std,bound
     double std = gain / sqrt(fan_in);
@@ -38,25 +36,6 @@ void kaiming_uniform(float**** kernel, int in_channels, int out_channels, int ke
             kernel[i][j][k][l] = RandomFloat(-bound,bound);
 
 }
-
-float**** initialize_conv(int in_channels, int out_channels, int kernel_size)
-{
-  //malloc space for kernel of shape (out, in, width, height)
-  float**** kernel = (float****) malloc (sizeof(float***)*out_channels);
-  for (int i=0; i<out_channels; i++)
-  {
-    kernel[i] = (float***) malloc (sizeof(float**)*in_channels);
-    for(int j=0; j<in_channels; j++)
-    {
-      kernel[i][j] = (float**) malloc (sizeof(float*)*kernel_size);
-      for(int k=0; k<kernel_size; k++)
-        kernel[i][j][k] = (float*) malloc (sizeof(float)*kernel_size);
-    }
-  }
-  kaiming_uniform(kernel, in_channels, out_channels, kernel_size);
-  return kernel;
-}
-
 
 void free_conv(float**** kernel, int in_channels, int out_channels, int kernel_size)
 {

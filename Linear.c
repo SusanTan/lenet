@@ -9,7 +9,7 @@ float RandomNumber(float Min, float Max)
 
 void uniform_W(float** W, int in, int out)
 {
-  float k = 3.0f/(float)(in);
+  float k = 1.0f/(float)(in);
   float sqrtk = sqrtf(k);
   for(int i = 0; i<out; i++)
     for(int j=0; j<in; j++)
@@ -22,25 +22,6 @@ void uniform_B(float* B, int in, int out)
   float sqrtk = sqrtf(k);
   for(int i=0; i<out; i++)
     B[i] = RandomNumber(-sqrtk,sqrtk);
-}
-
-
-float** initialize_linear_weight(int in, int out)
-{
-  //malloc space of shape (out,in) for weight
-  float** W = (float**) malloc (out*sizeof(float*));
-  for(int i=0; i<out; i++)
-    W[i]=(float*) malloc (in*sizeof(float));
-  uniform_W(W, in, out);
-  return W;
-}
-
-float* initialize_linear_bias(int in, int out)
-{
-  //malloc space of shape (out) for bias
-  float* B = (float*) malloc (out*sizeof(float));
-  uniform_B(B, in, out);
-  return B;
 }
 
 void free_linear(float** W, float* B, int out_channels)

@@ -1,6 +1,5 @@
 CC=clang
 CFLAGS= -O3
-#OBJ = mnist.o lenet.o lenet_test.o conv2d.o MaxPool2d.o Linear.o
 OBJ = mnist.o lenet.o conv2d.o Linear.o lenet_test.o MaxPool2d.o
 LINKFLAGS= -lm
 INPUT= mnist_train.csv
@@ -14,9 +13,9 @@ lenet: $(OBJ)
 run: lenet
 	./lenet
 
-python: 
+python:
 	python lenet.py
 
 clean:
-	rm *.o lenet
+	rm -rf *.o lenet data
 

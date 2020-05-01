@@ -10,3 +10,4 @@ void form_img_batch(Img** imgs, int* batchindice, int batchsize, Img* mnist_trai
 void form_label_batch(uint8_t* labels, int* batchindice, int batchsize, uint8_t* mnist_train_labels);
 Img** allocate_img_batch(int batchsize);
 uint8_t* allocate_label_batch(int batchsize);
+void free_image_batch(Img** ptr, int batchsize);

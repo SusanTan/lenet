@@ -47,24 +47,9 @@ typedef struct LeNet
 LeNet lenet;
 LeNet delta;
 /// intermediate results///////
-Img* C1_out;
-Img* S2_out;
 Img* S2_max_map; // record max locations
-Img* C3_out;
-Img* S4_out;
 Img* S4_max_map; // record max locations
-Img* C5_out;
-Img* F6_out;
-Img* OL_out;
-
 Img* last_error; //(batchsize, 10)
-Img* OL_error;
-Img* F6_error;
-Img* C5_error;
-Img* S4_error;
-Img* C3_error;
-Img* S2_error;
-Img* C1_error;
 
 typedef struct Intermediate
 {
@@ -82,9 +67,9 @@ Intermediate error;
 ///////////////////////////////
 
 //initializations
-float**** initialize_conv(int in_channels, int out_channels, int kernel_size);
-float** initialize_linear_weight(int in, int out);
-float*  initialize_linear_bias  (int in, int out);
+void kaiming_uniform(float**** kernel, int in_channels, int out_channels, int kernel_size);
+void uniform_W(float** W, int in, int out);
+void uniform_B(float* B, int in, int out);
 
 //free functions
 void free_conv(float**** kernel, int in_channels, int out_channels, int kernel_size);

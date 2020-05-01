@@ -61,6 +61,13 @@ Img** allocate_img_batch(int batchsize)
   return imgs;
 }
 
+void free_image_batch(Img** ptr, int batchsize)
+{
+  for(int i=0; i<batchsize; i++)
+    free(ptr[i]);
+  free(ptr);
+}
+
 void form_img_batch(Img** imgs, int* batchindice, int batchsize, Img* mnist_train_imgs)
 {
   for(int i=0; i<batchsize; i++)
