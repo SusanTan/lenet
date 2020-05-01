@@ -3,9 +3,7 @@
 #include <math.h>
 #include "mnist.h"
 
-float multiply_and_add (float** m1, float** m2);
-
-float RandomFloat(float Min, float Max)
+inline float RandomFloat(float Min, float Max)
 {
     return ((float)rand()/(float)RAND_MAX) * (Max - Min) + Min;
 }
@@ -52,7 +50,7 @@ void free_conv(float**** kernel, int in_channels, int out_channels, int kernel_s
   free(kernel);
 }
 
-void convolute_valid (float** result, float** kernel, Img input, int kernel_size, int img_size)
+inline void convolute_valid (float** result, float** kernel, Img input, int kernel_size, int img_size)
 {
   for(int i=0; i<img_size; i++)
     for(int j=0; j<img_size; j++)
@@ -61,7 +59,7 @@ void convolute_valid (float** result, float** kernel, Img input, int kernel_size
           result[i][j] += kernel[k][l] * input[i+k][j+l];
 }
 
-void convolute_full (float** result, float** kernel, Img input, int kernel_size, int img_size)
+inline void convolute_full (float** result, float** kernel, Img input, int kernel_size, int img_size)
 {
   for(int i=0; i<img_size; i++)
     for(int j=0; j<img_size; j++)

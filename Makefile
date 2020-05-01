@@ -8,7 +8,7 @@ INPUT= mnist_train.csv
 		$(CC) -c -o $@ $< $(CFLAGS)
 
 lenet: $(OBJ)
-		$(CC) -o $@ $^ $(CFLAGS) $(LINKFLAGS)
+		$(CC) -o $@ $^ $(LINKFLAGS)
 
 run: lenet
 	./lenet

@@ -4,13 +4,13 @@
 #include "lenet_test.h"
 #include <math.h>
 
-void RandomChoices(int* batchindice, int range, int size)
+inline void RandomChoices(int* batchindice, int range, int size)
 {
   for(int i=0; i<size; i++)
     batchindice[i] = (rand()%(range));
 }
 
-float** initialize_zeroweights(int d1, int d2)
+inline float** initialize_zeroweights(int d1, int d2)
 {
   float** result = (float**)malloc(d1*sizeof(float*));
   for(int i=0; i<d1; i++)
@@ -22,7 +22,7 @@ float** initialize_zeroweights(int d1, int d2)
   return result;
 }
 
-float* initialize_zerobias(int d1)
+inline float* initialize_zerobias(int d1)
 {
   float* result = (float*)malloc(d1*sizeof(float));
   for(int i=0; i<d1; i++)
@@ -30,7 +30,7 @@ float* initialize_zerobias(int d1)
   return result;
 }
 
-Img* initialize_images(int d1, int d2, int d3)
+inline Img* initialize_images(int d1, int d2, int d3)
 {
   Img* images = (Img*)malloc(sizeof(Img)*d1);
   for(int i=0; i<d1; i++)
@@ -46,7 +46,7 @@ Img* initialize_images(int d1, int d2, int d3)
   return images;
 }
 
-void free_images(Img* img, int d1, int d2)
+inline void free_images(Img* img, int d1, int d2)
 {
   for(int i=0; i<d1; i++)
   {
@@ -57,7 +57,7 @@ void free_images(Img* img, int d1, int d2)
   free(img);
 }
 
-float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
+inline float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
 {
   float**** images = (float****)malloc(sizeof(float***)*d1);
   for(int i=0; i<d1; i++)
@@ -122,7 +122,7 @@ void initialize_lenet(){
   delta.C1   = initialize_4Dzeros(C1_COUT, C1_CIN , CONV_SIZE, CONV_SIZE);
 }
 
-void torch_tanh (Img* x, int img_size, int channels)
+inline void torch_tanh (Img* x, int img_size, int channels)
 {
   for(int i=0; i<channels; i++)
     for(int j=0; j<img_size; j++)
@@ -165,7 +165,7 @@ void backward(i)
                     error.C1, CONV_SIZE, C1_INSIZE, C1_OUTSIZE, delta.C1);
 }
 
-void update_conv(float**** W, float**** W_d, int in_c, int out_c, int kernel)
+inline void update_conv(float**** W, float**** W_d, int in_c, int out_c, int kernel)
 {
   for(int i=0; i<out_c; i++)
     for(int j=0; j<in_c; j++)
@@ -177,7 +177,7 @@ void update_conv(float**** W, float**** W_d, int in_c, int out_c, int kernel)
         }
 }
 
-void update_linear_w(float** W, float** W_d, int in_c, int out_c)
+inline void update_linear_w(float** W, float** W_d, int in_c, int out_c)
 {
   for(int i=0; i<out_c; i++)
     for(int j=0; j<in_c; j++)
@@ -187,7 +187,7 @@ void update_linear_w(float** W, float** W_d, int in_c, int out_c)
     }
 }
 
-void update_linear_b(float* B, float* B_d, int out_c)
+inline void update_linear_b(float* B, float* B_d, int out_c)
 {
   for(int i=0; i<out_c; i++)
   {
@@ -304,6 +304,5 @@ int main(int argc, char** argv){
     training();
     testing();
     free_all();
-    //TODO: free all the mallocs
     return 0;
 }
