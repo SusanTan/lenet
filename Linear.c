@@ -2,7 +2,7 @@
 #include <math.h>
 #include "mnist.h"
 
-inline float RandomNumber(float Min, float Max)
+float RandomNumber(float Min, float Max)
 {
     return ((float)rand()/(float)RAND_MAX) * (Max - Min) + Min;
 }

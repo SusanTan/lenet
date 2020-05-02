@@ -8,10 +8,13 @@ INPUT= mnist_train.csv
 		$(CC) -c -o $@ $< $(CFLAGS)
 
 lenet: $(OBJ)
-		$(CC) -o $@ $^ $(LINKFLAGS)
+		$(CC) -o $@ $^ $(CFLAGS) $(LINKFLAGS)
 
 run: lenet
-	./lenet
+	./lenet 60000 10000
+
+profile: lenet
+	./lenet 6000 1000
 
 python:
 	python lenet.py

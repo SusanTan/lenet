@@ -11,7 +11,7 @@ uint8_t raw_imgs[TRAIN_SIZE][28][28];
 unsigned char raw_labels[TRAIN_SIZE];
 
 // data is enlarged to 32x32, normalized.
-inline void init_data(const char* imagefile, const char* labelfile, Img* imgs, uint8_t* labels, int size)
+void init_data(const char* imagefile, const char* labelfile, Img* imgs, uint8_t* labels, int size)
 {
     //malloc 32x32 for each image;
     for (int k=0; k<size; k++)
@@ -53,7 +53,7 @@ inline void init_data(const char* imagefile, const char* labelfile, Img* imgs, u
     }
 }
 
-inline Img** allocate_img_batch(int batchsize)
+Img** allocate_img_batch(int batchsize)
 {
   Img** imgs = (Img **)malloc(sizeof(Img*)*batchsize);
   for(int i=0; i<batchsize; i++)
@@ -61,26 +61,26 @@ inline Img** allocate_img_batch(int batchsize)
   return imgs;
 }
 
-inline void free_image_batch(Img** ptr, int batchsize)
+void free_image_batch(Img** ptr, int batchsize)
 {
   for(int i=0; i<batchsize; i++)
     free(ptr[i]);
   free(ptr);
 }
 
-inline void form_img_batch(Img** imgs, int* batchindice, int batchsize, Img* mnist_train_imgs)
+void form_img_batch(Img** imgs, int* batchindice, int batchsize, Img* mnist_train_imgs)
 {
   for(int i=0; i<batchsize; i++)
     imgs[i][0] = mnist_train_imgs[batchindice[i]];
 }
 
-inline uint8_t* allocate_label_batch(int batchsize)
+uint8_t* allocate_label_batch(int batchsize)
 {
   uint8_t* labels = (uint8_t*)malloc(sizeof(uint8_t)*batchsize);
   return labels;
 }
 
-inline void form_label_batch(uint8_t* labels, int* batchindice, int batchsize, uint8_t* mnist_train_labels)
+void form_label_batch(uint8_t* labels, int* batchindice, int batchsize, uint8_t* mnist_train_labels)
 {
   for(int i=0; i<batchsize; i++)
     labels[i] = mnist_train_labels[batchindice[i]];

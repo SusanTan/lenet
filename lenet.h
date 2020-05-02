@@ -23,6 +23,7 @@
 #define F6_OUTSIZE  1
 #define OL_OUTSIZE  1
 
+
 Img mnist_train_imgs[60000];
 uint8_t mnist_train_labels[60000];
 Img mnist_test_imgs[10000];

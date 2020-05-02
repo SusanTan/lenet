@@ -4,13 +4,16 @@
 #include "lenet_test.h"
 #include <math.h>
 
-inline void RandomChoices(int* batchindice, int range, int size)
+int ntrain = 60000;
+int ntest  = 10000;
+
+void RandomChoices(int* batchindice, int range, int size)
 {
   for(int i=0; i<size; i++)
     batchindice[i] = (rand()%(range));
 }
 
-inline float** initialize_zeroweights(int d1, int d2)
+float** initialize_zeroweights(int d1, int d2)
 {
   float** result = (float**)malloc(d1*sizeof(float*));
   for(int i=0; i<d1; i++)
@@ -22,7 +25,7 @@ inline float** initialize_zeroweights(int d1, int d2)
   return result;
 }
 
-inline float* initialize_zerobias(int d1)
+float* initialize_zerobias(int d1)
 {
   float* result = (float*)malloc(d1*sizeof(float));
   for(int i=0; i<d1; i++)
@@ -30,7 +33,7 @@ inline float* initialize_zerobias(int d1)
   return result;
 }
 
-inline Img* initialize_images(int d1, int d2, int d3)
+Img* initialize_images(int d1, int d2, int d3)
 {
   Img* images = (Img*)malloc(sizeof(Img)*d1);
   for(int i=0; i<d1; i++)
@@ -46,7 +49,7 @@ inline Img* initialize_images(int d1, int d2, int d3)
   return images;
 }
 
-inline void free_images(Img* img, int d1, int d2)
+void free_images(Img* img, int d1, int d2)
 {
   for(int i=0; i<d1; i++)
   {
@@ -57,7 +60,7 @@ inline void free_images(Img* img, int d1, int d2)
   free(img);
 }
 
-inline float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
+float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
 {
   float**** images = (float****)malloc(sizeof(float***)*d1);
   for(int i=0; i<d1; i++)
@@ -122,7 +125,7 @@ void initialize_lenet(){
   delta.C1   = initialize_4Dzeros(C1_COUT, C1_CIN , CONV_SIZE, CONV_SIZE);
 }
 
-inline void torch_tanh (Img* x, int img_size, int channels)
+void torch_tanh (Img* x, int img_size, int channels)
 {
   for(int i=0; i<channels; i++)
     for(int j=0; j<img_size; j++)
@@ -165,7 +168,7 @@ void backward(i)
                     error.C1, CONV_SIZE, C1_INSIZE, C1_OUTSIZE, delta.C1);
 }
 
-inline void update_conv(float**** W, float**** W_d, int in_c, int out_c, int kernel)
+void update_conv(float**** W, float**** W_d, int in_c, int out_c, int kernel)
 {
   for(int i=0; i<out_c; i++)
     for(int j=0; j<in_c; j++)
@@ -177,7 +180,7 @@ inline void update_conv(float**** W, float**** W_d, int in_c, int out_c, int ker
         }
 }
 
-inline void update_linear_w(float** W, float** W_d, int in_c, int out_c)
+void update_linear_w(float** W, float** W_d, int in_c, int out_c)
 {
   for(int i=0; i<out_c; i++)
     for(int j=0; j<in_c; j++)
@@ -187,7 +190,7 @@ inline void update_linear_w(float** W, float** W_d, int in_c, int out_c)
     }
 }
 
-inline void update_linear_b(float* B, float* B_d, int out_c)
+void update_linear_b(float* B, float* B_d, int out_c)
 {
   for(int i=0; i<out_c; i++)
   {
@@ -213,7 +216,7 @@ void training()
   int batchindice[BATCHSIZE];
   train_img_batch   = allocate_img_batch(BATCHSIZE);
   train_label_batch = allocate_label_batch(BATCHSIZE);
-  for(int j=0; j<60000/BATCHSIZE; j++)
+  for(int j=0; j<ntrain/BATCHSIZE; j++)
   {
     RandomChoices(batchindice, 60000, BATCHSIZE);
     form_img_batch(train_img_batch,batchindice, BATCHSIZE, mnist_train_imgs);
@@ -237,7 +240,7 @@ void testing()
   test_img_batch   = allocate_img_batch(1);
   test_label_batch = allocate_label_batch(1);
   int errors = 0;
-  for(int j=0; j<10000; j++)
+  for(int j=0; j<ntest; j++)
   {
     RandomChoices(batchindice, 10000, 1);
     form_img_batch(test_img_batch, batchindice, 1, mnist_test_imgs);
@@ -298,6 +301,13 @@ void free_all()
 }
 
 int main(int argc, char** argv){
+    if(argc < 2)
+    {
+      printf("please enter train size, then test size");
+      exit(-1);
+    }
+    ntrain = atoi(argv[1]);
+    ntest  = atoi(argv[2]);
     init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 60000);
     init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 10000);
     initialize_lenet();
