@@ -8,6 +8,7 @@
 int ntrain = 60000;
 int ntest  = 10000;
 int traininput_size;//profile purpose
+int testinput_size;//profile purpose
 void RandomChoices(int* batchindice, int range, int size)
 {
   for(int i=0; i<size; i++)
@@ -243,7 +244,7 @@ void testing()
   int errors = 0;
   for(int j=0; j<ntest; j++)
   {
-    RandomChoices(batchindice, 10000, 1);
+    RandomChoices(batchindice, testinput_size, 1);
     form_img_batch(test_img_batch, batchindice, 1, mnist_test_imgs);
     form_label_batch(test_label_batch, batchindice, 1, mnist_test_labels);
     forward(test_img_batch[0]);
@@ -265,7 +266,7 @@ void testing()
   }
   free_image_batch(test_img_batch, 1);
   free(test_label_batch);
-  double err =(double) errors/10000.0;
+  double err =(double) errors/(double)ntest;
   printf("\n classification error: %.3f\n", err);
 }
 
@@ -311,18 +312,20 @@ int main(int argc, char** argv){
     ntest  = atoi(argv[3]);
     if(strcmp(argv[1], "profile") == 0)
     {
-      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 10000);
-      traininput_size = 10000;
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 1000);
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 1000);
+      traininput_size = 1000;
+      testinput_size = 1000;
     }
     else if(strcmp(argv[1], "run") == 0)
     {
       init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 60000);
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 10000);
       traininput_size = 60000;
+      testinput_size = 10000;
     }
     else
       printf("fisrt argument should be keyword profile or run\n");
-
-    init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 10000);
     initialize_lenet();
     training();
     testing();
