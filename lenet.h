@@ -49,19 +49,35 @@ float*** S2_max_map; // record max locations
 float*** S4_max_map; // record max locations
 float*** last_error; //(batchsize, 10)
 
-typedef struct Intermediate
-{
-  float*** C1;
-  float*** S2;
-  float*** C3;
-  float*** S4;
-  float*** C5;
-  float*** F6;
-  float*** OL;
-}Intermediate;
+//typedef struct Intermediate
+//{
+//  float*** C1;
+//  float*** S2;
+//  float*** C3;
+//  float*** S4;
+//  float*** C5;
+//  float*** F6;
+//  float*** OL;
+//}Intermediate;
+//
+float*** out_C1;
+float*** out_S2;
+float*** out_C3;
+float*** out_S4;
+float*** out_C5;
+float*** out_F6;
+float*** out_OL;
 
-Intermediate out;
-Intermediate error;
+float*** error_C1;
+float*** error_S2;
+float*** error_C3;
+float*** error_S4;
+float*** error_C5;
+float*** error_F6;
+float*** error_OL;
+
+//Intermediate out;
+//Intermediate error;
 ///////////////////////////////
 
 //initializations
