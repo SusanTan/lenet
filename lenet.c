@@ -133,9 +133,12 @@ void torch_tanh (float*** x, int img_size, int channels)
         x[i][j][k] = tanh(x[i][j][k]);
 }
 
-void forward(float*** image)
+void forward(int i, uint8_t mode)
 {
-  conv2d_forward(lenet.C1, image, C1_OUTSIZE, C1_CIN, C1_COUT, out.C1);
+  if(mode == 0) //train mode
+    conv2d_forward(lenet.C1, train_img_batch[i], C1_OUTSIZE, C1_CIN, C1_COUT, out.C1);
+  else
+    conv2d_forward(lenet.C1, test_img_batch[i], C1_OUTSIZE, C1_CIN, C1_COUT, out.C1);
   torch_tanh(out.C1, C1_OUTSIZE, C1_COUT);
 	maxpool2d_forward(POOL_STRIDE, POOL_SIZE, out.C1, C1_COUT, S2_OUTSIZE, out.S2, S2_max_map);
   conv2d_forward(lenet.C3, out.S2, C3_OUTSIZE, C1_COUT, C3_COUT, out.C3);
@@ -224,7 +227,7 @@ void training()
 
     for(int i=0; i<BATCHSIZE; i++) // change to batchsize eventually
     {
-      forward(train_img_batch[i]);
+      forward(i, 0);
       backward(i);
     }
     weight_update();
@@ -245,7 +248,7 @@ void testing()
     //RandomChoices(batchindice, ntest, 1);
     form_img_batch(test_img_batch, j, 1, mnist_test_imgs);
     form_label_batch(test_label_batch, j, 1, mnist_test_labels);
-    forward(test_img_batch[0]);
+    forward(0, 1);
     int pred_digit = 0;
     int actual_digit = 0;
     float max = -100.0f;
