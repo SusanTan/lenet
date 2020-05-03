@@ -1,6 +1,6 @@
 CC=clang
-#CFLAGS= -O3
-CFLAGS= -ggdb
+CFLAGS= -O3
+#CFLAGS= -ggdb
 OBJ = mnist.o lenet.o conv2d.o Linear.o lenet_test.o MaxPool2d.o
 LINKFLAGS= -lm
 INPUT= mnist_train.csv

@@ -11,7 +11,7 @@
   FOR(i,channels)\
     FOR(j, img_size)\
       FOR(k, img_size)\
-          (x)[i][j][k] = tanh((x)[i][j][k]);\
+          (x)[i][j][k] = ((x)[i][j][k] > 0.0f) ? (x)[i][j][k]: 0.0f;\
 }
 
 #define UPDATE_CONV(W, W_d, in_c, out_c, kernel)\
@@ -21,7 +21,7 @@
       FOR(k, kernel)\
         FOR(l, kernel)\
         {\
-          (W)[i][j][k][l] += (W_d)[i][j][k][l]*0.2/BATCHSIZE;\
+          (W)[i][j][k][l] += (W_d)[i][j][k][l]*0.02/BATCHSIZE;\
           (W_d)[i][j][k][l] = 0.0f;\
         }\
 }
@@ -31,7 +31,7 @@
   FOR(i, out_c)\
     FOR(j, in_c)\
     {\
-      (W)[i][j] += (W_d)[i][j]*0.2/BATCHSIZE;\
+      (W)[i][j] += (W_d)[i][j]*0.02/BATCHSIZE;\
       (W_d)[i][j] = 0.0f;\
     }\
 }
@@ -40,7 +40,7 @@
 {\
   FOR(i, out_c)\
   {\
-    (B)[i] += (B_d)[i]*0.2/BATCHSIZE;\
+    (B)[i] += (B_d)[i]*0.02/BATCHSIZE;\
     (B_d)[i] = 0.0f;\
   }\
 }
@@ -310,17 +310,17 @@ int main(int argc, char** argv){
       printf("please enter profile/run, then train size, then test size\n");
       exit(-1);
     }
-    if(strcmp(argv[1], "profile") == 0)
-    {
       ntrain = atoi(argv[2])/BATCHSIZE*BATCHSIZE;
       ntest  = atoi(argv[3])/BATCHSIZE*BATCHSIZE;
+    if(strcmp(argv[1], "profile") == 0)
+    {
       init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", &mnist_train_imgs, &mnist_train_labels, ntrain);
       init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", &mnist_test_imgs, &mnist_test_labels, ntest);
     }
     else if(strcmp(argv[1], "run") == 0)
     {
-      init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", &mnist_train_imgs, &mnist_train_labels, 60000);
-      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", &mnist_test_imgs, &mnist_test_labels, 10000);
+      init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", &mnist_train_imgs, &mnist_train_labels, ntrain);
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", &mnist_test_imgs, &mnist_test_labels, ntest);
     }
     else
       printf("fisrt argument should be keyword profile or run\n");

@@ -9,7 +9,7 @@ float RandomNumber(float Min, float Max)
 
 void uniform_W(float*** W, int in, int out)
 {
-  float k = 1.0f/(float)(in);
+  float k = 6.0f/(float)(in);
   float sqrtk = sqrtf(k);
   for(int i = 0; i<out; i++)
     for(int j=0; j<in; j++)
@@ -18,7 +18,7 @@ void uniform_W(float*** W, int in, int out)
 
 void uniform_B(float** B, int in, int out)
 {
-  float k = 3.0f/(float)(in);
+  float k = 6.0f/(float)(in);
   float sqrtk = sqrtf(k);
   for(int i=0; i<out; i++)
     (*B)[i] = RandomNumber(-sqrtk,sqrtk);
@@ -53,14 +53,15 @@ void last_layer_prep(uint8_t* label, float**** out, int out_channels, float**** 
     if(j==(*label))
       (*error)[j][0][0]=1.0f;
     else
-      (*error)[j][0][0]=-1.0f;
+      (*error)[j][0][0]=0.0f;
   }
 
   //delta = -(y-out)*df(out) where df(x) is 1-x*x
   for(int j=0; j<out_channels; j++)
   {
     float x = (*out)[j][0][0];
-    (*error)[j][0][0] = ((*error)[j][0][0]-x)*(1-x*x);
+    //(*error)[j][0][0] = ((*error)[j][0][0]-x)*(1-x*x);
+    (*error)[j][0][0] = (x>0)?((*error)[j][0][0]-x) : 0.0f;
   }
 }
 
@@ -76,7 +77,8 @@ void linear_backward(float**** error_l_plus_1, float**** in, float*** W_l, int l
     for(int k=0; k<l_cout; k++)
       (*error_l)[j][0][0] += (*W_l)[k][j] * (*error_l_plus_1)[k][0][0];
     float x = (*in)[j][0][0];
-    (*error_l)[j][0][0] *= (1-x*x);
+    //(*error_l)[j][0][0] *= (1-x*x);
+    (*error_l)[j][0][0] *= (x>0)?1.0f:0.0f;
   }
 
   //float eta = 0.1f;
