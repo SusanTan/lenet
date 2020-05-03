@@ -24,15 +24,12 @@
 #define OL_OUTSIZE  1
 
 
-float** mnist_train_imgs[60000];
-uint8_t mnist_train_labels[60000];
-float** mnist_test_imgs[10000];
-uint8_t mnist_test_labels[10000];
+float*** mnist_train_imgs;
+uint8_t* mnist_train_labels;
+float*** mnist_test_imgs;
+uint8_t* mnist_test_labels;
 
-float**** train_img_batch;
-uint8_t* train_label_batch;
-float**** test_img_batch;
-uint8_t* test_label_batch;
+
 //kernels of size (out_channels, in_channels, h, w)
 typedef struct LeNet
 {
@@ -68,21 +65,21 @@ Intermediate error;
 ///////////////////////////////
 
 //initializations
-void kaiming_uniform(float**** kernel, int in_channels, int out_channels, int kernel_size);
-void uniform_W(float** W, int in, int out);
-void uniform_B(float* B, int in, int out);
+void kaiming_uniform(float***** kernel, int in_channels, int out_channels, int kernel_size);
+void uniform_W(float*** W, int in, int out);
+void uniform_B(float** B, int in, int out);
 
 //free functions
 void free_conv(float**** kernel, int in_channels, int out_channels, int kernel_size);
 void free_linear(float** W, float* B, int out_channels);
 
 //forward pass
-void conv2d_forward(float**** conv, float*** x, int img_size, int in_channels, int out_channels, float*** output);
-void maxpool2d_forward(int stride, int pool_size, float*** in, int channels, int img_size, float*** output, float*** max_map);
-void linear_forward(float** W, float* B, float*** in, int in_channels, int out_channels, float*** output);
+void conv2d_forward(float***** conv, float**** x, int img_size, int in_channels, int out_channels, float**** output);
+void maxpool2d_forward(int stride, int pool_size, float**** in, int channels, int img_size, float**** output, float**** max_map);
+void linear_forward(float*** W, float** B, float**** in, int in_channels, int out_channels, float**** output);
 
 //backward pass
-void last_layer_prep(uint8_t label, float*** out, int out_channels, float*** delta);
-void linear_backward(float*** error_l_plus_1, float*** in, float** W_l, float* B_l, int l_cin, int l_cout, float*** error_l, float**W_l_delta, float* B_l_delta);
-void conv_backward(float*** error_l_plus_1, float*** in, float**** W_l, int l_cin, int l_cout, float*** error_l, int kernel_size, int img_size_in, int img_size_out, float**** W_l_delta);
-void pool_backward(float*** error_l_plus_1, int channels, float*** error_l, int stride, int img_size_in, float*** max_map);
+void last_layer_prep(uint8_t* label, float**** out, int out_channels, float**** delta);
+void linear_backward(float**** error_l_plus_1, float**** in, float*** W_l, int l_cin, int l_cout, float**** error_l, float***W_l_delta, float** B_l_delta);
+void conv_backward(float**** error_l_plus_1, float**** in, float***** W_l, int l_cin, int l_cout, float**** error_l, int kernel_size, int img_size_in, int img_size_out, float***** W_l_delta);
+void pool_backward(float**** error_l_plus_1, int channels, float**** error_l, int stride, int img_size_in, float**** max_map);

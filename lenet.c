@@ -5,13 +5,53 @@
 #include <math.h>
 #include <string.h>
 
+#define FOR(i, count) for (int i = 0; i < count; i++)
+#define TORCH_TANH(x, img_size, channels)\
+{\
+  FOR(i,channels)\
+    FOR(j, img_size)\
+      FOR(k, img_size)\
+          (x)[i][j][k] = tanh((x)[i][j][k]);\
+}
+
+#define UPDATE_CONV(W, W_d, in_c, out_c, kernel)\
+{\
+  FOR(i, out_c)\
+    FOR(j, in_c)\
+      FOR(k, kernel)\
+        FOR(l, kernel)\
+        {\
+          (W)[i][j][k][l] += (W_d)[i][j][k][l]*0.2/BATCHSIZE;\
+          (W_d)[i][j][k][l] = 0.0f;\
+        }\
+}
+
+#define UPDATE_LINEAR_W(W, W_d, in_c, out_c)\
+{\
+  FOR(i, out_c)\
+    FOR(j, in_c)\
+    {\
+      (W)[i][j] += (W_d)[i][j]*0.2/BATCHSIZE;\
+      (W_d)[i][j] = 0.0f;\
+    }\
+}
+
+#define UPDATE_LINEAR_B(B, B_d, out_c)\
+{\
+  FOR(i, out_c)\
+  {\
+    (B)[i] += (B_d)[i]*0.2/BATCHSIZE;\
+    (B_d)[i] = 0.0f;\
+  }\
+}
+
 int ntrain = 60000;
 int ntest  = 10000;
-void RandomChoices(int* batchindice, int range, int size)
-{
-  for(int i=0; i<size; i++)
-    batchindice[i] = (rand()%(range));
-}
+//void RandomChoices(int* batchindice, int range, int size)
+//{
+//  for(int i=0; i<size; i++)
+//    batchindice[i] = (rand()%(range));
+//}
 
 float** initialize_zeroweights(int d1, int d2)
 {
@@ -83,19 +123,19 @@ float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
 
 void initialize_lenet(){
   lenet.C1 = initialize_4Dzeros(C1_COUT, C1_CIN,  CONV_SIZE, CONV_SIZE);
-  kaiming_uniform(lenet.C1, C1_CIN,  C1_COUT, CONV_SIZE);
+  kaiming_uniform(&lenet.C1, C1_CIN,  C1_COUT, CONV_SIZE);
   lenet.C3 = initialize_4Dzeros(C3_COUT, C1_COUT, CONV_SIZE, CONV_SIZE);
-  kaiming_uniform(lenet.C3, C1_COUT,  C3_COUT, CONV_SIZE);
+  kaiming_uniform(&lenet.C3, C1_COUT,  C3_COUT, CONV_SIZE);
   lenet.C5 = initialize_4Dzeros(C5_COUT, C3_COUT, CONV_SIZE, CONV_SIZE);
-  kaiming_uniform(lenet.C5, C3_COUT,  C5_COUT, CONV_SIZE);
+  kaiming_uniform(&lenet.C5, C3_COUT,  C5_COUT, CONV_SIZE);
   lenet.F6_W = initialize_zeroweights(F6_COUT, C5_COUT);
-  uniform_W(lenet.F6_W, C5_COUT, F6_COUT);
+  uniform_W(&lenet.F6_W, C5_COUT, F6_COUT);
   lenet.OL_W = initialize_zeroweights(OL_COUT, F6_COUT);
-  uniform_W(lenet.OL_W, F6_COUT, OL_COUT);
+  uniform_W(&lenet.OL_W, F6_COUT, OL_COUT);
   lenet.F6_B = initialize_zerobias(F6_COUT);
-  uniform_B(lenet.F6_B, C5_COUT, F6_COUT);
+  uniform_B(&lenet.F6_B, C5_COUT, F6_COUT);
   lenet.OL_B = initialize_zerobias(OL_COUT);
-  uniform_B(lenet.OL_B, F6_COUT, OL_COUT);
+  uniform_B(&lenet.OL_B, F6_COUT, OL_COUT);
 
   //initialize all intermediate storages
   out.C1     = initialize_images(C1_COUT, C1_OUTSIZE, C1_OUTSIZE);
@@ -125,93 +165,54 @@ void initialize_lenet(){
   delta.C1   = initialize_4Dzeros(C1_COUT, C1_CIN , CONV_SIZE, CONV_SIZE);
 }
 
-void torch_tanh (float*** x, int img_size, int channels)
-{
-  for(int i=0; i<channels; i++)
-    for(int j=0; j<img_size; j++)
-      for(int k=0; k<img_size; k++)
-        x[i][j][k] = tanh(x[i][j][k]);
-}
-
 void forward(int i, uint8_t mode)
 {
   if(mode == 0) //train mode
-    conv2d_forward(lenet.C1, train_img_batch[i], C1_OUTSIZE, C1_CIN, C1_COUT, out.C1);
+    conv2d_forward(&lenet.C1, train_img_batch+i, C1_OUTSIZE, C1_CIN, C1_COUT, &out.C1);
   else
-    conv2d_forward(lenet.C1, test_img_batch[i], C1_OUTSIZE, C1_CIN, C1_COUT, out.C1);
-  torch_tanh(out.C1, C1_OUTSIZE, C1_COUT);
-	maxpool2d_forward(POOL_STRIDE, POOL_SIZE, out.C1, C1_COUT, S2_OUTSIZE, out.S2, S2_max_map);
-  conv2d_forward(lenet.C3, out.S2, C3_OUTSIZE, C1_COUT, C3_COUT, out.C3);
-  torch_tanh(out.C3, C3_OUTSIZE, C3_COUT);
-  maxpool2d_forward(POOL_STRIDE, POOL_SIZE, out.C3, C3_COUT, S4_OUTSIZE, out.S4, S4_max_map);
-  conv2d_forward(lenet.C5, out.S4, C5_OUTSIZE, C3_COUT, C5_COUT, out.C5);
-  torch_tanh(out.C5, C5_OUTSIZE, C5_COUT);
-  linear_forward(lenet.F6_W, lenet.F6_B, out.C5, C5_COUT, F6_COUT, out.F6);
-  torch_tanh(out.F6, F6_OUTSIZE, F6_COUT);
-  linear_forward(lenet.OL_W, lenet.OL_B, out.F6, F6_COUT, OL_COUT, out.OL);
-  torch_tanh(out.OL, OL_OUTSIZE, OL_COUT);
+    conv2d_forward(&lenet.C1, test_img_batch+i, C1_OUTSIZE, C1_CIN, C1_COUT, &out.C1);
+  TORCH_TANH(out.C1, C1_OUTSIZE, C1_COUT);
+	maxpool2d_forward(POOL_STRIDE, POOL_SIZE, &out.C1, C1_COUT, S2_OUTSIZE, &out.S2, &S2_max_map);
+  conv2d_forward(&lenet.C3, &out.S2, C3_OUTSIZE, C1_COUT, C3_COUT, &out.C3);
+  TORCH_TANH(out.C3, C3_OUTSIZE, C3_COUT);
+  maxpool2d_forward(POOL_STRIDE, POOL_SIZE, &out.C3, C3_COUT, S4_OUTSIZE, &out.S4, &S4_max_map);
+  conv2d_forward(&lenet.C5, &out.S4, C5_OUTSIZE, C3_COUT, C5_COUT, &out.C5);
+  TORCH_TANH(out.C5, C5_OUTSIZE, C5_COUT);
+  linear_forward(&lenet.F6_W, &lenet.F6_B, &out.C5, C5_COUT, F6_COUT, &out.F6);
+  TORCH_TANH(out.F6, F6_OUTSIZE, F6_COUT);
+  linear_forward(&lenet.OL_W, &lenet.OL_B, &out.F6, F6_COUT, OL_COUT, &out.OL);
+  TORCH_TANH(out.OL, OL_OUTSIZE, OL_COUT);
 }
 
 void backward(i)
 {
-  last_layer_prep  (train_label_batch[i], out.OL, OL_COUT, last_error);
-  linear_backward  (last_error, out.F6, lenet.OL_W, lenet.OL_B,
-                    F6_COUT, OL_COUT, error.OL, delta.OL_W, delta.OL_B);
-  linear_backward  (error.OL, out.C5, lenet.F6_W, lenet.F6_B,
-                    C5_COUT, F6_COUT, error.F6, delta.F6_W, delta.F6_B);
-  conv_backward    (error.F6, out.S4, lenet.C5, C3_COUT, C5_COUT,
-                    error.C5, CONV_SIZE, S4_OUTSIZE, C5_OUTSIZE, delta.C5);
-  pool_backward    (error.C5, C3_COUT, error.S4, POOL_STRIDE,
-                    C3_OUTSIZE, S4_max_map);
-  conv_backward    (error.S4, out.S2, lenet.C3, C1_COUT, C3_COUT,
-                    error.C3, CONV_SIZE, S2_OUTSIZE, C3_OUTSIZE, delta.C3);
-  pool_backward    (error.C3, C1_COUT, error.S2, POOL_STRIDE,
-                    C1_OUTSIZE, S2_max_map);
-  conv_backward    (error.S2, train_img_batch[i], lenet.C1, C1_CIN, C1_COUT,
-                    error.C1, CONV_SIZE, C1_INSIZE, C1_OUTSIZE, delta.C1);
-}
-
-void update_conv(float**** W, float**** W_d, int in_c, int out_c, int kernel)
-{
-  for(int i=0; i<out_c; i++)
-    for(int j=0; j<in_c; j++)
-      for(int k=0; k<kernel; k++)
-        for(int l=0; l<kernel; l++)
-        {
-          W[i][j][k][l] += W_d[i][j][k][l]*0.2/BATCHSIZE;
-          W_d[i][j][k][l] = 0.0f;
-        }
-}
-
-void update_linear_w(float** W, float** W_d, int in_c, int out_c)
-{
-  for(int i=0; i<out_c; i++)
-    for(int j=0; j<in_c; j++)
-    {
-      W[i][j] += W_d[i][j]*0.2/BATCHSIZE;
-      W_d[i][j] = 0.0f;
-    }
-}
-
-void update_linear_b(float* B, float* B_d, int out_c)
-{
-  for(int i=0; i<out_c; i++)
-  {
-    B[i] += B_d[i]*0.2/BATCHSIZE;
-    B_d[i] = 0.0f;
-  }
+  last_layer_prep  (train_label_batch+i, &out.OL, OL_COUT, &last_error);
+  linear_backward  (&last_error, &out.F6, &lenet.OL_W,
+                    F6_COUT, OL_COUT, &error.OL, &delta.OL_W, &delta.OL_B);
+  linear_backward  (&error.OL, &out.C5, &lenet.F6_W,
+                    C5_COUT, F6_COUT, &error.F6, &delta.F6_W, &delta.F6_B);
+  conv_backward    (&error.F6, &out.S4, &lenet.C5, C3_COUT, C5_COUT,
+                    &error.C5, CONV_SIZE, S4_OUTSIZE, C5_OUTSIZE, &delta.C5);
+  pool_backward    (&error.C5, C3_COUT, &error.S4, POOL_STRIDE,
+                    C3_OUTSIZE, &S4_max_map);
+  conv_backward    (&error.S4, &out.S2, &lenet.C3, C1_COUT, C3_COUT,
+                    &error.C3, CONV_SIZE, S2_OUTSIZE, C3_OUTSIZE, &delta.C3);
+  pool_backward    (&error.C3, C1_COUT, &error.S2, POOL_STRIDE,
+                    C1_OUTSIZE, &S2_max_map);
+  conv_backward    (&error.S2, train_img_batch+i, &lenet.C1, C1_CIN, C1_COUT,
+                    &error.C1, CONV_SIZE, C1_INSIZE, C1_OUTSIZE, &delta.C1);
 }
 
 void weight_update()
 {
   //update, and also clear the buffer
-  update_conv(lenet.C1, delta.C1, C1_CIN,  C1_COUT, CONV_SIZE);
-  update_conv(lenet.C3, delta.C3, C1_COUT, C3_COUT, CONV_SIZE);
-  update_conv(lenet.C5, delta.C5, C3_COUT, C5_COUT, CONV_SIZE);
-  update_linear_w(lenet.F6_W, delta.F6_W, C5_COUT, F6_COUT);
-  update_linear_w(lenet.OL_W, delta.OL_W, F6_COUT, OL_COUT);
-  update_linear_b(lenet.F6_B, delta.F6_B, F6_COUT);
-  update_linear_b(lenet.OL_B, delta.OL_B, OL_COUT);
+  UPDATE_CONV(lenet.C1, delta.C1, C1_CIN,  C1_COUT, CONV_SIZE);
+  UPDATE_CONV(lenet.C3, delta.C3, C1_COUT, C3_COUT, CONV_SIZE);
+  UPDATE_CONV(lenet.C5, delta.C5, C3_COUT, C5_COUT, CONV_SIZE);
+  UPDATE_LINEAR_W(lenet.F6_W, delta.F6_W, C5_COUT, F6_COUT);
+  UPDATE_LINEAR_W(lenet.OL_W, delta.OL_W, F6_COUT, OL_COUT);
+  UPDATE_LINEAR_B(lenet.F6_B, delta.F6_B, F6_COUT);
+  UPDATE_LINEAR_B(lenet.OL_B, delta.OL_B, OL_COUT);
 }
 
 void training()
@@ -222,8 +223,8 @@ void training()
   for(int j=0; j<ntrain/BATCHSIZE; j++)
   {
     //RandomChoices(batchindice, ntrain, BATCHSIZE);
-    form_img_batch(train_img_batch, j*BATCHSIZE, BATCHSIZE, mnist_train_imgs);
-    form_label_batch(train_label_batch, j*BATCHSIZE, BATCHSIZE, mnist_train_labels);
+    form_img_batch(&train_img_batch, j*BATCHSIZE, BATCHSIZE, &mnist_train_imgs);
+    form_label_batch(&train_label_batch, j*BATCHSIZE, BATCHSIZE, &mnist_train_labels);
 
     for(int i=0; i<BATCHSIZE; i++) // change to batchsize eventually
     {
@@ -232,7 +233,7 @@ void training()
     }
     weight_update();
   }
-  free_image_batch(train_img_batch, BATCHSIZE);
+  free_image_batch(0, BATCHSIZE);
   free(train_label_batch);
 }
 
@@ -246,8 +247,8 @@ void testing()
   for(int j=0; j<ntest; j++)
   {
     //RandomChoices(batchindice, ntest, 1);
-    form_img_batch(test_img_batch, j, 1, mnist_test_imgs);
-    form_label_batch(test_label_batch, j, 1, mnist_test_labels);
+    form_img_batch(&test_img_batch, j, 1, &mnist_test_imgs);
+    form_label_batch(&test_label_batch, j, 1, &mnist_test_labels);
     forward(0, 1);
     int pred_digit = 0;
     int actual_digit = 0;
@@ -265,7 +266,7 @@ void testing()
     if(pred_digit != actual_digit)
       errors++;
   }
-  free_image_batch(test_img_batch, 1);
+  free_image_batch(1, 1);
   free(test_label_batch);
   double err =(double) errors/(double)ntest;
   printf("\n classification error: %.3f\n", err);
@@ -313,13 +314,13 @@ int main(int argc, char** argv){
     {
       ntrain = atoi(argv[2])/BATCHSIZE*BATCHSIZE;
       ntest  = atoi(argv[3])/BATCHSIZE*BATCHSIZE;
-      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, ntrain);
-      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, ntest);
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", &mnist_train_imgs, &mnist_train_labels, ntrain);
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", &mnist_test_imgs, &mnist_test_labels, ntest);
     }
     else if(strcmp(argv[1], "run") == 0)
     {
-      init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 60000);
-      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 10000);
+      init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", &mnist_train_imgs, &mnist_train_labels, 60000);
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", &mnist_test_imgs, &mnist_test_labels, 10000);
     }
     else
       printf("fisrt argument should be keyword profile or run\n");

@@ -15,7 +15,7 @@ run: lenet
 	./lenet run 60000 10000
 
 profile: lenet
-	./lenet profile 60 10
+	./lenet profile 600 100
 
 python:
 	python lenet.py
