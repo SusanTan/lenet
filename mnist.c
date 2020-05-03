@@ -68,10 +68,10 @@ void free_image_batch(float**** ptr, int batchsize)
   free(ptr);
 }
 
-void form_img_batch(float**** imgs, int* batchindice, int batchsize, float*** mnist_train_imgs)
+void form_img_batch(float**** imgs, int start, int batchsize, float*** mnist_train_imgs)
 {
   for(int i=0; i<batchsize; i++)
-    imgs[i][0] = mnist_train_imgs[batchindice[i]];
+    imgs[i][0] = mnist_train_imgs[i+start];
 }
 
 uint8_t* allocate_label_batch(int batchsize)
@@ -80,8 +80,8 @@ uint8_t* allocate_label_batch(int batchsize)
   return labels;
 }
 
-void form_label_batch(uint8_t* labels, int* batchindice, int batchsize, uint8_t* mnist_train_labels)
+void form_label_batch(uint8_t* labels, int start, int batchsize, uint8_t* mnist_train_labels)
 {
   for(int i=0; i<batchsize; i++)
-    labels[i] = mnist_train_labels[batchindice[i]];
+    labels[i] = mnist_train_labels[i+start];
 }

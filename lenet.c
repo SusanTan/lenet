@@ -7,8 +7,6 @@
 
 int ntrain = 60000;
 int ntest  = 10000;
-int traininput_size;//profile purpose
-int testinput_size;//profile purpose
 void RandomChoices(int* batchindice, int range, int size)
 {
   for(int i=0; i<size; i++)
@@ -215,14 +213,14 @@ void weight_update()
 
 void training()
 {
-  int batchindice[BATCHSIZE];
+  //int batchindice[BATCHSIZE];
   train_img_batch   = allocate_img_batch(BATCHSIZE);
   train_label_batch = allocate_label_batch(BATCHSIZE);
   for(int j=0; j<ntrain/BATCHSIZE; j++)
   {
-    RandomChoices(batchindice, traininput_size, BATCHSIZE);
-    form_img_batch(train_img_batch,batchindice, BATCHSIZE, mnist_train_imgs);
-    form_label_batch(train_label_batch, batchindice, BATCHSIZE, mnist_train_labels);
+    //RandomChoices(batchindice, ntrain, BATCHSIZE);
+    form_img_batch(train_img_batch, j*BATCHSIZE, BATCHSIZE, mnist_train_imgs);
+    form_label_batch(train_label_batch, j*BATCHSIZE, BATCHSIZE, mnist_train_labels);
 
     for(int i=0; i<BATCHSIZE; i++) // change to batchsize eventually
     {
@@ -238,15 +236,15 @@ void training()
 
 void testing()
 {
-  int batchindice[1];
+  //int batchindice[1];
   test_img_batch   = allocate_img_batch(1);
   test_label_batch = allocate_label_batch(1);
   int errors = 0;
   for(int j=0; j<ntest; j++)
   {
-    RandomChoices(batchindice, testinput_size, 1);
-    form_img_batch(test_img_batch, batchindice, 1, mnist_test_imgs);
-    form_label_batch(test_label_batch, batchindice, 1, mnist_test_labels);
+    //RandomChoices(batchindice, ntest, 1);
+    form_img_batch(test_img_batch, j, 1, mnist_test_imgs);
+    form_label_batch(test_label_batch, j, 1, mnist_test_labels);
     forward(test_img_batch[0]);
     int pred_digit = 0;
     int actual_digit = 0;
@@ -308,21 +306,17 @@ int main(int argc, char** argv){
       printf("please enter profile/run, then train size, then test size\n");
       exit(-1);
     }
-    ntrain = atoi(argv[2]);
-    ntest  = atoi(argv[3]);
     if(strcmp(argv[1], "profile") == 0)
     {
-      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 1000);
-      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 1000);
-      traininput_size = 1000;
-      testinput_size = 1000;
+      ntrain = atoi(argv[2])/BATCHSIZE*BATCHSIZE;
+      ntest  = atoi(argv[3])/BATCHSIZE*BATCHSIZE;
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, ntrain);
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, ntest);
     }
     else if(strcmp(argv[1], "run") == 0)
     {
       init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 60000);
       init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 10000);
-      traininput_size = 60000;
-      testinput_size = 10000;
     }
     else
       printf("fisrt argument should be keyword profile or run\n");
