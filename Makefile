@@ -11,10 +11,10 @@ lenet: $(OBJ)
 		$(CC) -o $@ $^ $(CFLAGS) $(LINKFLAGS)
 
 run: lenet
-	./lenet 60000 10000
+	./lenet run 60000 10000
 
 profile: lenet
-	./lenet 6000 1000
+	./lenet profile 6000 1000
 
 python:
 	python lenet.py

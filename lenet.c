@@ -3,10 +3,11 @@
 #include "lenet.h"
 #include "lenet_test.h"
 #include <math.h>
+#include <string.h>
 
 int ntrain = 60000;
 int ntest  = 10000;
-
+int traininput_size;//profile purpose
 void RandomChoices(int* batchindice, int range, int size)
 {
   for(int i=0; i<size; i++)
@@ -218,7 +219,7 @@ void training()
   train_label_batch = allocate_label_batch(BATCHSIZE);
   for(int j=0; j<ntrain/BATCHSIZE; j++)
   {
-    RandomChoices(batchindice, 60000, BATCHSIZE);
+    RandomChoices(batchindice, traininput_size, BATCHSIZE);
     form_img_batch(train_img_batch,batchindice, BATCHSIZE, mnist_train_imgs);
     form_label_batch(train_label_batch, batchindice, BATCHSIZE, mnist_train_labels);
 
@@ -301,14 +302,26 @@ void free_all()
 }
 
 int main(int argc, char** argv){
-    if(argc < 2)
+    if(argc < 3)
     {
-      printf("please enter train size, then test size");
+      printf("please enter profile/run, then train size, then test size\n");
       exit(-1);
     }
-    ntrain = atoi(argv[1]);
-    ntest  = atoi(argv[2]);
-    init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 60000);
+    ntrain = atoi(argv[2]);
+    ntest  = atoi(argv[3]);
+    if(strcmp(argv[1], "profile") == 0)
+    {
+      init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 10000);
+      traininput_size = 10000;
+    }
+    else if(strcmp(argv[1], "run") == 0)
+    {
+      init_data("train-images-idx3-ubyte", "train-labels-idx1-ubyte", mnist_train_imgs, mnist_train_labels, 60000);
+      traininput_size = 60000;
+    }
+    else
+      printf("fisrt argument should be keyword profile or run\n");
+
     init_data("t10k-images-idx3-ubyte", "t10k-labels-idx1-ubyte", mnist_test_imgs, mnist_test_labels, 10000);
     initialize_lenet();
     training();
