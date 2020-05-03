@@ -1,0 +1,3132 @@
+
+*********CallGraph Stats***************
+################ (program : )###############
+-------------------------------------------------------
+TotalNode           50
+TotalCycle          0
+MaxNodeInCycle      0
+NodeInCycle         0
+TotalEdge           165
+CalRetPairInCycle   0
+#######################################################
+
+*********General Stats***************
+################ (program : )###############
+BitCastNumber       34
+BBWith2Succ         131
+BBWith3Succ         0
+TotalPTAPAGEdges    1039
+TotalCallSite       165
+LocalVarInRecur     0
+IndCallSites        0
+ReturnsNum          40
+CallsNum            334
+GepsNum             386
+CopysNum            453
+StoresNum           116
+LoadsNum            356
+AddrsNum            154
+NonPtrObj           54
+ConstArrayObj       0
+ConstStructObj      0
+VarArrayObj         2
+VarStructObj        4
+FSObjNum            72
+FIObjNum            17
+StackObjs           0
+HeapObjs            20
+GlobalObjs          19
+FunctionObjs        50
+TotalPAGEdges       5118
+MaxStructSize       7
+TotalFieldObjects   30
+TotalObjects        90
+TotalPointers       2384
+-------------------------------------------------------
+#######################################################
+
+*********Constraint Graph Stats***************
+################ (program : )###############
+-------------------------------------------------------
+AvgIn/OutCopyEdge   0.986207
+AvgIn/OutLoadEdge   0.2867
+AvgIn/OutAddrEdge   0.0975369
+AvgIn/OutEdge       1.42759
+NumOfCGNode         2557
+TotalValidNode      1015
+TotalValidObjNode   117
+NumOfCGEdge         1350
+NumOfAddrs          99
+NumOfCopys          615
+NumOfGeps           386
+NumOfLoads          291
+NumOfStores         58
+MaxInCopyEdge       17
+MaxOutCopyEdge      47
+MaxInLoadEdge       1
+MaxOutLoadEdge      4
+MaxInStoreEdge      2
+MaxOutStoreEdge     11
+AvgIn/OutStoreEdge  0
+MaxInAddrEdge       1
+MaxOutAddrEdge      11
+#######################################################
+
+*********Andersen Pointer Analysis Stats***************
+################ (program : )###############
+-------------------------------------------------------
+AvgTopLvlPtsSize    1.04246
+AvgPtsSetSize       0.383653
+UpdateCGTime        0
+CopyGepTime         0.002
+LoadStoreTime       0.001
+SCCMergeTime        0
+SCCDetectTime       0
+TotalTime           0.004
+CollapseTime        0
+NullPointer         8
+MaxNodesInSCC       0
+NodesInCycles       0
+TotalPWCCycleNum    0
+TotalCycleNum       0
+NumOfSCCDetect      0
+IndEdgeSolved       0
+IndCallSites        0
+Iterations          1
+MaxPtsSetSize       3
+DYFieldObjs         30
+MemObjects          90
+DYFieldPtrs         0
+NumOfFieldExpand    0
+NumOfSFRs           0
+GepProcessed        383
+CopyProcessed       801
+StoreProcessed      59
+LoadProcessed       367
+AddrProcessed       99
+TotalObjects        120
+TotalPointers       2384
+Pointers            2384
+PointsToConstPtr    0
+PointsToBlkPtr      0
+#######################################################
+Focus on these loops (in this order):
+ - training :: for.cond3 (filename:lenet.c, line:229, col:5)	Time 193 / 246 Coverage: 78.5%
+ - conv2d_forward :: for.cond22 (filename:conv2d.c, line:82, col:4)	Time 104 / 246 Coverage: 42.3%
+ - conv2d_forward :: for.cond27 (filename:conv2d.c, line:83, col:6)	Time 104 / 246 Coverage: 42.3%
+ - conv_backward :: for.cond131 (filename:conv2d.c, line:105, col:3)	Time 72 / 246 Coverage: 29.3%
+ - conv_backward :: for.cond136 (filename:conv2d.c, line:106, col:5)	Time 72 / 246 Coverage: 29.3%
+ - conv_backward :: for.cond19 (filename:conv2d.c, line:95, col:3)	Time 61 / 246 Coverage: 24.8%
+ - conv_backward :: for.cond23 (filename:conv2d.c, line:96, col:5)	Time 61 / 246 Coverage: 24.8%
+ - testing :: for.cond (filename:lenet.c, line:247, col:3)	Time 49 / 246 Coverage: 19.9%
+SpecPrivProfiler loader: Structure good/good, Read 1821 good lines, 0 bad lines
+#################################################
+ Classification
+
+
+Starting task Classify loop.
+***************** Classify: training :: for.cond3 *****************
+Susan: start getting footprintGuessing at load from struct %struct.Intermediate = type { float***, float***, float***, float***, float***, float***, float*** } field 0
+Read::getUnderlyingAUs: Unexpected failure on   %8 = load float**, float*** %arrayidx, align 8, !dbg !324, !tbaa !285, !namer !333 in fcn forward, bb for.body16
+  In context FCN forward WITHIN LOOP training:for.cond3 WITHIN LOOP training:for.cond WITHIN FCN training
+getFootprint: failed on   %9 = load float*, float** %arrayidx18, align 8, !dbg !324, !tbaa !285, !namer !335 AT FCN forward WITHIN LOOP training:for.cond3 WITHIN LOOP training:for.cond WITHIN FCN training
+          in: Function forward :: block for.body16
+getFootprint: failed on   tail call fastcc void @forward(i32 %i.0, i8 zeroext 0), !dbg !280, !namer !282 AT LOOP training:for.cond3 WITHIN LOOP training:for.cond WITHIN FCN training
+          in: Function training :: block for.body6
+Susan: failed getting footprintClassify: Failed to get write footprint of loop; abort
+Task Classify loop completed in 4.921000e-03 seconds; average is 4.921000e-03 seconds.
+Starting task Classify loop.
+***************** Classify: conv2d_forward :: for.cond22 *****************
+Susan: start getting footprintClassification report: Valid for:   Loop conv2d_forward :: for.cond22, 
+  Found 0 shared AUs:
+  Found 0 local AUs:
+  Found 0 reduction AUs:
+  Found 1 private AUs:
+    o priv[sh=2] HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+  Found 0 kill private AUs:
+  Found 0 shareable private AUs:
+  Found 14 read-only (live-in) AUs:
+    o ro HEAP init_data for.body call5 AT LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP initialize_4Dzeros for.body9 call12 AT LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP initialize_images entry call AT FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP initialize_images for.body call4 AT LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP initialize_4Dzeros for.body call4 AT LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP init_data for.body10 call11 AT LOOP init_data:for.cond6 WITHIN LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP initialize_4Dzeros entry call AT FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP allocate_img_batch for.body call2 AT LOOP allocate_img_batch:for.cond WITHIN FCN allocate_img_batch WITHIN FCN testing WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP initialize_4Dzeros for.body21 call24 AT LOOP initialize_4Dzeros:for.cond17 WITHIN LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP allocate_img_batch entry call AT FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro GLOBAL lenet (conv2d_forward :: for.cond22) #regression
+    o ro HEAP allocate_img_batch entry call AT FCN allocate_img_batch WITHIN FCN testing WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro HEAP allocate_img_batch for.body call2 AT LOOP allocate_img_batch:for.cond WITHIN FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond22) #regression
+    o ro GLOBAL out (conv2d_forward :: for.cond22) #regression
+Task Classify loop completed in 4.488300e-02 seconds; average is 2.490200e-02 seconds.
+Starting task Classify loop.
+***************** Classify: conv2d_forward :: for.cond27 *****************
+Susan: start getting footprint( HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP )
+There is a flow from:
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405
+to:
+  %20 = load float, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !403
+
+Classification report: Valid for:   Loop conv2d_forward :: for.cond27, 
+  Found 1 shared AUs:
+    o shared[sh=2] HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+  Found 0 local AUs:
+  Found 0 reduction AUs:
+  Found 0 private AUs:
+  Found 0 kill private AUs:
+  Found 0 shareable private AUs:
+  Found 14 read-only (live-in) AUs:
+    o ro HEAP init_data for.body call5 AT LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP initialize_4Dzeros for.body9 call12 AT LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP initialize_images entry call AT FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP initialize_images for.body call4 AT LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP initialize_4Dzeros for.body call4 AT LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP init_data for.body10 call11 AT LOOP init_data:for.cond6 WITHIN LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP initialize_4Dzeros entry call AT FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP allocate_img_batch for.body call2 AT LOOP allocate_img_batch:for.cond WITHIN FCN allocate_img_batch WITHIN FCN testing WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP initialize_4Dzeros for.body21 call24 AT LOOP initialize_4Dzeros:for.cond17 WITHIN LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP allocate_img_batch entry call AT FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro GLOBAL lenet (conv2d_forward :: for.cond27) #regression
+    o ro HEAP allocate_img_batch entry call AT FCN allocate_img_batch WITHIN FCN testing WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro HEAP allocate_img_batch for.body call2 AT LOOP allocate_img_batch:for.cond WITHIN FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (conv2d_forward :: for.cond27) #regression
+    o ro GLOBAL out (conv2d_forward :: for.cond27) #regression
+Task Classify loop completed in 1.488100e-02 seconds; average is 2.156167e-02 seconds.
+Starting task Classify loop.
+***************** Classify: conv_backward :: for.cond131 *****************
+Susan: start getting footprintClassification report: Valid for:   Loop conv_backward :: for.cond131, 
+  Found 0 shared AUs:
+  Found 0 local AUs:
+  Found 1 reduction AUs:
+    o redux(f32_add) HEAP initialize_4Dzeros for.body21 call24 AT LOOP initialize_4Dzeros:for.cond17 WITHIN LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+  Found 0 private AUs:
+  Found 0 kill private AUs:
+  Found 0 shareable private AUs:
+  Found 13 read-only (live-in) AUs:
+    o ro HEAP init_data for.body call5 AT LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP initialize_4Dzeros for.body9 call12 AT LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP initialize_images entry call AT FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP initialize_images for.body call4 AT LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP initialize_4Dzeros for.body call4 AT LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP init_data for.body10 call11 AT LOOP init_data:for.cond6 WITHIN LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP initialize_4Dzeros entry call AT FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP allocate_img_batch entry call AT FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro HEAP allocate_img_batch for.body call2 AT LOOP allocate_img_batch:for.cond WITHIN FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (conv_backward :: for.cond131) #regression
+    o ro GLOBAL out (conv_backward :: for.cond131) #regression
+    o ro GLOBAL delta (conv_backward :: for.cond131) #regression
+    o ro GLOBAL error (conv_backward :: for.cond131) #regression
+Task Classify loop completed in 2.225700e-02 seconds; average is 2.173550e-02 seconds.
+Starting task Classify loop.
+***************** Classify: conv_backward :: for.cond136 *****************
+Susan: start getting footprintClassification report: Valid for:   Loop conv_backward :: for.cond136, 
+  Found 0 shared AUs:
+  Found 0 local AUs:
+  Found 1 reduction AUs:
+    o redux(f32_add) HEAP initialize_4Dzeros for.body21 call24 AT LOOP initialize_4Dzeros:for.cond17 WITHIN LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+  Found 0 private AUs:
+  Found 0 kill private AUs:
+  Found 0 shareable private AUs:
+  Found 13 read-only (live-in) AUs:
+    o ro HEAP init_data for.body call5 AT LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP initialize_4Dzeros for.body9 call12 AT LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP initialize_images entry call AT FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP initialize_images for.body call4 AT LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP initialize_4Dzeros for.body call4 AT LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP init_data for.body10 call11 AT LOOP init_data:for.cond6 WITHIN LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP initialize_4Dzeros entry call AT FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP allocate_img_batch entry call AT FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro HEAP allocate_img_batch for.body call2 AT LOOP allocate_img_batch:for.cond WITHIN FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (conv_backward :: for.cond136) #regression
+    o ro GLOBAL out (conv_backward :: for.cond136) #regression
+    o ro GLOBAL delta (conv_backward :: for.cond136) #regression
+    o ro GLOBAL error (conv_backward :: for.cond136) #regression
+Task Classify loop completed in 1.513000e-02 seconds; average is 2.041440e-02 seconds.
+Starting task Classify loop.
+***************** Classify: conv_backward :: for.cond19 *****************
+Susan: start getting footprint( HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP )
+There is a flow from:
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441
+to:
+  %21 = load float, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !439
+
+Classification report: Valid for:   Loop conv_backward :: for.cond19, 
+  Found 1 shared AUs:
+    o shared[sh=2] HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond19) #regression
+  Found 0 local AUs:
+  Found 0 reduction AUs:
+  Found 0 private AUs:
+  Found 0 kill private AUs:
+  Found 0 shareable private AUs:
+  Found 8 read-only (live-in) AUs:
+    o ro HEAP initialize_4Dzeros for.body9 call12 AT LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond19) #regression
+    o ro HEAP initialize_images entry call AT FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond19) #regression
+    o ro HEAP initialize_images for.body call4 AT LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond19) #regression
+    o ro HEAP initialize_4Dzeros for.body call4 AT LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond19) #regression
+    o ro HEAP initialize_4Dzeros entry call AT FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond19) #regression
+    o ro HEAP initialize_4Dzeros for.body21 call24 AT LOOP initialize_4Dzeros:for.cond17 WITHIN LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond19) #regression
+    o ro GLOBAL lenet (conv_backward :: for.cond19) #regression
+    o ro GLOBAL error (conv_backward :: for.cond19) #regression
+Task Classify loop completed in 2.294400e-02 seconds; average is 2.083600e-02 seconds.
+Starting task Classify loop.
+***************** Classify: conv_backward :: for.cond23 *****************
+Susan: start getting footprintClassification report: Valid for:   Loop conv_backward :: for.cond23, 
+  Found 0 shared AUs:
+  Found 0 local AUs:
+  Found 0 reduction AUs:
+  Found 1 private AUs:
+    o priv[sh=2] HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond23) #regression
+  Found 0 kill private AUs:
+  Found 0 shareable private AUs:
+  Found 8 read-only (live-in) AUs:
+    o ro HEAP initialize_4Dzeros for.body9 call12 AT LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond23) #regression
+    o ro HEAP initialize_images entry call AT FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond23) #regression
+    o ro HEAP initialize_images for.body call4 AT LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond23) #regression
+    o ro HEAP initialize_4Dzeros for.body call4 AT LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond23) #regression
+    o ro HEAP initialize_4Dzeros entry call AT FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond23) #regression
+    o ro HEAP initialize_4Dzeros for.body21 call24 AT LOOP initialize_4Dzeros:for.cond17 WITHIN LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (conv_backward :: for.cond23) #regression
+    o ro GLOBAL lenet (conv_backward :: for.cond23) #regression
+    o ro GLOBAL error (conv_backward :: for.cond23) #regression
+Task Classify loop completed in 1.793600e-02 seconds; average is 2.042171e-02 seconds.
+Starting task Classify loop.
+***************** Classify: testing :: for.cond *****************
+Susan: start getting footprintRead::getUnderlyingAUs: Unexpected failure on   %8 = load float**, float*** %arrayidx, align 8, !dbg !324, !tbaa !285, !namer !333 in fcn forward, bb for.body16
+  In context FCN forward WITHIN LOOP testing:for.cond WITHIN FCN testing
+getFootprint: failed on   %9 = load float*, float** %arrayidx18, align 8, !dbg !324, !tbaa !285, !namer !335 AT FCN forward WITHIN LOOP testing:for.cond WITHIN FCN testing
+          in: Function forward :: block for.body16
+getFootprint: failed on   tail call fastcc void @forward(i32 0, i8 zeroext 1), !dbg !273, !namer !274 AT LOOP testing:for.cond WITHIN FCN testing
+          in: Function testing :: block for.body
+Susan: failed getting footprintClassify: Failed to get write footprint of loop; abort
+Task Classify loop completed in 3.828000e-03 seconds; average is 1.834750e-02 seconds.
+Susan: Classification endsSLAMP output file result.slamp.profile cannot be opened
+#################################################
+Remed Selection
+
+
+---------------------------------------------------- Round 1 ----------------------------------------------------
+HeapAssignment invalid for loop training::for.cond3
+HeapAssignment invalid for loop testing::for.cond
+Loop conv2d_forward :: for.cond22 is incompatible with loop conv2d_forward :: for.cond27 because of simultaneous activation.
+Loop conv2d_forward :: for.cond22 is incompatible with loop conv_backward :: for.cond131 because of incompatible assignments.
+Loop conv2d_forward :: for.cond22 is incompatible with loop conv_backward :: for.cond136 because of incompatible assignments.
+Loop conv2d_forward :: for.cond22 is incompatible with loop conv_backward :: for.cond19 because of incompatible assignments.
+Loop conv2d_forward :: for.cond22 is COMPATIBLE with loop conv_backward :: for.cond23.
+Loop conv2d_forward :: for.cond27 is incompatible with loop conv_backward :: for.cond131 because of incompatible assignments.
+Loop conv2d_forward :: for.cond27 is incompatible with loop conv_backward :: for.cond136 because of incompatible assignments.
+Loop conv2d_forward :: for.cond27 is COMPATIBLE with loop conv_backward :: for.cond19.
+Loop conv2d_forward :: for.cond27 is incompatible with loop conv_backward :: for.cond23 because of incompatible assignments.
+Loop conv_backward :: for.cond131 is incompatible with loop conv_backward :: for.cond136 because of simultaneous activation.
+Loop conv_backward :: for.cond131 is incompatible with loop conv_backward :: for.cond19 because of incompatible assignments.
+Loop conv_backward :: for.cond131 is incompatible with loop conv_backward :: for.cond23 because of incompatible assignments.
+Loop conv_backward :: for.cond136 is incompatible with loop conv_backward :: for.cond19 because of incompatible assignments.
+Loop conv_backward :: for.cond136 is incompatible with loop conv_backward :: for.cond23 because of incompatible assignments.
+Loop conv_backward :: for.cond19 is incompatible with loop conv_backward :: for.cond23 because of simultaneous activation.
+
+
+=------------------------------------------------------------------------------=
+Compute weight for loop conv2d_forward :: for.cond22...
+constructEdgesFromMemory with CAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o NoLoopAA
+Total memory dependence queries to CAF: 196
+annotateMemDepsWithRemedies with SCAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+constructEdgesFromControl ...
+constructEdgesFromUseDefs ...
+PDG construction completed
+Run Orchestrator:: find best parallelization strategy for conv2d_forward :: for.cond22...
+Start of findBestStrategy for loop conv2d_forward::for.cond22 (filename:conv2d.c, line:82, col:4)
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o txio-aa
+	o comm-libs-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o priv-aa
+	o spec-priv-locality-oracle-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+
+Critic ps-dswp-critic
+Begin criticisms generation for PS-DSWP critic
+
+RAW Memory Loop-Carried Deps Count: 2
+WAW Memory Loop-Carried Deps Count: 1
+WAR Memory Loop-Carried Deps Count: 1
+Register Loop-Carried Deps Count: 1
+Control Loop-Carried Deps Count: 37
+
+Coverage of loop-carried dependences for hot loop conv2d_forward :: for.cond22 covered=42, total=42 , percentage=100.00%
+
+
+PS-DSWP applicable to conv2d_forward::for.cond22: large parallel stage found
+Pipeline for loop conv2d_forward :: for.cond22
+ Stage 0
+  Parallel Stage, 22 workers
+    /////    %indvars.iv13 = phi i64 [ 0, %for.cond22.preheader ], [ %indvars.iv.next14, %for.inc92 ], !dbg !331, !namer !332
+    XXXXX    %cmp23 = icmp slt i64 %indvars.iv13, %1, !dbg !333, !namer !334
+    /////    br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335
+    /////    br label %for.cond27, !dbg !336, !namer !337
+    /////    %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc89 ], [ 0, %for.cond27.preheader ], !dbg !338, !namer !339
+    XXXXX    %cmp28 = icmp slt i64 %indvars.iv11, %2, !dbg !340, !namer !341
+    /////    br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343
+    /////    br label %for.cond33, !dbg !344, !namer !345
+    /////    %indvars.iv9 = phi i64 [ %indvars.iv.next10, %for.inc86 ], [ 0, %for.cond33.preheader ], !dbg !346, !namer !347
+    XXXXX    %cmp34 = icmp slt i64 %indvars.iv9, %0, !dbg !348, !namer !349
+    /////    br i1 %cmp34, label %for.cond39.preheader, label %for.inc89, !dbg !344, !prof !350, !namer !351
+    /////    br label %for.cond39, !dbg !352, !namer !353
+    /////    %indvars.iv6 = phi i64 [ %indvars.iv.next7, %for.inc83 ], [ 0, %for.cond39.preheader ], !dbg !354, !namer !355
+    XXXXX    %exitcond8 = icmp eq i64 %indvars.iv6, %wide.trip.count17, !dbg !356, !namer !357
+    /////    br i1 %exitcond8, label %for.inc86, label %for.cond45.preheader, !dbg !352, !prof !358, !namer !359
+    /////    br label %for.cond45, !dbg !360, !namer !361
+    /////    %indvars.iv2 = phi i64 [ %indvars.iv.next3, %for.inc80 ], [ 0, %for.cond45.preheader ], !dbg !362, !namer !363
+    XXXXX    %exitcond5 = icmp eq i64 %indvars.iv2, 5, !dbg !364, !namer !365
+    /////    br i1 %exitcond5, label %for.inc83, label %for.cond50.preheader, !dbg !360, !prof !366, !namer !367
+    XXXXX    %6 = add nuw nsw i64 %indvars.iv9, %indvars.iv2, !dbg !368, !namer !370
+    /////    br label %for.cond50, !dbg !371, !namer !372
+    /////    %indvars.iv = phi i64 [ 0, %for.cond50.preheader ], [ %indvars.iv.next, %for.body54 ], !dbg !373, !namer !374
+    XXXXX    %exitcond = icmp eq i64 %indvars.iv, 5, !dbg !375, !namer !376
+    /////    br i1 %exitcond, label %for.inc80, label %for.body54, !dbg !371, !prof !377, !namer !378
+    #####    %7 = load float****, float***** %conv, align 8, !dbg !375, !tbaa !298, !namer !379
+    XXXXX    %arrayidx56 = getelementptr inbounds float***, float**** %7, i64 %indvars.iv13, !dbg !375, !namer !380
+    #####    %8 = load float***, float**** %arrayidx56, align 8, !dbg !375, !tbaa !298, !namer !381
+    XXXXX    %arrayidx58 = getelementptr inbounds float**, float*** %8, i64 %indvars.iv11, !dbg !375, !namer !382
+    #####    %9 = load float**, float*** %arrayidx58, align 8, !dbg !375, !tbaa !298, !namer !383
+    XXXXX    %arrayidx60 = getelementptr inbounds float*, float** %9, i64 %indvars.iv2, !dbg !375, !namer !384
+    #####    %10 = load float*, float** %arrayidx60, align 8, !dbg !375, !tbaa !298, !namer !385
+    XXXXX    %arrayidx62 = getelementptr inbounds float, float* %10, i64 %indvars.iv, !dbg !375, !namer !386
+    #####    %11 = load float, float* %arrayidx62, align 4, !dbg !375, !tbaa !310, !namer !387
+    #####    %12 = load float***, float**** %x, align 8, !dbg !375, !tbaa !298, !namer !388
+    XXXXX    %arrayidx64 = getelementptr inbounds float**, float*** %12, i64 %indvars.iv11, !dbg !375, !namer !389
+    #####    %13 = load float**, float*** %arrayidx64, align 8, !dbg !375, !tbaa !298, !namer !390
+    XXXXX    %arrayidx66 = getelementptr inbounds float*, float** %13, i64 %6, !dbg !375, !namer !391
+    #####    %14 = load float*, float** %arrayidx66, align 8, !dbg !375, !tbaa !298, !namer !392
+    XXXXX    %15 = add nuw nsw i64 %indvars.iv6, %indvars.iv, !dbg !375, !namer !393
+    XXXXX    %arrayidx69 = getelementptr inbounds float, float* %14, i64 %15, !dbg !375, !namer !394
+    #####    %16 = load float, float* %arrayidx69, align 4, !dbg !375, !tbaa !310, !namer !395
+    XXXXX    %mul = fmul float %11, %16, !dbg !375, !namer !396
+    #####    %17 = load float***, float**** %output, align 8, !dbg !375, !tbaa !298, !namer !397
+    XXXXX    %arrayidx71 = getelementptr inbounds float**, float*** %17, i64 %indvars.iv13, !dbg !375, !namer !398
+    #####    %18 = load float**, float*** %arrayidx71, align 8, !dbg !375, !tbaa !298, !namer !399
+    XXXXX    %arrayidx73 = getelementptr inbounds float*, float** %18, i64 %indvars.iv9, !dbg !375, !namer !400
+    #####    %19 = load float*, float** %arrayidx73, align 8, !dbg !375, !tbaa !298, !namer !401
+    XXXXX    %arrayidx75 = getelementptr inbounds float, float* %19, i64 %indvars.iv6, !dbg !375, !namer !402
+    #####    %20 = load float, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !403
+    XXXXX    %add76 = fadd float %20, %mul, !dbg !375, !namer !404
+    #####    store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405
+    XXXXX    %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1, !dbg !375, !namer !406
+    /////    br label %for.cond50, !dbg !375, !llvm.loop !407, !namer !408
+    XXXXX    %indvars.iv.next3 = add nuw nsw i64 %indvars.iv2, 1, !dbg !364, !namer !409
+    /////    br label %for.cond45, !dbg !364, !llvm.loop !410, !namer !411
+    XXXXX    %indvars.iv.next7 = add nuw nsw i64 %indvars.iv6, 1, !dbg !356, !namer !412
+    /////    br label %for.cond39, !dbg !356, !llvm.loop !413, !namer !414
+    XXXXX    %indvars.iv.next10 = add nuw nsw i64 %indvars.iv9, 1, !dbg !348, !namer !415
+    /////    br label %for.cond33, !dbg !348, !llvm.loop !416, !namer !417
+    XXXXX    %indvars.iv.next12 = add nuw nsw i64 %indvars.iv11, 1, !dbg !418, !namer !419
+    /////    br label %for.cond27, !dbg !420, !llvm.loop !421, !namer !423
+    XXXXX    %indvars.iv.next14 = add nuw nsw i64 %indvars.iv13, 1, !dbg !424, !namer !425
+    /////    br label %for.cond22, !dbg !426, !llvm.loop !427, !namer !429
+
+	*** estimate pipeline weights
+		- Stage  0 Weight 100.00 P-Factor   11 Speedup  10.04 Absolute P-Weight  10.36
+		- Weight  10.36
+Addressible criticisms
+
+-====================================================-
+Selected Remedies:
+----------------------------------------------------
+( mem-ver-remedy ) chosen to address criticism (Mem, WAR, LC):
+  %16 = load float, float* %arrayidx69, align 4, !dbg !375, !tbaa !310, !namer !395 (filename:conv2d.c, line:84, col:9) ->
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( mem-ver-remedy ) chosen to address criticism (Mem, WAW, LC):
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9) ->
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, LC):
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9) ->
+  %16 = load float, float* %arrayidx69, align 4, !dbg !375, !tbaa !310, !namer !395 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, LC):
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9) ->
+  %20 = load float, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !403 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %indvars.iv13 = phi i64 [ 0, %for.cond22.preheader ], [ %indvars.iv.next14, %for.inc92 ], !dbg !331, !namer !332 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond27, !dbg !336, !namer !337 (filename:conv2d.c, line:83, col:6)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc89 ], [ 0, %for.cond27.preheader ], !dbg !338, !namer !339 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond22, !dbg !426, !llvm.loop !427, !namer !429 (filename:conv2d.c, line:82, col:4)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond33, !dbg !344, !namer !345 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %indvars.iv9 = phi i64 [ %indvars.iv.next10, %for.inc86 ], [ 0, %for.cond33.preheader ], !dbg !346, !namer !347 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br i1 %cmp34, label %for.cond39.preheader, label %for.inc89, !dbg !344, !prof !350, !namer !351 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond27, !dbg !420, !llvm.loop !421, !namer !423 (filename:conv2d.c, line:83, col:6)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond39, !dbg !352, !namer !353 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %indvars.iv6 = phi i64 [ %indvars.iv.next7, %for.inc83 ], [ 0, %for.cond39.preheader ], !dbg !354, !namer !355 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br i1 %exitcond8, label %for.inc86, label %for.cond45.preheader, !dbg !352, !prof !358, !namer !359 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %18 = load float**, float*** %arrayidx71, align 8, !dbg !375, !tbaa !298, !namer !399 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond45, !dbg !360, !namer !361 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %indvars.iv2 = phi i64 [ %indvars.iv.next3, %for.inc80 ], [ 0, %for.cond45.preheader ], !dbg !362, !namer !363 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br i1 %exitcond5, label %for.inc83, label %for.cond50.preheader, !dbg !360, !prof !366, !namer !367 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond50, !dbg !371, !namer !372 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %indvars.iv = phi i64 [ 0, %for.cond50.preheader ], [ %indvars.iv.next, %for.body54 ], !dbg !373, !namer !374 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br i1 %exitcond, label %for.inc80, label %for.body54, !dbg !371, !prof !377, !namer !378 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %7 = load float****, float***** %conv, align 8, !dbg !375, !tbaa !298, !namer !379 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %8 = load float***, float**** %arrayidx56, align 8, !dbg !375, !tbaa !298, !namer !381 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %9 = load float**, float*** %arrayidx58, align 8, !dbg !375, !tbaa !298, !namer !383 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %10 = load float*, float** %arrayidx60, align 8, !dbg !375, !tbaa !298, !namer !385 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %11 = load float, float* %arrayidx62, align 4, !dbg !375, !tbaa !310, !namer !387 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %12 = load float***, float**** %x, align 8, !dbg !375, !tbaa !298, !namer !388 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %13 = load float**, float*** %arrayidx64, align 8, !dbg !375, !tbaa !298, !namer !390 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %14 = load float*, float** %arrayidx66, align 8, !dbg !375, !tbaa !298, !namer !392 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %16 = load float, float* %arrayidx69, align 4, !dbg !375, !tbaa !310, !namer !395 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %17 = load float***, float**** %output, align 8, !dbg !375, !tbaa !298, !namer !397 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %19 = load float*, float** %arrayidx73, align 8, !dbg !375, !tbaa !298, !namer !401 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  %20 = load float, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !403 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond50, !dbg !375, !llvm.loop !407, !namer !408 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond45, !dbg !364, !llvm.loop !410, !namer !411 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond39, !dbg !356, !llvm.loop !413, !namer !414 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp23, label %for.cond27.preheader, label %for.end94, !dbg !280, !prof !276, !namer !335 (filename:conv2d.c, line:82, col:4) ->
+  br label %for.cond33, !dbg !348, !llvm.loop !416, !namer !417 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( counted-iv-remedy ) chosen to address criticism (Reg, RAW, LC):
+  %indvars.iv.next14 = add nuw nsw i64 %indvars.iv13, 1, !dbg !424, !namer !425 (filename:conv2d.c, line:82, col:34) ->
+  %indvars.iv13 = phi i64 [ 0, %for.cond22.preheader ], [ %indvars.iv.next14, %for.inc92 ], !dbg !331, !namer !332 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+-====================================================-
+
+Selected Remediators:
+
+counted-iv-remedy was selected 1 times
+ctrl-spec-remedy was selected 37 times
+mem-ver-remedy was selected 2 times
+smtx-lamp-remedy was selected 4 times
+
+-====================================================-
+
+Expected Savings from critic ps-dswp-critic (no remedies): 83637  and selected remedies cost: 0
+	*** estimate pipeline weights
+		- Stage  0 Weight 100.00 P-Factor   11 Speedup  10.04 Absolute P-Weight  10.36
+		- Weight  10.36
+Parallelizable Loop conv2d_forward :: for.cond22 has expected savings 93637
+
+
+=------------------------------------------------------------------------------=
+Compute weight for loop conv2d_forward :: for.cond27...
+constructEdgesFromMemory with CAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o NoLoopAA
+Total memory dependence queries to CAF: 196
+annotateMemDepsWithRemedies with SCAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+constructEdgesFromControl ...
+constructEdgesFromUseDefs ...
+PDG construction completed
+Run Orchestrator:: find best parallelization strategy for conv2d_forward :: for.cond27...
+Start of findBestStrategy for loop conv2d_forward::for.cond27 (filename:conv2d.c, line:83, col:6)
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o txio-aa
+	o comm-libs-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o priv-aa
+	o spec-priv-locality-oracle-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+
+Critic ps-dswp-critic
+Begin criticisms generation for PS-DSWP critic
+Cannot remove loop-carried (Mem, RAW) edge(s) from   store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9)
+    to   %20 = load float, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !403 (filename:conv2d.c, line:84, col:9)
+
+RAW Memory Loop-Carried Deps Count: 2
+WAW Memory Loop-Carried Deps Count: 1
+WAR Memory Loop-Carried Deps Count: 1
+Register Loop-Carried Deps Count: 1
+Control Loop-Carried Deps Count: 33
+
+Coverage of loop-carried dependences for hot loop conv2d_forward :: for.cond27 covered=37, total=38 , percentage=97.37%
+
+
+PS-DSWP applicable to conv2d_forward::for.cond27: large parallel stage found
+Pipeline for loop conv2d_forward :: for.cond27
+ Stage 0
+  Parallel Stage, 21 workers
+    /////    %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc89 ], [ 0, %for.cond27.preheader ], !dbg !338, !namer !339
+    XXXXX    %cmp28 = icmp slt i64 %indvars.iv11, %2, !dbg !340, !namer !341
+    /////    br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343
+    /////    br label %for.cond33, !dbg !344, !namer !345
+    /////    %indvars.iv9 = phi i64 [ %indvars.iv.next10, %for.inc86 ], [ 0, %for.cond33.preheader ], !dbg !346, !namer !347
+    XXXXX    %cmp34 = icmp slt i64 %indvars.iv9, %0, !dbg !348, !namer !349
+    /////    br i1 %cmp34, label %for.cond39.preheader, label %for.inc89, !dbg !344, !prof !350, !namer !351
+    /////    br label %for.cond39, !dbg !352, !namer !353
+    /////    %indvars.iv6 = phi i64 [ %indvars.iv.next7, %for.inc83 ], [ 0, %for.cond39.preheader ], !dbg !354, !namer !355
+    XXXXX    %exitcond8 = icmp eq i64 %indvars.iv6, %wide.trip.count17, !dbg !356, !namer !357
+    /////    br i1 %exitcond8, label %for.inc86, label %for.cond45.preheader, !dbg !352, !prof !358, !namer !359
+    /////    br label %for.cond45, !dbg !360, !namer !361
+    /////    %indvars.iv2 = phi i64 [ %indvars.iv.next3, %for.inc80 ], [ 0, %for.cond45.preheader ], !dbg !362, !namer !363
+    XXXXX    %exitcond5 = icmp eq i64 %indvars.iv2, 5, !dbg !364, !namer !365
+    /////    br i1 %exitcond5, label %for.inc83, label %for.cond50.preheader, !dbg !360, !prof !366, !namer !367
+    XXXXX    %6 = add nuw nsw i64 %indvars.iv9, %indvars.iv2, !dbg !368, !namer !370
+    /////    br label %for.cond50, !dbg !371, !namer !372
+    /////    %indvars.iv = phi i64 [ 0, %for.cond50.preheader ], [ %indvars.iv.next, %for.body54 ], !dbg !373, !namer !374
+    XXXXX    %exitcond = icmp eq i64 %indvars.iv, 5, !dbg !375, !namer !376
+    /////    br i1 %exitcond, label %for.inc80, label %for.body54, !dbg !371, !prof !377, !namer !378
+    #####    %7 = load float****, float***** %conv, align 8, !dbg !375, !tbaa !298, !namer !379
+    XXXXX    %arrayidx56 = getelementptr inbounds float***, float**** %7, i64 %indvars.iv13, !dbg !375, !namer !380
+    #####    %8 = load float***, float**** %arrayidx56, align 8, !dbg !375, !tbaa !298, !namer !381
+    XXXXX    %arrayidx58 = getelementptr inbounds float**, float*** %8, i64 %indvars.iv11, !dbg !375, !namer !382
+    #####    %9 = load float**, float*** %arrayidx58, align 8, !dbg !375, !tbaa !298, !namer !383
+    XXXXX    %arrayidx60 = getelementptr inbounds float*, float** %9, i64 %indvars.iv2, !dbg !375, !namer !384
+    #####    %10 = load float*, float** %arrayidx60, align 8, !dbg !375, !tbaa !298, !namer !385
+    XXXXX    %arrayidx62 = getelementptr inbounds float, float* %10, i64 %indvars.iv, !dbg !375, !namer !386
+    #####    %11 = load float, float* %arrayidx62, align 4, !dbg !375, !tbaa !310, !namer !387
+    #####    %12 = load float***, float**** %x, align 8, !dbg !375, !tbaa !298, !namer !388
+    XXXXX    %arrayidx64 = getelementptr inbounds float**, float*** %12, i64 %indvars.iv11, !dbg !375, !namer !389
+    #####    %13 = load float**, float*** %arrayidx64, align 8, !dbg !375, !tbaa !298, !namer !390
+    XXXXX    %arrayidx66 = getelementptr inbounds float*, float** %13, i64 %6, !dbg !375, !namer !391
+    #####    %14 = load float*, float** %arrayidx66, align 8, !dbg !375, !tbaa !298, !namer !392
+    XXXXX    %15 = add nuw nsw i64 %indvars.iv6, %indvars.iv, !dbg !375, !namer !393
+    XXXXX    %arrayidx69 = getelementptr inbounds float, float* %14, i64 %15, !dbg !375, !namer !394
+    #####    %16 = load float, float* %arrayidx69, align 4, !dbg !375, !tbaa !310, !namer !395
+    XXXXX    %mul = fmul float %11, %16, !dbg !375, !namer !396
+    #####    %17 = load float***, float**** %output, align 8, !dbg !375, !tbaa !298, !namer !397
+    XXXXX    %arrayidx71 = getelementptr inbounds float**, float*** %17, i64 %indvars.iv13, !dbg !375, !namer !398
+    #####    %18 = load float**, float*** %arrayidx71, align 8, !dbg !375, !tbaa !298, !namer !399
+    XXXXX    %arrayidx73 = getelementptr inbounds float*, float** %18, i64 %indvars.iv9, !dbg !375, !namer !400
+    #####    %19 = load float*, float** %arrayidx73, align 8, !dbg !375, !tbaa !298, !namer !401
+    XXXXX    %arrayidx75 = getelementptr inbounds float, float* %19, i64 %indvars.iv6, !dbg !375, !namer !402
+    XXXXX    %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1, !dbg !375, !namer !406
+    /////    br label %for.cond50, !dbg !375, !llvm.loop !407, !namer !408
+    XXXXX    %indvars.iv.next3 = add nuw nsw i64 %indvars.iv2, 1, !dbg !364, !namer !409
+    /////    br label %for.cond45, !dbg !364, !llvm.loop !410, !namer !411
+    XXXXX    %indvars.iv.next7 = add nuw nsw i64 %indvars.iv6, 1, !dbg !356, !namer !412
+    /////    br label %for.cond39, !dbg !356, !llvm.loop !413, !namer !414
+    XXXXX    %indvars.iv.next10 = add nuw nsw i64 %indvars.iv9, 1, !dbg !348, !namer !415
+    /////    br label %for.cond33, !dbg !348, !llvm.loop !416, !namer !417
+    XXXXX    %indvars.iv.next12 = add nuw nsw i64 %indvars.iv11, 1, !dbg !418, !namer !419
+    /////    br label %for.cond27, !dbg !420, !llvm.loop !421, !namer !423
+ Stage 1
+  Sequential Stage
+    #####    %20 = load float, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !403
+    XXXXX    %add76 = fadd float %20, %mul, !dbg !375, !namer !404
+    #####    store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405
+
+These memory (forward) flows cross pipeline stages (needed for uncommitted value forwarding) :
+ No forward mem flows. No comm required for uncommitted value forwarding.
+
+Uncommitted value forwarding count: 0
+
+	*** estimate pipeline weights
+		- Stage  0 Weight  94.24 P-Factor   10 Speedup   9.16 Absolute P-Weight  10.70
+		- Stage  1 Weight   5.76 P-Factor    1 Speedup   1.00 Absolute P-Weight   5.99
+		- Weight  10.70
+Addressible criticisms
+
+-====================================================-
+Selected Remedies:
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, II):
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9) ->
+  %16 = load float, float* %arrayidx69, align 4, !dbg !375, !tbaa !310, !namer !395 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, LC):
+  store float %add76, float* %arrayidx75, align 4, !dbg !375, !tbaa !310, !namer !405 (filename:conv2d.c, line:84, col:9) ->
+  %16 = load float, float* %arrayidx69, align 4, !dbg !375, !tbaa !310, !namer !395 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc89 ], [ 0, %for.cond27.preheader ], !dbg !338, !namer !339 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond33, !dbg !344, !namer !345 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %indvars.iv9 = phi i64 [ %indvars.iv.next10, %for.inc86 ], [ 0, %for.cond33.preheader ], !dbg !346, !namer !347 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br i1 %cmp34, label %for.cond39.preheader, label %for.inc89, !dbg !344, !prof !350, !namer !351 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond27, !dbg !420, !llvm.loop !421, !namer !423 (filename:conv2d.c, line:83, col:6)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond39, !dbg !352, !namer !353 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %indvars.iv6 = phi i64 [ %indvars.iv.next7, %for.inc83 ], [ 0, %for.cond39.preheader ], !dbg !354, !namer !355 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br i1 %exitcond8, label %for.inc86, label %for.cond45.preheader, !dbg !352, !prof !358, !namer !359 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond45, !dbg !360, !namer !361 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %indvars.iv2 = phi i64 [ %indvars.iv.next3, %for.inc80 ], [ 0, %for.cond45.preheader ], !dbg !362, !namer !363 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br i1 %exitcond5, label %for.inc83, label %for.cond50.preheader, !dbg !360, !prof !366, !namer !367 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond50, !dbg !371, !namer !372 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond50, !dbg !375, !llvm.loop !407, !namer !408 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %indvars.iv = phi i64 [ 0, %for.cond50.preheader ], [ %indvars.iv.next, %for.body54 ], !dbg !373, !namer !374 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br i1 %exitcond, label %for.inc80, label %for.body54, !dbg !371, !prof !377, !namer !378 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %7 = load float****, float***** %conv, align 8, !dbg !375, !tbaa !298, !namer !379 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %8 = load float***, float**** %arrayidx56, align 8, !dbg !375, !tbaa !298, !namer !381 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %9 = load float**, float*** %arrayidx58, align 8, !dbg !375, !tbaa !298, !namer !383 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %10 = load float*, float** %arrayidx60, align 8, !dbg !375, !tbaa !298, !namer !385 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %11 = load float, float* %arrayidx62, align 4, !dbg !375, !tbaa !310, !namer !387 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %12 = load float***, float**** %x, align 8, !dbg !375, !tbaa !298, !namer !388 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %13 = load float**, float*** %arrayidx64, align 8, !dbg !375, !tbaa !298, !namer !390 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %14 = load float*, float** %arrayidx66, align 8, !dbg !375, !tbaa !298, !namer !392 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %16 = load float, float* %arrayidx69, align 4, !dbg !375, !tbaa !310, !namer !395 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %17 = load float***, float**** %output, align 8, !dbg !375, !tbaa !298, !namer !397 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %18 = load float**, float*** %arrayidx71, align 8, !dbg !375, !tbaa !298, !namer !399 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  %19 = load float*, float** %arrayidx73, align 8, !dbg !375, !tbaa !298, !namer !401 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond45, !dbg !364, !llvm.loop !410, !namer !411 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond39, !dbg !356, !llvm.loop !413, !namer !414 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp28, label %for.cond33.preheader, label %for.inc92, !dbg !336, !prof !342, !namer !343 (filename:conv2d.c, line:83, col:6) ->
+  br label %for.cond33, !dbg !348, !llvm.loop !416, !namer !417 (filename:conv2d.c, line:84, col:9)
+------------------------------------------------------
+
+----------------------------------------------------
+( counted-iv-remedy ) chosen to address criticism (Reg, RAW, LC):
+  %indvars.iv.next12 = add nuw nsw i64 %indvars.iv11, 1, !dbg !418, !namer !419 (filename:conv2d.c, line:83, col:35) ->
+  %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc89 ], [ 0, %for.cond27.preheader ], !dbg !338, !namer !339 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+-====================================================-
+
+Selected Remediators:
+
+smtx-lamp-remedy was selected 4 times
+counted-iv-remedy was selected 1 times
+ctrl-spec-remedy was selected 31 times
+
+-====================================================-
+
+Expected Savings from critic ps-dswp-critic (no remedies): 73300  and selected remedies cost: 0
+	*** estimate pipeline weights
+		- Stage  0 Weight  94.24 P-Factor   10 Speedup   9.16 Absolute P-Weight  10.70
+		- Stage  1 Weight   5.76 P-Factor    1 Speedup   1.00 Absolute P-Weight   5.99
+		- Weight  10.70
+Parallelizable Loop conv2d_forward :: for.cond27 has expected savings 83300
+
+
+=------------------------------------------------------------------------------=
+Compute weight for loop conv_backward :: for.cond131...
+constructEdgesFromMemory with CAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o NoLoopAA
+Total memory dependence queries to CAF: 196
+annotateMemDepsWithRemedies with SCAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+constructEdgesFromControl ...
+constructEdgesFromUseDefs ...
+PDG construction completed
+Run Orchestrator:: find best parallelization strategy for conv_backward :: for.cond131...
+Start of findBestStrategy for loop conv_backward::for.cond131 (filename:conv2d.c, line:105, col:3)
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o txio-aa
+	o comm-libs-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o priv-aa
+	o spec-priv-locality-oracle-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+
+Critic ps-dswp-critic
+Begin criticisms generation for PS-DSWP critic
+
+RAW Memory Loop-Carried Deps Count: 1
+WAW Memory Loop-Carried Deps Count: 1
+WAR Memory Loop-Carried Deps Count: 0
+Register Loop-Carried Deps Count: 1
+Control Loop-Carried Deps Count: 37
+
+Coverage of loop-carried dependences for hot loop conv_backward :: for.cond131 covered=40, total=40 , percentage=100.00%
+
+
+PS-DSWP applicable to conv_backward::for.cond131: large parallel stage found
+Pipeline for loop conv_backward :: for.cond131
+ Stage 0
+  Parallel Stage, 22 workers
+    /////    %indvars.iv13 = phi i64 [ %indvars.iv.next14, %for.inc199 ], [ 0, %for.cond131.preheader ], !dbg !531, !namer !532
+    XXXXX    %cmp132 = icmp slt i64 %indvars.iv13, %3, !dbg !533, !namer !534
+    /////    br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535
+    /////    br label %for.cond136, !dbg !536, !namer !537
+    /////    %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc196 ], [ 0, %for.cond136.preheader ], !dbg !538, !namer !539
+    XXXXX    %cmp137 = icmp slt i64 %indvars.iv11, %1, !dbg !540, !namer !541
+    /////    br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542
+    /////    br label %for.cond141, !dbg !543, !namer !544
+    /////    %indvars.iv9 = phi i64 [ %indvars.iv.next10, %for.inc193 ], [ 0, %for.cond141.preheader ], !dbg !545, !namer !546
+    XXXXX    %exitcond2 = icmp eq i64 %indvars.iv9, 5, !dbg !547, !namer !548
+    /////    br i1 %exitcond2, label %for.inc196, label %for.cond146.preheader, !dbg !543, !prof !549, !namer !550
+    /////    br label %for.cond146, !dbg !551, !namer !552
+    /////    %indvars.iv5 = phi i64 [ %indvars.iv.next6, %for.inc190 ], [ 0, %for.cond146.preheader ], !dbg !553, !namer !554
+    XXXXX    %exitcond8 = icmp eq i64 %indvars.iv5, 5, !dbg !555, !namer !556
+    /////    br i1 %exitcond8, label %for.inc193, label %for.cond151.preheader, !dbg !551, !prof !557, !namer !558
+    /////    br label %for.cond151, !dbg !559, !namer !560
+    /////    %indvars.iv2 = phi i64 [ %indvars.iv.next3, %for.inc187 ], [ 0, %for.cond151.preheader ], !dbg !561, !namer !562
+    XXXXX    %cmp152 = icmp slt i64 %indvars.iv2, %2, !dbg !563, !namer !564
+    /////    br i1 %cmp152, label %for.cond156.preheader, label %for.inc190, !dbg !559, !prof !565, !namer !566
+    XXXXX    %30 = add nuw nsw i64 %indvars.iv9, %indvars.iv2, !dbg !567, !namer !569
+    /////    br label %for.cond156, !dbg !570, !namer !571
+    /////    %indvars.iv = phi i64 [ 0, %for.cond156.preheader ], [ %indvars.iv.next, %for.body159 ], !dbg !572, !namer !573
+    XXXXX    %exitcond = icmp eq i64 %indvars.iv, %wide.trip.count33, !dbg !574, !namer !575
+    /////    br i1 %exitcond, label %for.inc187, label %for.body159, !dbg !570, !prof !576, !namer !577
+    #####    %31 = load float***, float**** %error_l_plus_1, align 8, !dbg !574, !tbaa !331, !namer !578
+    XXXXX    %arrayidx161 = getelementptr inbounds float**, float*** %31, i64 %indvars.iv13, !dbg !574, !namer !579
+    #####    %32 = load float**, float*** %arrayidx161, align 8, !dbg !574, !tbaa !331, !namer !580
+    XXXXX    %arrayidx163 = getelementptr inbounds float*, float** %32, i64 %indvars.iv2, !dbg !574, !namer !581
+    #####    %33 = load float*, float** %arrayidx163, align 8, !dbg !574, !tbaa !331, !namer !582
+    XXXXX    %arrayidx165 = getelementptr inbounds float, float* %33, i64 %indvars.iv, !dbg !574, !namer !583
+    #####    %34 = load float, float* %arrayidx165, align 4, !dbg !574, !tbaa !343, !namer !584
+    #####    %35 = load float***, float**** %in, align 8, !dbg !574, !tbaa !331, !namer !585
+    XXXXX    %arrayidx167 = getelementptr inbounds float**, float*** %35, i64 %indvars.iv11, !dbg !574, !namer !586
+    #####    %36 = load float**, float*** %arrayidx167, align 8, !dbg !574, !tbaa !331, !namer !587
+    XXXXX    %arrayidx170 = getelementptr inbounds float*, float** %36, i64 %30, !dbg !574, !namer !588
+    #####    %37 = load float*, float** %arrayidx170, align 8, !dbg !574, !tbaa !331, !namer !589
+    XXXXX    %38 = add nuw nsw i64 %indvars.iv5, %indvars.iv, !dbg !574, !namer !590
+    XXXXX    %arrayidx173 = getelementptr inbounds float, float* %37, i64 %38, !dbg !574, !namer !591
+    #####    %39 = load float, float* %arrayidx173, align 4, !dbg !574, !tbaa !343, !namer !592
+    XXXXX    %mul174 = fmul float %34, %39, !dbg !574, !namer !593
+    #####    %40 = load float****, float***** %W_l_delta, align 8, !dbg !574, !tbaa !331, !namer !594
+    XXXXX    %arrayidx176 = getelementptr inbounds float***, float**** %40, i64 %indvars.iv13, !dbg !574, !namer !595
+    #####    %41 = load float***, float**** %arrayidx176, align 8, !dbg !574, !tbaa !331, !namer !596
+    XXXXX    %arrayidx178 = getelementptr inbounds float**, float*** %41, i64 %indvars.iv11, !dbg !574, !namer !597
+    #####    %42 = load float**, float*** %arrayidx178, align 8, !dbg !574, !tbaa !331, !namer !598
+    XXXXX    %arrayidx180 = getelementptr inbounds float*, float** %42, i64 %indvars.iv9, !dbg !574, !namer !599
+    #####    %43 = load float*, float** %arrayidx180, align 8, !dbg !574, !tbaa !331, !namer !600
+    XXXXX    %arrayidx182 = getelementptr inbounds float, float* %43, i64 %indvars.iv5, !dbg !574, !namer !601
+    #####    %44 = load float, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !602
+    XXXXX    %add183 = fadd float %44, %mul174, !dbg !574, !namer !603
+    #####    store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604
+    XXXXX    %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1, !dbg !574, !namer !605
+    /////    br label %for.cond156, !dbg !574, !llvm.loop !606, !namer !607
+    XXXXX    %indvars.iv.next3 = add nuw nsw i64 %indvars.iv2, 1, !dbg !563, !namer !608
+    /////    br label %for.cond151, !dbg !563, !llvm.loop !609, !namer !610
+    XXXXX    %indvars.iv.next6 = add nuw nsw i64 %indvars.iv5, 1, !dbg !555, !namer !611
+    /////    br label %for.cond146, !dbg !555, !llvm.loop !612, !namer !613
+    XXXXX    %indvars.iv.next10 = add nuw nsw i64 %indvars.iv9, 1, !dbg !547, !namer !614
+    /////    br label %for.cond141, !dbg !547, !llvm.loop !615, !namer !616
+    XXXXX    %indvars.iv.next12 = add nuw nsw i64 %indvars.iv11, 1, !dbg !617, !namer !618
+    /////    br label %for.cond136, !dbg !619, !llvm.loop !620, !namer !622
+    XXXXX    %indvars.iv.next14 = add nuw nsw i64 %indvars.iv13, 1, !dbg !623, !namer !624
+    /////    br label %for.cond131, !dbg !625, !llvm.loop !626, !namer !628
+
+	*** estimate pipeline weights
+		- Stage  0 Weight 100.00 P-Factor   12 Speedup  10.41 Absolute P-Weight   6.92
+		- Weight   6.92
+Addressible criticisms
+
+-====================================================-
+Selected Remedies:
+----------------------------------------------------
+( mem-ver-remedy ) chosen to address criticism (Mem, WAW, LC):
+  store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604 (filename:conv2d.c, line:107, col:7) ->
+  store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, LC):
+  store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604 (filename:conv2d.c, line:107, col:7) ->
+  %44 = load float, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !602 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %indvars.iv13 = phi i64 [ %indvars.iv.next14, %for.inc199 ], [ 0, %for.cond131.preheader ], !dbg !531, !namer !532 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond136, !dbg !536, !namer !537 (filename:conv2d.c, line:106, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc196 ], [ 0, %for.cond136.preheader ], !dbg !538, !namer !539 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond131, !dbg !625, !llvm.loop !626, !namer !628 (filename:conv2d.c, line:105, col:3)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond141, !dbg !543, !namer !544 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %indvars.iv9 = phi i64 [ %indvars.iv.next10, %for.inc193 ], [ 0, %for.cond141.preheader ], !dbg !545, !namer !546 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br i1 %exitcond2, label %for.inc196, label %for.cond146.preheader, !dbg !543, !prof !549, !namer !550 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond146, !dbg !551, !namer !552 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %indvars.iv5 = phi i64 [ %indvars.iv.next6, %for.inc190 ], [ 0, %for.cond146.preheader ], !dbg !553, !namer !554 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br i1 %exitcond8, label %for.inc193, label %for.cond151.preheader, !dbg !551, !prof !557, !namer !558 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond151, !dbg !559, !namer !560 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %42 = load float**, float*** %arrayidx178, align 8, !dbg !574, !tbaa !331, !namer !598 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %indvars.iv2 = phi i64 [ %indvars.iv.next3, %for.inc187 ], [ 0, %for.cond151.preheader ], !dbg !561, !namer !562 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br i1 %cmp152, label %for.cond156.preheader, label %for.inc190, !dbg !559, !prof !565, !namer !566 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond146, !dbg !555, !llvm.loop !612, !namer !613 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond156, !dbg !570, !namer !571 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %indvars.iv = phi i64 [ 0, %for.cond156.preheader ], [ %indvars.iv.next, %for.body159 ], !dbg !572, !namer !573 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br i1 %exitcond, label %for.inc187, label %for.body159, !dbg !570, !prof !576, !namer !577 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %31 = load float***, float**** %error_l_plus_1, align 8, !dbg !574, !tbaa !331, !namer !578 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %32 = load float**, float*** %arrayidx161, align 8, !dbg !574, !tbaa !331, !namer !580 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %33 = load float*, float** %arrayidx163, align 8, !dbg !574, !tbaa !331, !namer !582 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %34 = load float, float* %arrayidx165, align 4, !dbg !574, !tbaa !343, !namer !584 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %35 = load float***, float**** %in, align 8, !dbg !574, !tbaa !331, !namer !585 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %36 = load float**, float*** %arrayidx167, align 8, !dbg !574, !tbaa !331, !namer !587 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %37 = load float*, float** %arrayidx170, align 8, !dbg !574, !tbaa !331, !namer !589 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %39 = load float, float* %arrayidx173, align 4, !dbg !574, !tbaa !343, !namer !592 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %40 = load float****, float***** %W_l_delta, align 8, !dbg !574, !tbaa !331, !namer !594 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %41 = load float***, float**** %arrayidx176, align 8, !dbg !574, !tbaa !331, !namer !596 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %43 = load float*, float** %arrayidx180, align 8, !dbg !574, !tbaa !331, !namer !600 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  %44 = load float, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !602 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond156, !dbg !574, !llvm.loop !606, !namer !607 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond151, !dbg !563, !llvm.loop !609, !namer !610 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond141, !dbg !547, !llvm.loop !615, !namer !616 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp132, label %for.cond136.preheader, label %for.end201, !dbg !473, !prof !368, !namer !535 (filename:conv2d.c, line:105, col:3) ->
+  br label %for.cond136, !dbg !619, !llvm.loop !620, !namer !622 (filename:conv2d.c, line:106, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( counted-iv-remedy ) chosen to address criticism (Reg, RAW, LC):
+  %indvars.iv.next14 = add nuw nsw i64 %indvars.iv13, 1, !dbg !623, !namer !624 (filename:conv2d.c, line:105, col:27) ->
+  %indvars.iv13 = phi i64 [ %indvars.iv.next14, %for.inc199 ], [ 0, %for.cond131.preheader ], !dbg !531, !namer !532 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+-====================================================-
+
+Selected Remediators:
+
+counted-iv-remedy was selected 1 times
+ctrl-spec-remedy was selected 37 times
+mem-ver-remedy was selected 1 times
+smtx-lamp-remedy was selected 2 times
+
+-====================================================-
+
+Expected Savings from critic ps-dswp-critic (no remedies): 55084  and selected remedies cost: 0
+	*** estimate pipeline weights
+		- Stage  0 Weight 100.00 P-Factor   12 Speedup  10.41 Absolute P-Weight   6.92
+		- Weight   6.92
+Parallelizable Loop conv_backward :: for.cond131 has expected savings 65084
+
+
+=------------------------------------------------------------------------------=
+Compute weight for loop conv_backward :: for.cond136...
+constructEdgesFromMemory with CAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o NoLoopAA
+Total memory dependence queries to CAF: 196
+annotateMemDepsWithRemedies with SCAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+constructEdgesFromControl ...
+constructEdgesFromUseDefs ...
+PDG construction completed
+Run Orchestrator:: find best parallelization strategy for conv_backward :: for.cond136...
+Start of findBestStrategy for loop conv_backward::for.cond136 (filename:conv2d.c, line:106, col:5)
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o txio-aa
+	o comm-libs-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o priv-aa
+	o spec-priv-locality-oracle-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+
+Critic ps-dswp-critic
+Begin criticisms generation for PS-DSWP critic
+
+RAW Memory Loop-Carried Deps Count: 1
+WAW Memory Loop-Carried Deps Count: 1
+WAR Memory Loop-Carried Deps Count: 0
+Register Loop-Carried Deps Count: 1
+Control Loop-Carried Deps Count: 33
+
+Coverage of loop-carried dependences for hot loop conv_backward :: for.cond136 covered=36, total=36 , percentage=100.00%
+
+
+PS-DSWP applicable to conv_backward::for.cond136: large parallel stage found
+Pipeline for loop conv_backward :: for.cond136
+ Stage 0
+  Parallel Stage, 22 workers
+    /////    %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc196 ], [ 0, %for.cond136.preheader ], !dbg !538, !namer !539
+    XXXXX    %cmp137 = icmp slt i64 %indvars.iv11, %1, !dbg !540, !namer !541
+    /////    br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542
+    /////    br label %for.cond141, !dbg !543, !namer !544
+    /////    %indvars.iv9 = phi i64 [ %indvars.iv.next10, %for.inc193 ], [ 0, %for.cond141.preheader ], !dbg !545, !namer !546
+    XXXXX    %exitcond2 = icmp eq i64 %indvars.iv9, 5, !dbg !547, !namer !548
+    /////    br i1 %exitcond2, label %for.inc196, label %for.cond146.preheader, !dbg !543, !prof !549, !namer !550
+    /////    br label %for.cond146, !dbg !551, !namer !552
+    /////    %indvars.iv5 = phi i64 [ %indvars.iv.next6, %for.inc190 ], [ 0, %for.cond146.preheader ], !dbg !553, !namer !554
+    XXXXX    %exitcond8 = icmp eq i64 %indvars.iv5, 5, !dbg !555, !namer !556
+    /////    br i1 %exitcond8, label %for.inc193, label %for.cond151.preheader, !dbg !551, !prof !557, !namer !558
+    /////    br label %for.cond151, !dbg !559, !namer !560
+    /////    %indvars.iv2 = phi i64 [ %indvars.iv.next3, %for.inc187 ], [ 0, %for.cond151.preheader ], !dbg !561, !namer !562
+    XXXXX    %cmp152 = icmp slt i64 %indvars.iv2, %2, !dbg !563, !namer !564
+    /////    br i1 %cmp152, label %for.cond156.preheader, label %for.inc190, !dbg !559, !prof !565, !namer !566
+    XXXXX    %30 = add nuw nsw i64 %indvars.iv9, %indvars.iv2, !dbg !567, !namer !569
+    /////    br label %for.cond156, !dbg !570, !namer !571
+    /////    %indvars.iv = phi i64 [ 0, %for.cond156.preheader ], [ %indvars.iv.next, %for.body159 ], !dbg !572, !namer !573
+    XXXXX    %exitcond = icmp eq i64 %indvars.iv, %wide.trip.count33, !dbg !574, !namer !575
+    /////    br i1 %exitcond, label %for.inc187, label %for.body159, !dbg !570, !prof !576, !namer !577
+    #####    %31 = load float***, float**** %error_l_plus_1, align 8, !dbg !574, !tbaa !331, !namer !578
+    XXXXX    %arrayidx161 = getelementptr inbounds float**, float*** %31, i64 %indvars.iv13, !dbg !574, !namer !579
+    #####    %32 = load float**, float*** %arrayidx161, align 8, !dbg !574, !tbaa !331, !namer !580
+    XXXXX    %arrayidx163 = getelementptr inbounds float*, float** %32, i64 %indvars.iv2, !dbg !574, !namer !581
+    #####    %33 = load float*, float** %arrayidx163, align 8, !dbg !574, !tbaa !331, !namer !582
+    XXXXX    %arrayidx165 = getelementptr inbounds float, float* %33, i64 %indvars.iv, !dbg !574, !namer !583
+    #####    %34 = load float, float* %arrayidx165, align 4, !dbg !574, !tbaa !343, !namer !584
+    #####    %35 = load float***, float**** %in, align 8, !dbg !574, !tbaa !331, !namer !585
+    XXXXX    %arrayidx167 = getelementptr inbounds float**, float*** %35, i64 %indvars.iv11, !dbg !574, !namer !586
+    #####    %36 = load float**, float*** %arrayidx167, align 8, !dbg !574, !tbaa !331, !namer !587
+    XXXXX    %arrayidx170 = getelementptr inbounds float*, float** %36, i64 %30, !dbg !574, !namer !588
+    #####    %37 = load float*, float** %arrayidx170, align 8, !dbg !574, !tbaa !331, !namer !589
+    XXXXX    %38 = add nuw nsw i64 %indvars.iv5, %indvars.iv, !dbg !574, !namer !590
+    XXXXX    %arrayidx173 = getelementptr inbounds float, float* %37, i64 %38, !dbg !574, !namer !591
+    #####    %39 = load float, float* %arrayidx173, align 4, !dbg !574, !tbaa !343, !namer !592
+    XXXXX    %mul174 = fmul float %34, %39, !dbg !574, !namer !593
+    #####    %40 = load float****, float***** %W_l_delta, align 8, !dbg !574, !tbaa !331, !namer !594
+    XXXXX    %arrayidx176 = getelementptr inbounds float***, float**** %40, i64 %indvars.iv13, !dbg !574, !namer !595
+    #####    %41 = load float***, float**** %arrayidx176, align 8, !dbg !574, !tbaa !331, !namer !596
+    XXXXX    %arrayidx178 = getelementptr inbounds float**, float*** %41, i64 %indvars.iv11, !dbg !574, !namer !597
+    #####    %42 = load float**, float*** %arrayidx178, align 8, !dbg !574, !tbaa !331, !namer !598
+    XXXXX    %arrayidx180 = getelementptr inbounds float*, float** %42, i64 %indvars.iv9, !dbg !574, !namer !599
+    #####    %43 = load float*, float** %arrayidx180, align 8, !dbg !574, !tbaa !331, !namer !600
+    XXXXX    %arrayidx182 = getelementptr inbounds float, float* %43, i64 %indvars.iv5, !dbg !574, !namer !601
+    #####    %44 = load float, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !602
+    XXXXX    %add183 = fadd float %44, %mul174, !dbg !574, !namer !603
+    #####    store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604
+    XXXXX    %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1, !dbg !574, !namer !605
+    /////    br label %for.cond156, !dbg !574, !llvm.loop !606, !namer !607
+    XXXXX    %indvars.iv.next3 = add nuw nsw i64 %indvars.iv2, 1, !dbg !563, !namer !608
+    /////    br label %for.cond151, !dbg !563, !llvm.loop !609, !namer !610
+    XXXXX    %indvars.iv.next6 = add nuw nsw i64 %indvars.iv5, 1, !dbg !555, !namer !611
+    /////    br label %for.cond146, !dbg !555, !llvm.loop !612, !namer !613
+    XXXXX    %indvars.iv.next10 = add nuw nsw i64 %indvars.iv9, 1, !dbg !547, !namer !614
+    /////    br label %for.cond141, !dbg !547, !llvm.loop !615, !namer !616
+    XXXXX    %indvars.iv.next12 = add nuw nsw i64 %indvars.iv11, 1, !dbg !617, !namer !618
+    /////    br label %for.cond136, !dbg !619, !llvm.loop !620, !namer !622
+
+	*** estimate pipeline weights
+		- Stage  0 Weight 100.00 P-Factor   11 Speedup   9.66 Absolute P-Weight   7.45
+		- Weight   7.45
+Addressible criticisms
+
+-====================================================-
+Selected Remedies:
+----------------------------------------------------
+( counted-iv-remedy ) chosen to address criticism (Reg, RAW, LC):
+  %indvars.iv.next12 = add nuw nsw i64 %indvars.iv11, 1, !dbg !617, !namer !618 (filename:conv2d.c, line:106, col:28) ->
+  %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc196 ], [ 0, %for.cond136.preheader ], !dbg !538, !namer !539 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, LC):
+  store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604 (filename:conv2d.c, line:107, col:7) ->
+  %44 = load float, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !602 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( mem-ver-remedy ) chosen to address criticism (Mem, WAW, LC):
+  store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604 (filename:conv2d.c, line:107, col:7) ->
+  store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %indvars.iv11 = phi i64 [ %indvars.iv.next12, %for.inc196 ], [ 0, %for.cond136.preheader ], !dbg !538, !namer !539 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond141, !dbg !543, !namer !544 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %indvars.iv9 = phi i64 [ %indvars.iv.next10, %for.inc193 ], [ 0, %for.cond141.preheader ], !dbg !545, !namer !546 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br i1 %exitcond2, label %for.inc196, label %for.cond146.preheader, !dbg !543, !prof !549, !namer !550 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond146, !dbg !551, !namer !552 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %indvars.iv5 = phi i64 [ %indvars.iv.next6, %for.inc190 ], [ 0, %for.cond146.preheader ], !dbg !553, !namer !554 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br i1 %exitcond8, label %for.inc193, label %for.cond151.preheader, !dbg !551, !prof !557, !namer !558 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond151, !dbg !559, !namer !560 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %indvars.iv2 = phi i64 [ %indvars.iv.next3, %for.inc187 ], [ 0, %for.cond151.preheader ], !dbg !561, !namer !562 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br i1 %cmp152, label %for.cond156.preheader, label %for.inc190, !dbg !559, !prof !565, !namer !566 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond146, !dbg !555, !llvm.loop !612, !namer !613 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond156, !dbg !570, !namer !571 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond156, !dbg !574, !llvm.loop !606, !namer !607 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %indvars.iv = phi i64 [ 0, %for.cond156.preheader ], [ %indvars.iv.next, %for.body159 ], !dbg !572, !namer !573 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br i1 %exitcond, label %for.inc187, label %for.body159, !dbg !570, !prof !576, !namer !577 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %31 = load float***, float**** %error_l_plus_1, align 8, !dbg !574, !tbaa !331, !namer !578 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %32 = load float**, float*** %arrayidx161, align 8, !dbg !574, !tbaa !331, !namer !580 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %33 = load float*, float** %arrayidx163, align 8, !dbg !574, !tbaa !331, !namer !582 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %34 = load float, float* %arrayidx165, align 4, !dbg !574, !tbaa !343, !namer !584 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %35 = load float***, float**** %in, align 8, !dbg !574, !tbaa !331, !namer !585 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %36 = load float**, float*** %arrayidx167, align 8, !dbg !574, !tbaa !331, !namer !587 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %37 = load float*, float** %arrayidx170, align 8, !dbg !574, !tbaa !331, !namer !589 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %39 = load float, float* %arrayidx173, align 4, !dbg !574, !tbaa !343, !namer !592 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %40 = load float****, float***** %W_l_delta, align 8, !dbg !574, !tbaa !331, !namer !594 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %41 = load float***, float**** %arrayidx176, align 8, !dbg !574, !tbaa !331, !namer !596 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %42 = load float**, float*** %arrayidx178, align 8, !dbg !574, !tbaa !331, !namer !598 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %43 = load float*, float** %arrayidx180, align 8, !dbg !574, !tbaa !331, !namer !600 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  %44 = load float, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !602 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  store float %add183, float* %arrayidx182, align 4, !dbg !574, !tbaa !343, !namer !604 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond151, !dbg !563, !llvm.loop !609, !namer !610 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond141, !dbg !547, !llvm.loop !615, !namer !616 (filename:conv2d.c, line:107, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp137, label %for.cond141.preheader, label %for.inc199, !dbg !536, !prof !378, !namer !542 (filename:conv2d.c, line:106, col:5) ->
+  br label %for.cond136, !dbg !619, !llvm.loop !620, !namer !622 (filename:conv2d.c, line:106, col:5)
+------------------------------------------------------
+
+-====================================================-
+
+Selected Remediators:
+
+mem-ver-remedy was selected 1 times
+ctrl-spec-remedy was selected 33 times
+counted-iv-remedy was selected 1 times
+smtx-lamp-remedy was selected 2 times
+
+-====================================================-
+
+Expected Savings from critic ps-dswp-critic (no remedies): 44546  and selected remedies cost: 0
+	*** estimate pipeline weights
+		- Stage  0 Weight 100.00 P-Factor   11 Speedup   9.66 Absolute P-Weight   7.45
+		- Weight   7.45
+Parallelizable Loop conv_backward :: for.cond136 has expected savings 54546
+
+
+=------------------------------------------------------------------------------=
+Compute weight for loop conv_backward :: for.cond19...
+constructEdgesFromMemory with CAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o NoLoopAA
+Total memory dependence queries to CAF: 196
+annotateMemDepsWithRemedies with SCAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+constructEdgesFromControl ...
+constructEdgesFromUseDefs ...
+PDG construction completed
+Run Orchestrator:: find best parallelization strategy for conv_backward :: for.cond19...
+Start of findBestStrategy for loop conv_backward::for.cond19 (filename:conv2d.c, line:95, col:3)
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o txio-aa
+	o comm-libs-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o priv-aa
+	o spec-priv-locality-oracle-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+
+Critic ps-dswp-critic
+Begin criticisms generation for PS-DSWP critic
+Cannot remove loop-carried (Mem, RAW) edge(s) from   store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7)
+    to   %21 = load float, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !439 (filename:conv2d.c, line:97, col:7)
+
+RAW Memory Loop-Carried Deps Count: 2
+WAW Memory Loop-Carried Deps Count: 1
+WAR Memory Loop-Carried Deps Count: 1
+Register Loop-Carried Deps Count: 1
+Control Loop-Carried Deps Count: 37
+
+Coverage of loop-carried dependences for hot loop conv_backward :: for.cond19 covered=41, total=42 , percentage=97.62%
+
+
+PS-DSWP applicable to conv_backward::for.cond19: large parallel stage found
+Pipeline for loop conv_backward :: for.cond19
+ Stage 0
+  Parallel Stage, 21 workers
+    /////    %indvars.iv39 = phi i64 [ 0, %for.cond19.preheader ], [ %indvars.iv.next40, %for.inc83 ], !dbg !364, !namer !365
+    XXXXX    %cmp20 = icmp slt i64 %indvars.iv39, %3, !dbg !366, !namer !367
+    /////    br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369
+    /////    br label %for.cond23, !dbg !370, !namer !371
+    /////    %indvars.iv37 = phi i64 [ %indvars.iv.next38, %for.inc80 ], [ 0, %for.cond23.preheader ], !dbg !374, !namer !375
+    XXXXX    %cmp24 = icmp slt i64 %indvars.iv37, %1, !dbg !376, !namer !377
+    /////    br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379
+    /////    br label %for.cond27, !dbg !380, !namer !381
+    /////    %indvars.iv35 = phi i64 [ %indvars.iv.next36, %for.inc77 ], [ 0, %for.cond27.preheader ], !dbg !382, !namer !383
+    XXXXX    %cmp28 = icmp slt i64 %indvars.iv35, %2, !dbg !384, !namer !385
+    /////    br i1 %cmp28, label %for.cond32.preheader, label %for.inc80, !dbg !380, !prof !386, !namer !387
+    /////    br label %for.cond32, !dbg !388, !namer !389
+    /////    %indvars.iv31 = phi i64 [ %indvars.iv.next32, %for.inc74 ], [ 0, %for.cond32.preheader ], !dbg !390, !namer !391
+    XXXXX    %exitcond34 = icmp eq i64 %indvars.iv31, %wide.trip.count33, !dbg !392, !namer !393
+    /////    br i1 %exitcond34, label %for.inc77, label %for.cond37.preheader, !dbg !388, !prof !394, !namer !395
+    /////    br label %for.cond37, !dbg !396, !namer !397
+    /////    %indvars.iv28 = phi i64 [ %indvars.iv.next29, %for.inc71 ], [ 0, %for.cond37.preheader ], !dbg !398, !namer !399
+    XXXXX    %exitcond3 = icmp eq i64 %indvars.iv28, 5, !dbg !400, !namer !401
+    /////    br i1 %exitcond3, label %for.inc74, label %for.cond42.preheader, !dbg !396, !prof !402, !namer !403
+    XXXXX    %7 = add nuw nsw i64 %indvars.iv35, %indvars.iv28, !dbg !404, !namer !406
+    /////    br label %for.cond42, !dbg !407, !namer !408
+    /////    %indvars.iv23 = phi i64 [ 0, %for.cond42.preheader ], [ %indvars.iv.next24, %for.body45 ], !dbg !409, !namer !410
+    XXXXX    %exitcond27 = icmp eq i64 %indvars.iv23, 5, !dbg !411, !namer !412
+    /////    br i1 %exitcond27, label %for.inc71, label %for.body45, !dbg !407, !prof !413, !namer !414
+    #####    %8 = load float****, float***** %W_l, align 8, !dbg !411, !tbaa !331, !namer !415
+    XXXXX    %arrayidx47 = getelementptr inbounds float***, float**** %8, i64 %indvars.iv39, !dbg !411, !namer !416
+    #####    %9 = load float***, float**** %arrayidx47, align 8, !dbg !411, !tbaa !331, !namer !417
+    XXXXX    %arrayidx49 = getelementptr inbounds float**, float*** %9, i64 %indvars.iv37, !dbg !411, !namer !418
+    #####    %10 = load float**, float*** %arrayidx49, align 8, !dbg !411, !tbaa !331, !namer !419
+    XXXXX    %arrayidx51 = getelementptr inbounds float*, float** %10, i64 %indvars.iv28, !dbg !411, !namer !420
+    #####    %11 = load float*, float** %arrayidx51, align 8, !dbg !411, !tbaa !331, !namer !421
+    XXXXX    %arrayidx53 = getelementptr inbounds float, float* %11, i64 %indvars.iv23, !dbg !411, !namer !422
+    #####    %12 = load float, float* %arrayidx53, align 4, !dbg !411, !tbaa !343, !namer !423
+    #####    %13 = load float***, float**** %error_l_plus_1, align 8, !dbg !411, !tbaa !331, !namer !424
+    XXXXX    %arrayidx55 = getelementptr inbounds float**, float*** %13, i64 %indvars.iv39, !dbg !411, !namer !425
+    #####    %14 = load float**, float*** %arrayidx55, align 8, !dbg !411, !tbaa !331, !namer !426
+    XXXXX    %arrayidx57 = getelementptr inbounds float*, float** %14, i64 %indvars.iv35, !dbg !411, !namer !427
+    #####    %15 = load float*, float** %arrayidx57, align 8, !dbg !411, !tbaa !331, !namer !428
+    XXXXX    %arrayidx59 = getelementptr inbounds float, float* %15, i64 %indvars.iv31, !dbg !411, !namer !429
+    #####    %16 = load float, float* %arrayidx59, align 4, !dbg !411, !tbaa !343, !namer !430
+    XXXXX    %mul = fmul float %12, %16, !dbg !411, !namer !431
+    #####    %17 = load float***, float**** %error_l, align 8, !dbg !411, !tbaa !331, !namer !432
+    XXXXX    %arrayidx61 = getelementptr inbounds float**, float*** %17, i64 %indvars.iv37, !dbg !411, !namer !433
+    #####    %18 = load float**, float*** %arrayidx61, align 8, !dbg !411, !tbaa !331, !namer !434
+    XXXXX    %arrayidx63 = getelementptr inbounds float*, float** %18, i64 %7, !dbg !411, !namer !435
+    #####    %19 = load float*, float** %arrayidx63, align 8, !dbg !411, !tbaa !331, !namer !436
+    XXXXX    %20 = add nuw nsw i64 %indvars.iv31, %indvars.iv23, !dbg !411, !namer !437
+    XXXXX    %arrayidx66 = getelementptr inbounds float, float* %19, i64 %20, !dbg !411, !namer !438
+    XXXXX    %indvars.iv.next24 = add nuw nsw i64 %indvars.iv23, 1, !dbg !411, !namer !442
+    /////    br label %for.cond42, !dbg !411, !llvm.loop !443, !namer !444
+    XXXXX    %indvars.iv.next29 = add nuw nsw i64 %indvars.iv28, 1, !dbg !400, !namer !445
+    /////    br label %for.cond37, !dbg !400, !llvm.loop !446, !namer !447
+    XXXXX    %indvars.iv.next32 = add nuw nsw i64 %indvars.iv31, 1, !dbg !392, !namer !448
+    /////    br label %for.cond32, !dbg !392, !llvm.loop !449, !namer !450
+    XXXXX    %indvars.iv.next36 = add nuw nsw i64 %indvars.iv35, 1, !dbg !384, !namer !451
+    /////    br label %for.cond27, !dbg !384, !llvm.loop !452, !namer !453
+    XXXXX    %indvars.iv.next38 = add nuw nsw i64 %indvars.iv37, 1, !dbg !454, !namer !455
+    /////    br label %for.cond23, !dbg !456, !llvm.loop !457, !namer !459
+    XXXXX    %indvars.iv.next40 = add nuw nsw i64 %indvars.iv39, 1, !dbg !460, !namer !461
+    /////    br label %for.cond19, !dbg !462, !llvm.loop !463, !namer !465
+ Stage 1
+  Sequential Stage
+    #####    %21 = load float, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !439
+    XXXXX    %add67 = fadd float %21, %mul, !dbg !411, !namer !440
+    #####    store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441
+
+These memory (forward) flows cross pipeline stages (needed for uncommitted value forwarding) :
+ No forward mem flows. No comm required for uncommitted value forwarding.
+
+Uncommitted value forwarding count: 0
+
+	*** estimate pipeline weights
+		- Stage  0 Weight  93.74 P-Factor   11 Speedup   9.36 Absolute P-Weight   6.11
+		- Stage  1 Weight   6.26 P-Factor    1 Speedup   1.00 Absolute P-Weight   3.82
+		- Weight   6.11
+Addressible criticisms
+
+-====================================================-
+Selected Remedies:
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, II):
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7) ->
+  %16 = load float, float* %arrayidx59, align 4, !dbg !411, !tbaa !343, !namer !430 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, LC):
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7) ->
+  %16 = load float, float* %arrayidx59, align 4, !dbg !411, !tbaa !343, !namer !430 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %indvars.iv39 = phi i64 [ 0, %for.cond19.preheader ], [ %indvars.iv.next40, %for.inc83 ], !dbg !364, !namer !365 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond23, !dbg !370, !namer !371 (filename:conv2d.c, line:96, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %indvars.iv37 = phi i64 [ %indvars.iv.next38, %for.inc80 ], [ 0, %for.cond23.preheader ], !dbg !374, !namer !375 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond19, !dbg !462, !llvm.loop !463, !namer !465 (filename:conv2d.c, line:95, col:3)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond27, !dbg !380, !namer !381 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %indvars.iv35 = phi i64 [ %indvars.iv.next36, %for.inc77 ], [ 0, %for.cond27.preheader ], !dbg !382, !namer !383 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br i1 %cmp28, label %for.cond32.preheader, label %for.inc80, !dbg !380, !prof !386, !namer !387 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond23, !dbg !456, !llvm.loop !457, !namer !459 (filename:conv2d.c, line:96, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond32, !dbg !388, !namer !389 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %indvars.iv31 = phi i64 [ %indvars.iv.next32, %for.inc74 ], [ 0, %for.cond32.preheader ], !dbg !390, !namer !391 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br i1 %exitcond34, label %for.inc77, label %for.cond37.preheader, !dbg !388, !prof !394, !namer !395 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %18 = load float**, float*** %arrayidx61, align 8, !dbg !411, !tbaa !331, !namer !434 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond37, !dbg !396, !namer !397 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %indvars.iv28 = phi i64 [ %indvars.iv.next29, %for.inc71 ], [ 0, %for.cond37.preheader ], !dbg !398, !namer !399 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br i1 %exitcond3, label %for.inc74, label %for.cond42.preheader, !dbg !396, !prof !402, !namer !403 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond42, !dbg !407, !namer !408 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %indvars.iv23 = phi i64 [ 0, %for.cond42.preheader ], [ %indvars.iv.next24, %for.body45 ], !dbg !409, !namer !410 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br i1 %exitcond27, label %for.inc71, label %for.body45, !dbg !407, !prof !413, !namer !414 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %8 = load float****, float***** %W_l, align 8, !dbg !411, !tbaa !331, !namer !415 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %9 = load float***, float**** %arrayidx47, align 8, !dbg !411, !tbaa !331, !namer !417 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %10 = load float**, float*** %arrayidx49, align 8, !dbg !411, !tbaa !331, !namer !419 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %11 = load float*, float** %arrayidx51, align 8, !dbg !411, !tbaa !331, !namer !421 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %12 = load float, float* %arrayidx53, align 4, !dbg !411, !tbaa !343, !namer !423 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %13 = load float***, float**** %error_l_plus_1, align 8, !dbg !411, !tbaa !331, !namer !424 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %14 = load float**, float*** %arrayidx55, align 8, !dbg !411, !tbaa !331, !namer !426 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %15 = load float*, float** %arrayidx57, align 8, !dbg !411, !tbaa !331, !namer !428 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %16 = load float, float* %arrayidx59, align 4, !dbg !411, !tbaa !343, !namer !430 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %17 = load float***, float**** %error_l, align 8, !dbg !411, !tbaa !331, !namer !432 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  %19 = load float*, float** %arrayidx63, align 8, !dbg !411, !tbaa !331, !namer !436 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond42, !dbg !411, !llvm.loop !443, !namer !444 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond37, !dbg !400, !llvm.loop !446, !namer !447 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond32, !dbg !392, !llvm.loop !449, !namer !450 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp20, label %for.cond23.preheader, label %for.cond87.preheader, !dbg !310, !prof !368, !namer !369 (filename:conv2d.c, line:95, col:3) ->
+  br label %for.cond27, !dbg !384, !llvm.loop !452, !namer !453 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( counted-iv-remedy ) chosen to address criticism (Reg, RAW, LC):
+  %indvars.iv.next40 = add nuw nsw i64 %indvars.iv39, 1, !dbg !460, !namer !461 (filename:conv2d.c, line:95, col:27) ->
+  %indvars.iv39 = phi i64 [ 0, %for.cond19.preheader ], [ %indvars.iv.next40, %for.inc83 ], !dbg !364, !namer !365 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+-====================================================-
+
+Selected Remediators:
+
+smtx-lamp-remedy was selected 4 times
+counted-iv-remedy was selected 1 times
+ctrl-spec-remedy was selected 35 times
+
+-====================================================-
+
+Expected Savings from critic ps-dswp-critic (no remedies): 43893  and selected remedies cost: 0
+	*** estimate pipeline weights
+		- Stage  0 Weight  93.74 P-Factor   11 Speedup   9.36 Absolute P-Weight   6.11
+		- Stage  1 Weight   6.26 P-Factor    1 Speedup   1.00 Absolute P-Weight   3.82
+		- Weight   6.11
+Parallelizable Loop conv_backward :: for.cond19 has expected savings 53893
+
+
+=------------------------------------------------------------------------------=
+Compute weight for loop conv_backward :: for.cond23...
+constructEdgesFromMemory with CAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o NoLoopAA
+Total memory dependence queries to CAF: 196
+annotateMemDepsWithRemedies with SCAF ...
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+constructEdgesFromControl ...
+constructEdgesFromUseDefs ...
+PDG construction completed
+Run Orchestrator:: find best parallelization strategy for conv_backward :: for.cond23...
+Start of findBestStrategy for loop conv_backward::for.cond23 (filename:conv2d.c, line:96, col:5)
+LoopAA Stack, top to bottom:
+	o basic-loop-aa
+	o unique-access-paths-aa
+	o array-of-structures-aa
+	o std-in-out-err-aa
+	o loop-variant-allocation-aa
+	o field-malloc-aa
+	o disjoint-fields-aa
+	o AcyclicAA
+	o NoEscapeFieldsAA
+	o TypeAA
+	o no-capture-src-aa
+	o no-capture-global-aa
+	o phi-maze-aa
+	o semi-local-fun-aa
+	o pure-fun-aa
+	o global-malloc-aa
+	o intrinsic-aa
+	o auto-restrict-aa
+	o scev-loopaa
+	o llvm-results-aa
+	o svf-results
+	o callsite-depth-combinator-aa
+	o kill-flow-aa
+	o simple-aa
+	o edge-count-oracle-aa
+	o kill-flow-ctrl-spec-aa
+	o callsite-depth-combinator-ctrl-spec-aa
+	o spec-priv-prediction-oracle-aa
+	o spec-priv-ptr-residue-aa
+	o txio-aa
+	o comm-libs-aa
+	o spec-priv-local-aa
+	o spec-priv-read-only-aa
+	o priv-aa
+	o spec-priv-locality-oracle-aa
+	o smtx-aa
+	o spec-priv-points-to-oracle-aa
+	o NoLoopAA
+
+Critic ps-dswp-critic
+Begin criticisms generation for PS-DSWP critic
+
+RAW Memory Loop-Carried Deps Count: 2
+WAW Memory Loop-Carried Deps Count: 1
+WAR Memory Loop-Carried Deps Count: 1
+Register Loop-Carried Deps Count: 1
+Control Loop-Carried Deps Count: 33
+
+Coverage of loop-carried dependences for hot loop conv_backward :: for.cond23 covered=38, total=38 , percentage=100.00%
+
+
+PS-DSWP applicable to conv_backward::for.cond23: large parallel stage found
+Pipeline for loop conv_backward :: for.cond23
+ Stage 0
+  Parallel Stage, 22 workers
+    /////    %indvars.iv37 = phi i64 [ %indvars.iv.next38, %for.inc80 ], [ 0, %for.cond23.preheader ], !dbg !374, !namer !375
+    XXXXX    %cmp24 = icmp slt i64 %indvars.iv37, %1, !dbg !376, !namer !377
+    /////    br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379
+    /////    br label %for.cond27, !dbg !380, !namer !381
+    /////    %indvars.iv35 = phi i64 [ %indvars.iv.next36, %for.inc77 ], [ 0, %for.cond27.preheader ], !dbg !382, !namer !383
+    XXXXX    %cmp28 = icmp slt i64 %indvars.iv35, %2, !dbg !384, !namer !385
+    /////    br i1 %cmp28, label %for.cond32.preheader, label %for.inc80, !dbg !380, !prof !386, !namer !387
+    /////    br label %for.cond32, !dbg !388, !namer !389
+    /////    %indvars.iv31 = phi i64 [ %indvars.iv.next32, %for.inc74 ], [ 0, %for.cond32.preheader ], !dbg !390, !namer !391
+    XXXXX    %exitcond34 = icmp eq i64 %indvars.iv31, %wide.trip.count33, !dbg !392, !namer !393
+    /////    br i1 %exitcond34, label %for.inc77, label %for.cond37.preheader, !dbg !388, !prof !394, !namer !395
+    /////    br label %for.cond37, !dbg !396, !namer !397
+    /////    %indvars.iv28 = phi i64 [ %indvars.iv.next29, %for.inc71 ], [ 0, %for.cond37.preheader ], !dbg !398, !namer !399
+    XXXXX    %exitcond3 = icmp eq i64 %indvars.iv28, 5, !dbg !400, !namer !401
+    /////    br i1 %exitcond3, label %for.inc74, label %for.cond42.preheader, !dbg !396, !prof !402, !namer !403
+    XXXXX    %7 = add nuw nsw i64 %indvars.iv35, %indvars.iv28, !dbg !404, !namer !406
+    /////    br label %for.cond42, !dbg !407, !namer !408
+    /////    %indvars.iv23 = phi i64 [ 0, %for.cond42.preheader ], [ %indvars.iv.next24, %for.body45 ], !dbg !409, !namer !410
+    XXXXX    %exitcond27 = icmp eq i64 %indvars.iv23, 5, !dbg !411, !namer !412
+    /////    br i1 %exitcond27, label %for.inc71, label %for.body45, !dbg !407, !prof !413, !namer !414
+    #####    %8 = load float****, float***** %W_l, align 8, !dbg !411, !tbaa !331, !namer !415
+    XXXXX    %arrayidx47 = getelementptr inbounds float***, float**** %8, i64 %indvars.iv39, !dbg !411, !namer !416
+    #####    %9 = load float***, float**** %arrayidx47, align 8, !dbg !411, !tbaa !331, !namer !417
+    XXXXX    %arrayidx49 = getelementptr inbounds float**, float*** %9, i64 %indvars.iv37, !dbg !411, !namer !418
+    #####    %10 = load float**, float*** %arrayidx49, align 8, !dbg !411, !tbaa !331, !namer !419
+    XXXXX    %arrayidx51 = getelementptr inbounds float*, float** %10, i64 %indvars.iv28, !dbg !411, !namer !420
+    #####    %11 = load float*, float** %arrayidx51, align 8, !dbg !411, !tbaa !331, !namer !421
+    XXXXX    %arrayidx53 = getelementptr inbounds float, float* %11, i64 %indvars.iv23, !dbg !411, !namer !422
+    #####    %12 = load float, float* %arrayidx53, align 4, !dbg !411, !tbaa !343, !namer !423
+    #####    %13 = load float***, float**** %error_l_plus_1, align 8, !dbg !411, !tbaa !331, !namer !424
+    XXXXX    %arrayidx55 = getelementptr inbounds float**, float*** %13, i64 %indvars.iv39, !dbg !411, !namer !425
+    #####    %14 = load float**, float*** %arrayidx55, align 8, !dbg !411, !tbaa !331, !namer !426
+    XXXXX    %arrayidx57 = getelementptr inbounds float*, float** %14, i64 %indvars.iv35, !dbg !411, !namer !427
+    #####    %15 = load float*, float** %arrayidx57, align 8, !dbg !411, !tbaa !331, !namer !428
+    XXXXX    %arrayidx59 = getelementptr inbounds float, float* %15, i64 %indvars.iv31, !dbg !411, !namer !429
+    #####    %16 = load float, float* %arrayidx59, align 4, !dbg !411, !tbaa !343, !namer !430
+    XXXXX    %mul = fmul float %12, %16, !dbg !411, !namer !431
+    #####    %17 = load float***, float**** %error_l, align 8, !dbg !411, !tbaa !331, !namer !432
+    XXXXX    %arrayidx61 = getelementptr inbounds float**, float*** %17, i64 %indvars.iv37, !dbg !411, !namer !433
+    #####    %18 = load float**, float*** %arrayidx61, align 8, !dbg !411, !tbaa !331, !namer !434
+    XXXXX    %arrayidx63 = getelementptr inbounds float*, float** %18, i64 %7, !dbg !411, !namer !435
+    #####    %19 = load float*, float** %arrayidx63, align 8, !dbg !411, !tbaa !331, !namer !436
+    XXXXX    %20 = add nuw nsw i64 %indvars.iv31, %indvars.iv23, !dbg !411, !namer !437
+    XXXXX    %arrayidx66 = getelementptr inbounds float, float* %19, i64 %20, !dbg !411, !namer !438
+    #####    %21 = load float, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !439
+    XXXXX    %add67 = fadd float %21, %mul, !dbg !411, !namer !440
+    #####    store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441
+    XXXXX    %indvars.iv.next24 = add nuw nsw i64 %indvars.iv23, 1, !dbg !411, !namer !442
+    /////    br label %for.cond42, !dbg !411, !llvm.loop !443, !namer !444
+    XXXXX    %indvars.iv.next29 = add nuw nsw i64 %indvars.iv28, 1, !dbg !400, !namer !445
+    /////    br label %for.cond37, !dbg !400, !llvm.loop !446, !namer !447
+    XXXXX    %indvars.iv.next32 = add nuw nsw i64 %indvars.iv31, 1, !dbg !392, !namer !448
+    /////    br label %for.cond32, !dbg !392, !llvm.loop !449, !namer !450
+    XXXXX    %indvars.iv.next36 = add nuw nsw i64 %indvars.iv35, 1, !dbg !384, !namer !451
+    /////    br label %for.cond27, !dbg !384, !llvm.loop !452, !namer !453
+    XXXXX    %indvars.iv.next38 = add nuw nsw i64 %indvars.iv37, 1, !dbg !454, !namer !455
+    /////    br label %for.cond23, !dbg !456, !llvm.loop !457, !namer !459
+
+	*** estimate pipeline weights
+		- Stage  0 Weight 100.00 P-Factor   10 Speedup   8.71 Absolute P-Weight   7.00
+		- Weight   7.00
+Addressible criticisms
+
+-====================================================-
+Selected Remedies:
+----------------------------------------------------
+( mem-ver-remedy ) chosen to address criticism (Mem, WAW, LC):
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7) ->
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, LC):
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7) ->
+  %16 = load float, float* %arrayidx59, align 4, !dbg !411, !tbaa !343, !namer !430 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( smtx-lamp-remedy, smtx-lamp-remedy ) chosen to address criticism (Mem, RAW, LC):
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7) ->
+  %21 = load float, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !439 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( mem-ver-remedy ) chosen to address criticism (Mem, WAR, LC):
+  %16 = load float, float* %arrayidx59, align 4, !dbg !411, !tbaa !343, !namer !430 (filename:conv2d.c, line:97, col:7) ->
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %indvars.iv37 = phi i64 [ %indvars.iv.next38, %for.inc80 ], [ 0, %for.cond23.preheader ], !dbg !374, !namer !375 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond27, !dbg !380, !namer !381 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %indvars.iv35 = phi i64 [ %indvars.iv.next36, %for.inc77 ], [ 0, %for.cond27.preheader ], !dbg !382, !namer !383 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br i1 %cmp28, label %for.cond32.preheader, label %for.inc80, !dbg !380, !prof !386, !namer !387 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond23, !dbg !456, !llvm.loop !457, !namer !459 (filename:conv2d.c, line:96, col:5)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond32, !dbg !388, !namer !389 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %indvars.iv31 = phi i64 [ %indvars.iv.next32, %for.inc74 ], [ 0, %for.cond32.preheader ], !dbg !390, !namer !391 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br i1 %exitcond34, label %for.inc77, label %for.cond37.preheader, !dbg !388, !prof !394, !namer !395 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond37, !dbg !396, !namer !397 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %indvars.iv28 = phi i64 [ %indvars.iv.next29, %for.inc71 ], [ 0, %for.cond37.preheader ], !dbg !398, !namer !399 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br i1 %exitcond3, label %for.inc74, label %for.cond42.preheader, !dbg !396, !prof !402, !namer !403 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond42, !dbg !407, !namer !408 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond42, !dbg !411, !llvm.loop !443, !namer !444 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %indvars.iv23 = phi i64 [ 0, %for.cond42.preheader ], [ %indvars.iv.next24, %for.body45 ], !dbg !409, !namer !410 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br i1 %exitcond27, label %for.inc71, label %for.body45, !dbg !407, !prof !413, !namer !414 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %8 = load float****, float***** %W_l, align 8, !dbg !411, !tbaa !331, !namer !415 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %9 = load float***, float**** %arrayidx47, align 8, !dbg !411, !tbaa !331, !namer !417 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %10 = load float**, float*** %arrayidx49, align 8, !dbg !411, !tbaa !331, !namer !419 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %11 = load float*, float** %arrayidx51, align 8, !dbg !411, !tbaa !331, !namer !421 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %12 = load float, float* %arrayidx53, align 4, !dbg !411, !tbaa !343, !namer !423 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %13 = load float***, float**** %error_l_plus_1, align 8, !dbg !411, !tbaa !331, !namer !424 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %14 = load float**, float*** %arrayidx55, align 8, !dbg !411, !tbaa !331, !namer !426 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %15 = load float*, float** %arrayidx57, align 8, !dbg !411, !tbaa !331, !namer !428 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %16 = load float, float* %arrayidx59, align 4, !dbg !411, !tbaa !343, !namer !430 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %17 = load float***, float**** %error_l, align 8, !dbg !411, !tbaa !331, !namer !432 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %18 = load float**, float*** %arrayidx61, align 8, !dbg !411, !tbaa !331, !namer !434 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %19 = load float*, float** %arrayidx63, align 8, !dbg !411, !tbaa !331, !namer !436 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  %21 = load float, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !439 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  store float %add67, float* %arrayidx66, align 4, !dbg !411, !tbaa !343, !namer !441 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond37, !dbg !400, !llvm.loop !446, !namer !447 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond32, !dbg !392, !llvm.loop !449, !namer !450 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( ctrl-spec-remedy ) chosen to address criticism (Control, LC):
+  br i1 %cmp24, label %for.cond27.preheader, label %for.inc83, !dbg !370, !prof !378, !namer !379 (filename:conv2d.c, line:96, col:5) ->
+  br label %for.cond27, !dbg !384, !llvm.loop !452, !namer !453 (filename:conv2d.c, line:97, col:7)
+------------------------------------------------------
+
+----------------------------------------------------
+( counted-iv-remedy ) chosen to address criticism (Reg, RAW, LC):
+  %indvars.iv.next38 = add nuw nsw i64 %indvars.iv37, 1, !dbg !454, !namer !455 (filename:conv2d.c, line:96, col:28) ->
+  %indvars.iv37 = phi i64 [ %indvars.iv.next38, %for.inc80 ], [ 0, %for.cond23.preheader ], !dbg !374, !namer !375 (filename:conv2d.c, line:0, col:0)
+------------------------------------------------------
+
+-====================================================-
+
+Selected Remediators:
+
+counted-iv-remedy was selected 1 times
+ctrl-spec-remedy was selected 33 times
+mem-ver-remedy was selected 2 times
+smtx-lamp-remedy was selected 4 times
+
+-====================================================-
+
+Expected Savings from critic ps-dswp-critic (no remedies): 33001  and selected remedies cost: 0
+	*** estimate pipeline weights
+		- Stage  0 Weight 100.00 P-Factor   10 Speedup   8.71 Absolute P-Weight   7.00
+		- Weight   7.00
+Parallelizable Loop conv_backward :: for.cond23 has expected savings 43001
+
+
+*********************************************************************
+Parallelizable loops:
+  - 42.28% conv2d_forward :: for.cond22 DSWP[P22] (Loop speedup: 10.04x)
+  - 42.28% conv2d_forward :: for.cond27 DSWP[P21-S] (Loop speedup: 5.02x)
+  - 29.27% conv_backward :: for.cond131 DSWP[P22] (Loop speedup: 10.41x)
+  - 29.27% conv_backward :: for.cond136 DSWP[P22] (Loop speedup: 4.12x)
+  - 24.80% conv_backward :: for.cond19 DSWP[P21-S] (Loop speedup: 8.58x)
+  - 24.80% conv_backward :: for.cond23 DSWP[P22] (Loop speedup: 3.39x)
+  Total expected speedup: 2.26x using 22 workers.
+Count of remeds with unknown gravity stage: 0
+ - 24.80% depth 1    conv_backward :: for.cond19    DSWP[P21-S]	P-portion= 93.74% LgstSeq-portion=  6.26% LgstSeq-with-val-portion=  6.26%			#regrn-par-loop
+Count of remeds with unknown gravity stage: 0
+ - 42.28% depth 2    conv2d_forward :: for.cond27    DSWP[P21-S]	P-portion= 94.24% LgstSeq-portion=  5.76% LgstSeq-with-val-portion=  5.76%			#regrn-par-loop
+Count of remeds with unknown gravity stage: 0
+ X 42.28% depth 1    conv2d_forward :: for.cond22    DSWP[P22]	P-portion=100.00% LgstSeq-portion=  0.00% LgstSeq-with-val-portion=  0.00%			#regrn-no-par-loop
+Count of remeds with unknown gravity stage: 0
+ X 24.80% depth 2    conv_backward :: for.cond23    DSWP[P22]	P-portion=100.00% LgstSeq-portion=  0.00% LgstSeq-with-val-portion=  0.00%			#regrn-no-par-loop
+Count of remeds with unknown gravity stage: 0
+ X 29.27% depth 1    conv_backward :: for.cond131    DSWP[P22]	P-portion=100.00% LgstSeq-portion=  0.00% LgstSeq-with-val-portion=  0.00%			#regrn-no-par-loop
+Count of remeds with unknown gravity stage: 0
+ X 29.27% depth 2    conv_backward :: for.cond136    DSWP[P22]	P-portion=100.00% LgstSeq-portion=  0.00% LgstSeq-with-val-portion=  0.00%			#regrn-no-par-loop
+Classification report: Valid for:   Loop conv2d_forward :: for.cond27,   Loop conv_backward :: for.cond19, 
+  Found 1 shared AUs:
+    o shared[sh=2] HEAP initialize_images for.body9 call12 AT LOOP initialize_images:for.cond5 WITHIN LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (combined) #regression
+  Found 0 local AUs:
+  Found 0 reduction AUs:
+  Found 0 private AUs:
+  Found 0 kill private AUs:
+  Found 0 shareable private AUs:
+  Found 15 read-only (live-in) AUs:
+    o ro HEAP init_data for.body call5 AT LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP initialize_4Dzeros for.body9 call12 AT LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP initialize_images entry call AT FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP initialize_images for.body call4 AT LOOP initialize_images:for.cond WITHIN FCN initialize_images WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP initialize_4Dzeros for.body call4 AT LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP init_data for.body10 call11 AT LOOP init_data:for.cond6 WITHIN LOOP init_data:for.cond WITHIN FCN init_data WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP initialize_4Dzeros entry call AT FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP allocate_img_batch for.body call2 AT LOOP allocate_img_batch:for.cond WITHIN FCN allocate_img_batch WITHIN FCN testing WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP initialize_4Dzeros for.body21 call24 AT LOOP initialize_4Dzeros:for.cond17 WITHIN LOOP initialize_4Dzeros:for.cond5 WITHIN LOOP initialize_4Dzeros:for.cond WITHIN FCN initialize_4Dzeros WITHIN FCN initialize_lenet WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP allocate_img_batch entry call AT FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro GLOBAL lenet (combined) #regression
+    o ro HEAP allocate_img_batch entry call AT FCN allocate_img_batch WITHIN FCN testing WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro HEAP allocate_img_batch for.body call2 AT LOOP allocate_img_batch:for.cond WITHIN FCN allocate_img_batch WITHIN FCN training WITHIN FCN main WITHIN TOP (combined) #regression
+    o ro GLOBAL out (combined) #regression
+    o ro GLOBAL error (combined) #regression
+===-------------------------------------------------------------------------===
+                          ... Statistics Collected ...
+===-------------------------------------------------------------------------===
+
+  36 LoopProfLoad                 - XXX Loops with non-zero execution weight
+ 384 array-of-structures-aa       - Num eligible
+ 296 basicaa                      - Number of times a GEP is decomposed
+7913 bitcode-reader               - Number of Metadata records loaded
+ 259 bitcode-reader               - Number of MDStrings loaded
+ 165 break-constgeps              - Number of Converted GEP Constant Expressions
+ 165 break-constgeps              - Number of Converted Constant Expressions
+  78 callsite-depth-combinator-aa - Num flow tests
+   6 classify                     - Parallel regions selected #regression
+  62 commlib                      - Num mem queries passed to comm libs
+  46 commlib                      - Num mem queries passed to comm libs
+ 366 commlib                      - Num register deps queries
+   6 counted-iv-remed             - Number of ctrl deps removed by counted IV remed
+   6 counted-iv-remed             - Number of reg deps removed by counted IV remed
+ 148 ctrlspec                     - Num queries in cntr spec AA
+  35 ctrlspec                     - Speculatively Dead Blocks
+   8 ctrlspec                     - Speculatively Dead Edges
+ 352 ctrlspec                     - Total basic blocks visited
+ 234 ctrlspec-remed               - Num removed ctrl dep with cntr spec remediator
+ 408 ctrlspec-remed               - Num ctrl queries in cntr spec remediator
+  46 ctrlspec-remed               - Num mem queries in cntr spec remediator
+ 366 ctrlspec-remed               - Num reg queries in cntr spec remediator
+   1 globalsmodref-aa             - Number of functions that do not access memory
+  32 globalsmodref-aa             - Number of functions without address taken
+   2 globalsmodref-aa             - Number of global vars without address taken
+   1 globalsmodref-aa             - Number of functions that only read memory
+ 110 kill-flow-aa                 - Num eligible BACKWARD LOAD
+ 110 kill-flow-aa                 - Num eligible BACKWARD LOAD
+ 130 kill-flow-aa                 - Num eligible BACKWARD STORE
+ 124 kill-flow-aa                 - Num eligible BACKWARD STORE
+  70 kill-flow-aa                 - Num eligible FORWARD LOAD
+  64 kill-flow-aa                 - Num eligible FORWARD LOAD
+ 170 kill-flow-aa                 - Num eligible FORWARD STORE
+ 170 kill-flow-aa                 - Num eligible FORWARD STORE
+   6 kill-flow-aa                 - Num killed FORWARD LOAD
+ 240 kill-flow-aa                 - Num queries passed to KillFlow
+ 234 kill-flow-aa                 - Num queries passed to KillFlow_CtrlSpecAware
+  30 kill-flow-aa                 - Num sub-queries spawned
+  16 kill-flow-aa                 - Num sub-queries spawned
+  84 llvm-aa-results              - Number of NoModRef from llvm-aa-results
+  14 mem-spec-aa-remed            - Num no-flow results
+  46 mem-spec-aa-remed            - Num queries
+  10 mem-ver-remed                - Number of false mem deps removed with memory versioning
+ 696 no-capture-global-aa         - Queries
+  48 prediction-aa                - Num sub-queries spawned
+ 366 redux-remed                  - Num register deps queries
+  21 scalar-evolution             - Number of loops with predictable loop counts
+ 534 scalar-evolution-aa          - Num eligible queries
+  60 scalar-evolution-aa          - Num must-alias queries
+ 694 scalar-evolution-aa          - Num queries received
+   2 selector                     - Parallel regions selected #regression
+  58 smtx-aa                      - Num eligible queries
+  38 smtx-aa                      - Num forward no-flow results
+  10 smtx-aa                      - Num reverse no-flow results
+ 124 smtx-aa                      - Num queries
+ 252 spec-priv-local-aa           - Num eligible queries
+ 284 spec-priv-local-aa           - Num queries
+  76 spec-priv-locality-aa        - Num eligible queries
+  16 spec-priv-locality-aa        - Num privatized (Private)
+  12 spec-priv-locality-aa        - Num privatized (Redux)
+   7 spec-priv-locality-aa        - Num avoid extra private inst
+ 100 spec-priv-ptr-residue-aa     - Num applicable queries
+ 284 spec-priv-ptr-residue-aa     - Num queries received
+ 252 spec-priv-read-only-aa       - Num eligible queries
+ 284 spec-priv-read-only-aa       - Num queries
+  10 spec-priv-smtx-manager       - Number of intra-iteration no-flow assumptions
+   8 spec-priv-smtx-manager       - Number of loop-carried no-flow assumptions
+1823 specpriv-parse               - Lines read from SpecPriv profile
+  60 svf-results                  - Number of no alias from svf-results
+ 166 svf-results                  - Number of NoModRef from svf-results
+1064 tracedata                    - Num invocations of traceConcreteIntegerValues()
+  28 typeaa                       - Number of definitions for non-captured fields of sane types
+  15 typeaa                       - Number of insane types identified.
+ 966 typeaa                       - Number of AA queries given to AcyclicAA
+ 696 typeaa                       - Number of AA queries passed to TypeAA.
+   2 typeaa                       - Number of sane-types with field defs
+   1 unique-access-paths-aa       - Longest list of definitions
+  12 unique-access-paths-aa       - Num eligible queries
+ 430 unique-access-paths-aa       - Num cache hits
+1084 unique-access-paths-aa       - Num queries
+  12 unique-access-paths-aa       - Num sub-queries issued
+  80 unique-access-paths-aa       - Num steps performed by trace()
+
+43.21user 0.06system 0:43.34elapsed 99%CPU (0avgtext+0avgdata 118684maxresident)k
+0inputs+1344outputs (0major+13662minor)pagefaults 0swaps
