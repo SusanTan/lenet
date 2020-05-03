@@ -1,7 +1,7 @@
 #include "mnist.h"
 #include <stdlib.h>
 
-void maxpool2d_forward(int stride, int pool_size, Img* in, int channels, int img_size, Img* output, Img* max_map)
+void maxpool2d_forward(int stride, int pool_size, float*** in, int channels, int img_size, float*** output, float*** max_map)
 {
   for(int i=0; i<channels; i++)
     for(int j=0; j<img_size; j++)
@@ -38,7 +38,7 @@ void maxpool2d_forward(int stride, int pool_size, Img* in, int channels, int img
    }
 }
 
-void pool_backward(Img* error_l_plus_1, int channels, Img* error_l, int stride, int img_size_in, Img* max_map)
+void pool_backward(float*** error_l_plus_1, int channels, float*** error_l, int stride, int img_size_in, float*** max_map)
 {
   //note: += because it's batched
   for(int i=0; i<channels; i++)

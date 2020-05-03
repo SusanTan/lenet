@@ -35,7 +35,7 @@ void test_initialization (LeNet* lenet)
   test_linear_init(lenet->F6_W, lenet->F6_B, 84, 120);
 }
 
-void test_image (Img* imgs, int imgsize)
+void test_image (float*** imgs, int imgsize)
 {
   printf("\n*******Printing the image from channel 0:******\n");
   //just use the first channel
@@ -44,7 +44,7 @@ void test_image (Img* imgs, int imgsize)
       printf("%.4f, ",imgs[0][j][k]);
 }
 
-void test_output (Img* imgs)
+void test_output (float*** imgs)
 {
 
   printf("\n*******test output image**************\n");

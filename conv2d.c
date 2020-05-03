@@ -50,7 +50,7 @@ void free_conv(float**** kernel, int in_channels, int out_channels, int kernel_s
   free(kernel);
 }
 
-void convolute_valid (float** result, float** kernel, Img input, int kernel_size, int img_size)
+void convolute_valid (float** result, float** kernel, float** input, int kernel_size, int img_size)
 {
   for(int i=0; i<img_size; i++)
     for(int j=0; j<img_size; j++)
@@ -59,7 +59,7 @@ void convolute_valid (float** result, float** kernel, Img input, int kernel_size
           result[i][j] += kernel[k][l] * input[i+k][j+l];
 }
 
-void convolute_full (float** result, float** kernel, Img input, int kernel_size, int img_size)
+void convolute_full (float** result, float** kernel, float** input, int kernel_size, int img_size)
 {
   for(int i=0; i<img_size; i++)
     for(int j=0; j<img_size; j++)
@@ -69,7 +69,7 @@ void convolute_full (float** result, float** kernel, Img input, int kernel_size,
 }
 
 
-void conv2d_forward(float**** conv, Img* x, int img_size, int in_channels, int out_channels, Img* output)
+void conv2d_forward(float**** conv, float*** x, int img_size, int in_channels, int out_channels, float*** output)
 {
   //clear output first
   for(int i=0; i<out_channels; i++)
@@ -82,7 +82,7 @@ void conv2d_forward(float**** conv, Img* x, int img_size, int in_channels, int o
        convolute_valid(output[j], conv[j][k], x[k], 5, img_size);
 }
 
-void conv_backward(Img* error_l_plus_1, Img* in, float**** W_l, int l_cin, int l_cout, Img* error_l, int kernel_size, int img_size_in, int img_size_out, float**** W_l_delta)
+void conv_backward(float*** error_l_plus_1, float*** in, float**** W_l, int l_cin, int l_cout, float*** error_l, int kernel_size, int img_size_in, int img_size_out, float**** W_l_delta)
 {
   //clear the delta array
   for(int j=0; j<l_cin; j++)

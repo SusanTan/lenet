@@ -32,7 +32,7 @@ void free_linear(float** W, float* B, int out_channels)
   free(B);
 }
 
-void linear_forward(float** W, float* B, Img* in, int in_channels, int out_channels, Img* output)
+void linear_forward(float** W, float* B, float*** in, int in_channels, int out_channels, float*** output)
 {
   for(int i=0; i<out_channels; i++)
     output[i][0][0] = 0.0f;
@@ -45,7 +45,7 @@ void linear_forward(float** W, float* B, Img* in, int in_channels, int out_chann
   }
 }
 
-void last_layer_prep(uint8_t label, Img* out, int out_channels, Img* error)
+void last_layer_prep(uint8_t label, float*** out, int out_channels, float*** error)
 {
   //form y the same size as out
   for(int j=0; j<out_channels; j++)
@@ -64,7 +64,7 @@ void last_layer_prep(uint8_t label, Img* out, int out_channels, Img* error)
   }
 }
 
-void linear_backward(Img* error_l_plus_1, Img* in, float** W_l, float* B_l, int l_cin, int l_cout, Img* error_l, float** W_l_delta, float* B_l_delta)
+void linear_backward(float*** error_l_plus_1, float*** in, float** W_l, float* B_l, int l_cin, int l_cout, float*** error_l, float** W_l_delta, float* B_l_delta)
 {
   //initialize the error array;
   for(int i=0; i<l_cin; i++)
