@@ -101,6 +101,7 @@ void conv_backward(float**** error_l_plus_1, float**** in, float***** W_l, int l
       for(int l=0; l<img_size_in; l++)
         (*error_l)[j][k][l] *= 1-((*in)[j][k][l]*(*in)[j][k][l]);
 
+  //batched, reverted convolution in the buffer, too lazy to do anything fancy
   for(int a=0; a<l_cout; a++)
     for(int b=0; b<l_cin; b++)
       CONV_VALID((*W_l_delta)[a][b], (*error_l_plus_1)[a], (*in)[b], img_size_out, kernel_size);
