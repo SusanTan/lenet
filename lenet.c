@@ -147,7 +147,7 @@ void initialize_lenet(){
   out_C5     = initialize_images(C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
   out_F6     = initialize_images(F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
   out_OL     = initialize_images(OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
-  last_error = initialize_images(OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
+  /*last_error = initialize_images(OL_COUT, OL_OUTSIZE, OL_OUTSIZE);
   error_OL   = initialize_images(F6_COUT, F6_OUTSIZE, F6_OUTSIZE);
   error_F6   = initialize_images(C5_COUT, C5_OUTSIZE, C5_OUTSIZE);
   error_C5   = initialize_images(C3_COUT, S4_OUTSIZE, S4_OUTSIZE);
@@ -162,7 +162,7 @@ void initialize_lenet(){
   delta.F6_B = initialize_zerobias(F6_COUT);
   delta.C5   = initialize_4Dzeros(C5_COUT, C3_COUT, CONV_SIZE, CONV_SIZE);
   delta.C3   = initialize_4Dzeros(C3_COUT, C1_COUT, CONV_SIZE, CONV_SIZE);
-  delta.C1   = initialize_4Dzeros(C1_COUT, C1_CIN , CONV_SIZE, CONV_SIZE);
+  delta.C1   = initialize_4Dzeros(C1_COUT, C1_CIN , CONV_SIZE, CONV_SIZE);*/
 }
 
 void forward(int i, uint8_t mode)
@@ -246,9 +246,8 @@ void testing()
   int errors = 0;
   for(int j=0; j<ntest; j++)
   {
-    //RandomChoices(batchindice, ntest, 1);
-    form_img_batch(&test_img_batch, j, 1, &mnist_test_imgs);
-    form_label_batch(&test_label_batch, j, 1, &mnist_test_labels);
+    test_img_batch[0][0] = mnist_test_imgs[j];
+    test_label_batch[0] =  mnist_test_labels[j];
     forward(0, 1);
     int pred_digit = 0;
     int actual_digit = 0;
@@ -289,7 +288,7 @@ void free_all()
   free_images(out_C5, C5_COUT, C5_OUTSIZE);
   free_images(out_F6, F6_COUT, F6_OUTSIZE);
   free_images(out_OL, OL_COUT, OL_OUTSIZE);
-  free_images(last_error, OL_COUT, OL_OUTSIZE);
+  /*free_images(last_error, OL_COUT, OL_OUTSIZE);
   free_images(error_OL, F6_COUT, F6_OUTSIZE);
   free_images(error_F6, C5_COUT, C5_OUTSIZE);
   free_images(error_C5, C3_COUT, S4_OUTSIZE);
@@ -301,7 +300,7 @@ void free_all()
   free_conv(delta.C3, C1_COUT, C3_COUT, CONV_SIZE);
   free_conv(delta.C1, C1_CIN,  C1_COUT, CONV_SIZE);
   free_linear(delta.F6_W, delta.F6_B, F6_COUT);
-  free_linear(delta.OL_W, delta.OL_B, OL_COUT);
+  free_linear(delta.OL_W, delta.OL_B, OL_COUT);*/
 }
 
 int main(int argc, char** argv){
@@ -325,7 +324,7 @@ int main(int argc, char** argv){
     else
       printf("fisrt argument should be keyword profile or run\n");
     initialize_lenet();
-    training();
+    //training();
     testing();
     free_all();
     return 0;
