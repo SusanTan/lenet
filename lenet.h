@@ -31,35 +31,26 @@ uint8_t* mnist_test_labels;
 
 
 //kernels of size (out_channels, in_channels, h, w)
-typedef struct LeNet
-{
-    float**** C1;
-    float**** C3;
-    float**** C5;
-    float** F6_W;
-    float*  F6_B;
-    float** OL_W;
-    float*  OL_B;
-}LeNet;
+float**** lenet_C1;
+float**** lenet_C3;
+float**** lenet_C5;
+float** lenet_F6_W;
+float*  lenet_F6_B;
+float** lenet_OL_W;
+float*  lenet_OL_B;
 
-LeNet lenet;
-LeNet delta;
+float**** delta_C1;
+float**** delta_C3;
+float**** delta_C5;
+float** delta_F6_W;
+float*  delta_F6_B;
+float** delta_OL_W;
+float*  delta_OL_B;
 /// intermediate results///////
 float*** S2_max_map; // record max locations
 float*** S4_max_map; // record max locations
 float*** last_error; //(batchsize, 10)
 
-//typedef struct Intermediate
-//{
-//  float*** C1;
-//  float*** S2;
-//  float*** C3;
-//  float*** S4;
-//  float*** C5;
-//  float*** F6;
-//  float*** OL;
-//}Intermediate;
-//
 float*** out_C1;
 float*** out_S2;
 float*** out_C3;
