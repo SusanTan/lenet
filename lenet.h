@@ -44,22 +44,12 @@ typedef struct LeNet
 
 LeNet lenet;
 LeNet delta;
+LeNet cumulator;
 /// intermediate results///////
 float*** S2_max_map; // record max locations
 float*** S4_max_map; // record max locations
 float*** last_error; //(batchsize, 10)
 
-//typedef struct Intermediate
-//{
-//  float*** C1;
-//  float*** S2;
-//  float*** C3;
-//  float*** S4;
-//  float*** C5;
-//  float*** F6;
-//  float*** OL;
-//}Intermediate;
-//
 float*** out_C1;
 float*** out_S2;
 float*** out_C3;
