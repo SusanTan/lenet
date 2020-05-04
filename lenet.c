@@ -14,42 +14,33 @@
           (x)[i][j][k] = ((x)[i][j][k] > 0.0f) ? (x)[i][j][k]: 0.0f;\
 }
 
-#define UPDATE_CONV(W, W_d, in_c, out_c, kernel, mode)\
+#define UPDATE_CONV(W, W_d, in_c, out_c, kernel)\
 {\
   FOR(i, out_c)\
     FOR(j, in_c)\
       FOR(k, kernel)\
         FOR(l, kernel)\
         {\
-          if(mode == 0)\
-            (W)[i][j][k][l] += (W_d)[i][j][k][l]*0.012;\
-          else\
-            (W)[i][j][k][l] += (W_d)[i][j][k][l]/BATCHSIZE;\
+          (W)[i][j][k][l] += (W_d)[i][j][k][l]*0.02/BATCHSIZE;\
           (W_d)[i][j][k][l] = 0.0f;\
         }\
 }
 
-#define UPDATE_LINEAR_W(W, W_d, in_c, out_c, mode)\
+#define UPDATE_LINEAR_W(W, W_d, in_c, out_c)\
 {\
   FOR(i, out_c)\
     FOR(j, in_c)\
     {\
-      if(mode == 0)\
-        (W)[i][j] += (W_d)[i][j]*0.012;\
-      else\
-        (W)[i][j] += (W_d)[i][j]/BATCHSIZE;\
-      (W_d)[i][j]= 0.0f;\
+      (W)[i][j] += (W_d)[i][j]*0.02/BATCHSIZE;\
+      (W_d)[i][j] = 0.0f;\
     }\
 }
 
-#define UPDATE_LINEAR_B(B, B_d, out_c, mode)\
+#define UPDATE_LINEAR_B(B, B_d, out_c)\
 {\
   FOR(i, out_c)\
   {\
-    if(mode == 0)\
-      (B)[i] += (B_d)[i]*0.012;\
-    else\
-      (B)[i] += (B_d)[i]/BATCHSIZE;\
+    (B)[i] += (B_d)[i]*0.02/BATCHSIZE;\
     (B_d)[i] = 0.0f;\
   }\
 }
@@ -64,27 +55,37 @@ int ntest  = 10000;
 
 float** initialize_zeroweights(int d1, int d2)
 {
-  float** result = (float**)calloc(d1, sizeof(float*));
+  float** result = (float**)malloc(d1*sizeof(float*));
   for(int i=0; i<d1; i++)
-    result[i] = (float*)calloc(d2, sizeof(float));
+    result[i] = (float*)malloc(d2*sizeof(float));
+
+  for(int i=0; i<d1; i++)
+    for(int j=0; j<d2; j++)
+      result[i][j] = 0.0f;
   return result;
 }
 
 float* initialize_zerobias(int d1)
 {
-  float* result = (float*)calloc(d1,sizeof(float));
+  float* result = (float*)malloc(d1*sizeof(float));
+  for(int i=0; i<d1; i++)
+      result[i] = 0.0f;
   return result;
 }
 
 float*** initialize_images(int d1, int d2, int d3)
 {
-  float*** images = (float***)calloc(d1, sizeof(float**));
+  float*** images = (float***)malloc(sizeof(float**)*d1);
   for(int i=0; i<d1; i++)
   {
-    images[i] = (float**)calloc(d2, sizeof(float*));
+    images[i] = (float**)malloc(sizeof(float*)*d2);
     for(int j=0; j<d2; j++)
-      images[i][j] = (float*)calloc(d3, sizeof(float));
+      images[i][j] = (float*)malloc(sizeof(float)*d3);
   }
+  for(int i=0; i<d1; i++)
+    for(int j=0; j<d2; j++)
+      for(int k=0; k<d3; k++)
+        images[i][j][k] = 0.0f;
   return images;
 }
 
@@ -101,17 +102,22 @@ void free_images(float*** img, int d1, int d2)
 
 float**** initialize_4Dzeros(int d1, int d2, int d3, int d4)
 {
-  float**** images = (float****)calloc(d1, sizeof(float***));
+  float**** images = (float****)malloc(sizeof(float***)*d1);
   for(int i=0; i<d1; i++)
   {
-    images[i] = (float***)calloc(d2, sizeof(float**));
+    images[i] = (float***)malloc(sizeof(float**)*d2);
     for(int j=0; j<d2; j++)
     {
-      images[i][j] = (float**)calloc(d3, sizeof(float*));
+      images[i][j] = (float**)malloc(sizeof(float*)*d3);
       for(int k=0; k<d3; k++)
-        images[i][j][k] = (float*)calloc(d4, sizeof(float));
+        images[i][j][k] = (float*)malloc(sizeof(float)*d4);
     }
   }
+  for(int i=0; i<d1; i++)
+    for(int j=0; j<d2; j++)
+      for(int k=0; k<d3; k++)
+        for(int l=0; l<d4; l++)
+          images[i][j][k][l] = 0.0f;
   return images;
 }
 
@@ -157,14 +163,6 @@ void initialize_lenet(){
   delta.C5   = initialize_4Dzeros(C5_COUT, C3_COUT, CONV_SIZE, CONV_SIZE);
   delta.C3   = initialize_4Dzeros(C3_COUT, C1_COUT, CONV_SIZE, CONV_SIZE);
   delta.C1   = initialize_4Dzeros(C1_COUT, C1_CIN , CONV_SIZE, CONV_SIZE);
-
-  cumulator.OL_W = initialize_zeroweights(OL_COUT, F6_COUT);
-  cumulator.F6_W = initialize_zeroweights(F6_COUT, C5_COUT);
-  cumulator.OL_B = initialize_zerobias(OL_COUT);
-  cumulator.F6_B = initialize_zerobias(F6_COUT);
-  cumulator.C5   = initialize_4Dzeros(C5_COUT, C3_COUT, CONV_SIZE, CONV_SIZE);
-  cumulator.C3   = initialize_4Dzeros(C3_COUT, C1_COUT, CONV_SIZE, CONV_SIZE);
-  cumulator.C1   = initialize_4Dzeros(C1_COUT, C1_CIN , CONV_SIZE, CONV_SIZE);
 }
 
 void forward(int i, uint8_t mode)
@@ -205,34 +203,26 @@ void backward(i)
                     &error_C1, CONV_SIZE, C1_INSIZE, C1_OUTSIZE, &delta.C1);
 }
 
-void delta_cumulate()
-{
-  UPDATE_CONV(cumulator.C1, delta.C1, C1_CIN,  C1_COUT, CONV_SIZE, 0);
-  UPDATE_CONV(cumulator.C3, delta.C3, C1_COUT, C3_COUT, CONV_SIZE, 0);
-  UPDATE_CONV(cumulator.C5, delta.C5, C3_COUT, C5_COUT, CONV_SIZE, 0);
-  UPDATE_LINEAR_W(cumulator.F6_W, delta.F6_W, C5_COUT, F6_COUT, 0);
-  UPDATE_LINEAR_W(cumulator.OL_W, delta.OL_W, F6_COUT, OL_COUT, 0);
-  UPDATE_LINEAR_B(cumulator.F6_B, delta.F6_B, F6_COUT, 0);
-  UPDATE_LINEAR_B(cumulator.OL_B, delta.OL_B, OL_COUT, 0);
-}
-
 void weight_update()
 {
-  UPDATE_CONV(lenet.C1, cumulator.C1, C1_CIN,  C1_COUT, CONV_SIZE, 1);
-  UPDATE_CONV(lenet.C3, cumulator.C3, C1_COUT, C3_COUT, CONV_SIZE, 1);
-  UPDATE_CONV(lenet.C5, cumulator.C5, C3_COUT, C5_COUT, CONV_SIZE, 1);
-  UPDATE_LINEAR_W(lenet.F6_W, cumulator.F6_W, C5_COUT, F6_COUT, 1);
-  UPDATE_LINEAR_W(lenet.OL_W, cumulator.OL_W, F6_COUT, OL_COUT, 1);
-  UPDATE_LINEAR_B(lenet.F6_B, cumulator.F6_B, F6_COUT, 1);
-  UPDATE_LINEAR_B(lenet.OL_B, cumulator.OL_B, OL_COUT, 1);
+  //update, and also clear the buffer
+  UPDATE_CONV(lenet.C1, delta.C1, C1_CIN,  C1_COUT, CONV_SIZE);
+  UPDATE_CONV(lenet.C3, delta.C3, C1_COUT, C3_COUT, CONV_SIZE);
+  UPDATE_CONV(lenet.C5, delta.C5, C3_COUT, C5_COUT, CONV_SIZE);
+  UPDATE_LINEAR_W(lenet.F6_W, delta.F6_W, C5_COUT, F6_COUT);
+  UPDATE_LINEAR_W(lenet.OL_W, delta.OL_W, F6_COUT, OL_COUT);
+  UPDATE_LINEAR_B(lenet.F6_B, delta.F6_B, F6_COUT);
+  UPDATE_LINEAR_B(lenet.OL_B, delta.OL_B, OL_COUT);
 }
 
 void training()
 {
+  //int batchindice[BATCHSIZE];
   train_img_batch   = allocate_img_batch(BATCHSIZE);
   train_label_batch = allocate_label_batch(BATCHSIZE);
   for(int j=0; j<ntrain/BATCHSIZE; j++)
   {
+    //RandomChoices(batchindice, ntrain, BATCHSIZE);
     form_img_batch(&train_img_batch, j*BATCHSIZE, BATCHSIZE, &mnist_train_imgs);
     form_label_batch(&train_label_batch, j*BATCHSIZE, BATCHSIZE, &mnist_train_labels);
 
@@ -240,7 +230,6 @@ void training()
     {
       forward(i, 0);
       backward(i);
-      delta_cumulate();
     }
     weight_update();
   }

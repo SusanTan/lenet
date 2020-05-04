@@ -84,8 +84,8 @@ void linear_backward(float**** error_l_plus_1, float**** in, float*** W_l, int l
   //float eta = 0.1f;
   for(int j=0; j<l_cout; j++)
     for(int k=0; k<l_cin; k++)
-      (*W_l_delta)[j][k] = (*error_l_plus_1)[j][0][0] * (*in)[k][0][0];
+      (*W_l_delta)[j][k] += (*error_l_plus_1)[j][0][0] * (*in)[k][0][0];
 
   for(int i=0; i<l_cout; i++)
-    (*B_l_delta)[i] = (*error_l_plus_1)[i][0][0];
+    (*B_l_delta)[i] += (*error_l_plus_1)[i][0][0];
 }
