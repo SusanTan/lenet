@@ -3,7 +3,7 @@
 #define CONV_SIZE   5
 #define POOL_SIZE   2
 #define POOL_STRIDE 2
-#define BATCHSIZE   32
+#define BATCHSIZE   1
 
 //Channel size
 #define C1_CIN      1

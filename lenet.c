@@ -212,22 +212,18 @@ void weight_update()
 void training()
 {
   //int batchindice[BATCHSIZE];
-  train_img_batch   = allocate_img_batch(BATCHSIZE);
-  train_label_batch = allocate_label_batch(BATCHSIZE);
-  for(int j=0; j<ntrain/BATCHSIZE; j++)
+  train_img_batch   = allocate_img_batch(1);
+  train_label_batch = allocate_label_batch(1);
+  for(int j=0; j<ntrain; j++)
   //95.3% exec time
   {
-    form_img_batch(&train_img_batch, j*BATCHSIZE, BATCHSIZE, &mnist_train_imgs);
-    form_label_batch(&train_label_batch, j*BATCHSIZE, BATCHSIZE, &mnist_train_labels);
-
-    for(int i=0; i<BATCHSIZE; i++) // change to batchsize eventually
-    {
-      forward(i, 0);
-      backward(i);
-    }
+    train_img_batch[0][0] = mnist_train_imgs[j];
+    train_label_batch[0] = mnist_train_labels[j];
+      forward(0, 0);
+      backward(0);
     weight_update();
   }
-  free_image_batch(0, BATCHSIZE);
+  free_image_batch(0, 1);
   free(train_label_batch);
 }
 
