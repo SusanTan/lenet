@@ -52,14 +52,9 @@ class LeNet5(nn.Module):
         self.C1 = nn.Conv2d(1, 6, kernel_size=(5, 5))
         self.S2 = nn.MaxPool2d(kernel_size=(2, 2), stride=2)
 
-        ####### Complete the defition of C3 and S4 ##########
-        # C3 is a convolutional layer with 16 5x5 kernels
-        # S4 is a max pooling layer with 2x2 kernel and stride 2
-
         self.C3 = nn.Conv2d(6, 16, kernel_size=(5, 5))
         self.S4 = nn.MaxPool2d(kernel_size=(2, 2), stride=2)
 
-        #####################################################
 
         self.C5 = nn.Conv2d(16, 120, kernel_size=(5, 5))
         self.F6 = nn.Linear(120, 84)
@@ -73,24 +68,11 @@ class LeNet5(nn.Module):
     # definition of the forward pass
     def forward(self, x):
 
-        # input x are (batch, 1, 32, 32) grayscale images
-        # the first convolutional layer C1 with 6 kernels size 5×5 and a stride of 1
-        # output image size changes from (batch, 1, 32, 32) to (batch, 6, 28, 28)
-        # then pass the feature maps to the tanh activation function
         x = torch.tanh(self.C1(x))
 
         # pass the feature maps to a 2x2 max pooling layer S2 
         # the output image dimension decreases halved -> (batch, 6, 14, 14)
         x = self.S2(x)
-
-        ####### Complete the foward pass C3 > S4 > C5 ###################################
-        # C2 is the second convolutional layer with 16 kernels size 5×5 and a stride of 1
-        # after C2, the output image size changes from (batch, 6, 14, 14) to (batch, 16, 10, 10)
-        # S3 is the second 2x2 pooling layer with strid 2
-        # after S4, the output image size changes from (batch, 16, 10, 10) to (batch, 16, 5, 5)
-        # C5 is the third convolutional layer with 120 kernels size 5×5 and a stride of 1
-        # after C5, the output image size changes from (batch, 16, 5, 5) to (batch, 120, 1, 1)
-        # C3, C5 is followed by tanh activations
 
         x = torch.tanh(self.C3(x))
         x = self.S4(x)
